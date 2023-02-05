@@ -89,12 +89,14 @@ public class MusicService {
   }
 
   public IReadOnlyCollection<Track> GetTracks() {
-    this._finishedLoadingEvent.WaitOne();
 
-      if (this._tracks == null)
+    if (this._finishedLoadingEvent.WaitOne(0)) //if is blocking
+      this._finishedLoadingEvent.WaitOne();
+
+    if (this._tracks == null)
       this.Init();
 
-      return this._tracks!;
+    return this._tracks!;
   }
 
   public async Task<IReadOnlyCollection<Track>> GetTracksAsync() => await Task.Run(this.GetTracks);

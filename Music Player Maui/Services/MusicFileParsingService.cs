@@ -31,12 +31,24 @@ public class MusicFileParsingService {
 
   public bool TryParseAllLocalSongsFromMusicDirectory(CancellationToken cancellationToken, out ParseResult result) {
 
+    var files = this._GetMusicFiles();
+
+    //load all tracks with artists and genres
+    if (!this._LoadTracks(cancellationToken, files, out var tracks, out var artists, out var genres)) {
+      result = null!;
+      return false;
+    }
+
+    _AttachTracksToArtists(artists, tracks);
+    _AttachTracksToGenres(genres, tracks);
+
+    result = new ParseResult(tracks, artists, genres);
+    return true;
+  }
+
+  private FileInfo[] _GetMusicFiles() {
     var path = this._settings.MusicDirectory;
     //path = "/storage/9C33-6BBD/Music/music4phone";
-
-    var tracks = new List<Track>();
-    var artists = new List<Artist>();
-    var genres = new List<Genre>();
 
     //todo: use searchPattern instead
     var files = Directory
@@ -45,46 +57,49 @@ public class MusicFileParsingService {
       .Where(f => _supportedFormats.Contains(f.Extension))
       .ToArray();
 
-    //load all tracks with artists and genres
-    try {
-      Parallel.ForEach(files, file => {
-        cancellationToken.ThrowIfCancellationRequested();
-
-        if (_supportedFormats.All(f => file.Extension != f))
-          return;
+    return files;
+  }
 
 
-        if (!this._tagReadingService.TryReadTags(file, ref artists, ref genres, out var dbTrack))
-          return;
+  private bool _LoadTracks(CancellationToken cancellationToken, FileInfo[] files, out List<Track> tracks, out List<Artist> artists, out List<Genre> genres) {
+    tracks = new List<Track>();
+    artists = new List<Artist>();
+    genres = new List<Genre>();
 
-        tracks.Add(dbTrack);
-        this.OnTrackLoaded?.Invoke(this, new TrackLoadedEventArgs(tracks.Count, files.Length));
-      });
+    foreach (var file in files) {
+      if (cancellationToken.IsCancellationRequested)
+        return false;
 
-    } catch (OperationCanceledException ex) {
-      result = null!;
-      return false;
+      if (_supportedFormats.All(f => file.Extension != f))
+        continue;
+
+      if (!this._tagReadingService.TryReadTags(file, ref artists, ref genres, out var dbTrack))
+        continue;
+
+      tracks.Add(dbTrack);
+      this.OnTrackLoaded?.Invoke(this, new TrackLoadedEventArgs(tracks.Count, files.Length));
     }
 
-    //attach tracks to artists
-    foreach (var artist in artists) {
-      artist.Tracks = tracks
-          .Where(t => t.Artists
-            .Contains(artist))
-          .ToList();
-    }
+    return true;
+  }
 
-    //attach tracks to genres
-
+  private static void _AttachTracksToGenres(IEnumerable<Genre> genres, IList<Track> tracks) {
     foreach (var genre in genres) {
       genre.Tracks = tracks
         .Where(t => t.Genres
           .Contains(genre))
         .ToList();
     }
+  }
 
-    result = new ParseResult(tracks, artists, genres);
-    return true;
+  private static void _AttachTracksToArtists(IEnumerable<Artist> artists, IList<Track> tracks) {
+    //attach tracks to artists
+    foreach (var artist in artists) {
+      artist.Tracks = tracks
+        .Where(t => t.Artists
+          .Contains(artist))
+        .ToList();
+    }
   }
 
 }

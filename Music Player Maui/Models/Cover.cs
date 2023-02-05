@@ -6,24 +6,24 @@ public class Cover {
 
   private const string _DEFAULT_PIC_PATH = "record.png";
 
+  //todo: makes view slow, make this lazy, put logic into viewModel(s)
   public ImageSource Source {
     get {
+      if (this.hasPicture != null)
+        return this.hasPicture.Value
+          ? this._GetImageSource()!
+          : ImageSource.FromFile(_DEFAULT_PIC_PATH); //todo: don't reload every time
+
 
       //first time called code
-      if (this.hasPicture == null) {
-        var source = this._GetImageSource();
-        if (source == null) {
-          this.hasPicture = false;
-          return ImageSource.FromFile(_DEFAULT_PIC_PATH);
-        }
-
-        this.hasPicture = true;
-        return source;
+      var source = this._GetImageSource();
+      if (source == null) {
+        this.hasPicture = false;
+        return ImageSource.FromFile(_DEFAULT_PIC_PATH);
       }
 
-      return this.hasPicture.Value
-        ? this._GetImageSource()!
-        : ImageSource.FromFile(_DEFAULT_PIC_PATH);
+      this.hasPicture = true;
+      return source;
     }
   }
 

@@ -4,6 +4,7 @@
              xmlns:Converters="using:Music_Player_Maui.Converters"
              xmlns:ViewModels="using:Music_Player_Maui.ViewModels"
              xmlns:Models="clr-namespace:Music_Player_Maui.Models"
+             xmlns:UserControls="clr-namespace:Music_Player_Maui.Views.UserControls"
              x:Class="Music_Player_Maui.Views.Pages.SongsPage"
              Title="Songs"
              x:DataType="ViewModels:SongsViewModel">
@@ -26,6 +27,7 @@
       <RowDefinition Height="auto" />
       <RowDefinition Height="auto" />
       <RowDefinition Height="*" />
+      <RowDefinition Height="auto" />
     </Grid.RowDefinitions>
 
     <Label Text="{Binding AmountOfTracksRead}"
@@ -93,6 +95,8 @@
         </DataTemplate>
       </ListView.ItemTemplate>
     </ListView>
+
+    <UserControls:BottomTrackView Grid.Row="4"/>
   </Grid>
 
   <!--<VerticalStackLayout>

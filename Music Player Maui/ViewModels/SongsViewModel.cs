@@ -31,6 +31,10 @@ public partial class SongsViewModel : AViewModel {
     musicFileParsingService.OnTrackLoaded += this._OnTrackLoaded;
 
     this.DisplayState = _GetDisplayState(musicLoadingService.IsLoading, musicLoadingService.HasTracks);
+
+    if (this.DisplayState == DisplayState.DisplayingContent) { //todo: kinda double code
+      this.Tracks = musicLoadingService.GetTracks();
+    }
   }
 
   private void _OnTrackLoaded(object? sender, MusicFileParsingService.TrackLoadedEventArgs e) {

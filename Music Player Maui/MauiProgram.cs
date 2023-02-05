@@ -4,6 +4,7 @@ using Music_Player_Maui.Services;
 using Music_Player_Maui.ViewModels;
 using Music_Player_Maui.Views.Pages;
 using Music_Player_Maui.Models;
+using Music_Player_Maui.Views.UserControls;
 
 namespace Music_Player_Maui;
 
@@ -37,6 +38,9 @@ public static class MauiProgram {
     services.AddSingleton<SettingsPage>();
     services.AddSingleton<SettingsViewModel>();
 
+    services.AddSingleton<BottomTrackView>();
+    services.AddSingleton<TrackViewModel>();
+
 #if DEBUG
     builder.Logging.AddDebug();
 #endif
@@ -46,18 +50,18 @@ public static class MauiProgram {
 
   private static void _CreateDatabaseService(IServiceCollection services) {
     services.AddSingleton(provider => {
-      var dbName = "sqliteDb.db";
+      const string dbName = "sqliteDb.db";
       var applicationDataPath = FileSystem.Current.AppDataDirectory;
       var dbFilePath = Path.Combine(applicationDataPath, dbName);
 
       //for preventing migration issues
-   //   if (VersionTracking.IsFirstLaunchForVersion(VersionTracking.CurrentVersion)) {
+      if (VersionTracking.IsFirstLaunchForVersion(VersionTracking.CurrentVersion)) {
         if (File.Exists(dbFilePath))
           File.Delete(dbFilePath);
 
         var settings = provider.GetService<Settings>()!;
         settings.ReadFromCache = false;
-   //   }
+      }
 
       var context = new MusicContext(dbFilePath);
       context.Database.EnsureCreated();
