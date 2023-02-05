@@ -9,6 +9,10 @@
     <ShellContent Route="SongsPage" ContentTemplate="{DataTemplate local:SongsPage}" />
   </FlyoutItem>
 
+  <!--<FlyoutItem Title="Music Library" Icon="music_library.png">
+    <ShellContent Route="TabLibraryPage" ContentTemplate="{DataTemplate local:TabLibraryPage}" />
+  </FlyoutItem>-->
+
   <FlyoutItem Title="Genres" Icon="genres.png">
     <ShellContent Route="SongsPage" ContentTemplate="{DataTemplate local:SongsPage}" />
   </FlyoutItem>

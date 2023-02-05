@@ -1,8 +1,12 @@
-﻿namespace Music_Player_Maui.Models; 
+﻿using Music_Player_Maui.Models;
+using Plugin.Maui.Audio;
+
+namespace Music_Player_Maui.Services; 
 
 public class TrackQueue {
+  private readonly IAudioManager _audioManager;
 
- // public event EventHandler<TrackEventArgs> NewSongSelected;
+  // public event EventHandler<TrackEventArgs> NewSongSelected;
 
   public List<Track> NextUpTracks { get; private set; } = new();
   public List<Track> QueuedTracks { get; private set; } = new();
@@ -26,11 +30,18 @@ public class TrackQueue {
   private Track _currentTrack;
 
   private bool _wasPaused; //indicates if the track was already paused or if its the first play   
- // private readonly IMediaManager _mediaManager;
+
+  private IAudioPlayer? _currentPlayer;
+  // private readonly IMediaManager _mediaManager;
+
+
   public bool IsShuffle { get; private set; }
 
-  private TrackQueue() {
-  //  var manager = CrossMediaManager.Current;
+  public TrackQueue(IAudioManager audioManager) {
+    this._audioManager = audioManager;
+
+
+    //  var manager = CrossMediaManager.Current;
   //  this._mediaManager = manager;
   //  manager.MediaItemFinished += this._MediaItemFinished;
   }
@@ -105,21 +116,31 @@ public class TrackQueue {
 
   public void Play(Track track) {
     this.CurrentTrack = track;
+
+    var stream = File.OpenRead(track.Path);
+
+    this._currentPlayer?.Stop();
+
+    this._currentPlayer = this._audioManager.CreatePlayer(stream);
+    this._currentPlayer.Play();
+
     //this._mediaManager.Play(track.Path);
   }
 
   //todo: works fine with first start but doesnt with new song selected, differentiate with check of crossmediainitization
   public void Play() {
-  //  if (!this._wasPaused) {
-  //    var progress = this.CurrentTrack.GetProgress();
-  //
-  //    if (progress != TimeSpan.Zero)
-  //      this._PlayAtTime(progress);
-  //    else
-  //      this._mediaManager.Play(this.CurrentTrack.Path);
-  //
-  //  } else
-  //    this._mediaManager.Play();
+    
+
+    //  if (!this._wasPaused) {
+    //    var progress = this.CurrentTrack.GetProgress();
+    //
+    //    if (progress != TimeSpan.Zero)
+    //      this._PlayAtTime(progress);
+    //    else
+    //      this._mediaManager.Play(this.CurrentTrack.Path);
+    //
+    //  } else
+    //    this._mediaManager.Play();
   }
 
   private void _PlayAtTime(TimeSpan time) {

@@ -7,11 +7,13 @@ using Music_Player_Maui.Models;
 namespace Music_Player_Maui.ViewModels; 
 
 public partial class SongsViewModel : AViewModel {
+  private readonly MusicService _musicLoadingService;
+  private readonly TrackQueue _queue;
   private DisplayState _displayState = DisplayState.Loading;
-  private IReadOnlyCollection<Track>? _tracks;
+  private IReadOnlyCollection<TrackCellViewModel>? _tracks;
   private string? _amountOfTracksRead;
 
-  public IReadOnlyCollection<Track>? Tracks {
+  public IReadOnlyCollection<TrackCellViewModel>? Tracks {
     get => this._tracks;
     set => this.SetProperty(ref this._tracks, value);
   }
@@ -26,14 +28,17 @@ public partial class SongsViewModel : AViewModel {
     set => this.SetProperty(ref this._amountOfTracksRead, value);
   }
 
-  public SongsViewModel(MusicService musicLoadingService, MusicFileParsingService musicFileParsingService) {
+  public SongsViewModel(MusicService musicLoadingService, MusicFileParsingService musicFileParsingService, TrackQueue queue) {
+    this._musicLoadingService = musicLoadingService;
+    this._queue = queue;
+
     musicLoadingService.LoadingStateChangedEvent += this._OnLoadingChanged;
     musicFileParsingService.OnTrackLoaded += this._OnTrackLoaded;
 
     this.DisplayState = _GetDisplayState(musicLoadingService.IsLoading, musicLoadingService.HasTracks);
 
     if (this.DisplayState == DisplayState.DisplayingContent) { //todo: kinda double code
-      this.Tracks = musicLoadingService.GetTracks();
+      this.Tracks = this.LoadTrackViewModels();
     }
   }
 
@@ -56,7 +61,13 @@ public partial class SongsViewModel : AViewModel {
     }
 
     this.DisplayState = DisplayState.DisplayingContent;
-    this.Tracks = musicLoadingService.GetTracks();
+    this.Tracks = this.LoadTrackViewModels();
+  }
+
+  private IReadOnlyCollection<TrackCellViewModel> LoadTrackViewModels() {
+    var tracks = this._musicLoadingService.GetTracks();
+
+    return tracks.Select(track => new TrackCellViewModel(track, this._queue)).ToList();
   }
 
   private static DisplayState _GetDisplayState(bool isLoading, bool hasTracks)
@@ -71,4 +82,5 @@ public partial class SongsViewModel : AViewModel {
     //Shell.Current.CurrentPage.Title = "Search";
     await Shell.Current.GoToAsync($"///{nameof(SearchPage)}");
   }
+
 }

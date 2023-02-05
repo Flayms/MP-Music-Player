@@ -10,6 +10,7 @@ public class MusicService {
   private readonly Settings _settings;
   private readonly MusicContext _context;
   private readonly MusicFileParsingService _musicFileParsingService;
+  private readonly TrackQueue _queue;
 
   public IReadOnlyCollection<Track>? _tracks;
 
@@ -39,10 +40,11 @@ public class MusicService {
   private CancellationTokenSource? _initializationCancellationToken;
   private bool _isLoading;
 
-  public MusicService(Settings settings, MusicContext context, MusicFileParsingService musicFileParsingService) {
+  public MusicService(Settings settings, MusicContext context, MusicFileParsingService musicFileParsingService, TrackQueue queue) {
     this._settings = settings;
     this._context = context;
     this._musicFileParsingService = musicFileParsingService;
+    this._queue = queue;
   }
 
   /// <summary>
@@ -65,6 +67,8 @@ public class MusicService {
       .Include(t => t.Genres)
       .OrderBy(t => t.Title)
       .ToArray();
+
+    this._queue.Play(this._tracks.First());
 
     this.IsLoading = false;
     this._settings.ReadFromCache = true;

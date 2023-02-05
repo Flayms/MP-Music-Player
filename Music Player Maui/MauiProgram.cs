@@ -5,6 +5,7 @@ using Music_Player_Maui.ViewModels;
 using Music_Player_Maui.Views.Pages;
 using Music_Player_Maui.Models;
 using Music_Player_Maui.Views.UserControls;
+using Plugin.Maui.Audio;
 
 namespace Music_Player_Maui;
 
@@ -25,6 +26,9 @@ public static class MauiProgram {
 
     _CreateDatabaseService(services);
 
+    services.AddSingleton(AudioManager.Current);
+
+    services.AddSingleton<TrackQueue>();
     services.AddSingleton<TagReadingService>();
     services.AddSingleton<MusicFileParsingService>();
     services.AddSingleton<MusicService>();

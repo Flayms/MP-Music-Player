@@ -9,6 +9,7 @@ public partial class App : Application {
     this._musicLoadingServiceX = musicLoadingServiceX;
     this.InitializeComponent();
 
+    this.MainPage = new NavigationPage(new AppShell());
     this.MainPage = new AppShell();
   }
 

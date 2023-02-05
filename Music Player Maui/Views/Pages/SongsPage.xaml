@@ -15,11 +15,11 @@
     <Converters:DisplayStateToIsEmptyConverter x:Key="displayStateToIsEmpty" />
   </ContentPage.Resources>
 
-  <!--<ContentPage.ToolbarItems>
+  <ContentPage.ToolbarItems>
     <ToolbarItem Order="Primary" Text="Shuffle all" IconImageSource="shuffle.png" Priority="0" />
     <ToolbarItem Order="Primary" Text="Search" IconImageSource="search_small.png" Priority="1"
                  Command="{Binding NavigateToSearchCommand}"/>
-  </ContentPage.ToolbarItems>-->
+  </ContentPage.ToolbarItems>
 
   <Grid>
     <Grid.RowDefinitions>
@@ -51,47 +51,7 @@
 
       <ListView.ItemTemplate>
         <DataTemplate x:DataType="Models:Track">
-          <ViewCell>
-
-            <Frame Padding="0" Margin="7" CornerRadius="7" BackgroundColor="Transparent">
-              <Grid>
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="auto"/>
-                  <ColumnDefinition Width="*"/>
-                  <ColumnDefinition Width="auto"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                  <RowDefinition Height="*"/>
-                  <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-
-                <Frame CornerRadius="7"
-                     Padding="0" IsClippedToBounds="True"
-                     HorizontalOptions="Start"
-                     MinimumWidthRequest="55" MinimumHeightRequest="55" WidthRequest="55" HeightRequest="55"
-                     Margin="0, 0, 5, 0"
-                     Grid.Column="0"
-                     Grid.RowSpan="2">
-                  <Image Aspect="AspectFill"
-                         MinimumWidthRequest="55" MinimumHeightRequest="55" WidthRequest="55" HeightRequest="55"
-                         Source="{Binding Cover.Source}" />
-                </Frame>
-
-                <Label Text="{Binding Title}" LineBreakMode="TailTruncation"
-                       Grid.Column="1" Grid.Row="0"/>
-                <Label Text="{Binding CombinedArtistNames}" TextColor="Grey" LineBreakMode="TailTruncation"
-                       Grid.Column="1" Grid.Row="1" />
-
-                <ImageButton Source="options.png"
-                             WidthRequest="48"
-                             BackgroundColor="Transparent"
-                             Padding="26, 0, 8, 0"
-                             Grid.Column="2" Grid.Row="0" Grid.RowSpan="2">
-                </ImageButton>
-              </Grid>
-            </Frame>
-
-          </ViewCell>
+          <UserControls:SmallTrackCell />
         </DataTemplate>
       </ListView.ItemTemplate>
     </ListView>
@@ -99,10 +59,4 @@
     <UserControls:BottomTrackView Grid.Row="4"/>
   </Grid>
 
-  <!--<VerticalStackLayout>
-
-
-
-
-  </VerticalStackLayout>-->
 </ContentPage>

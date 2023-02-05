@@ -4,7 +4,9 @@ using Music_Player_Maui.Services;
 
 namespace Music_Player_Maui.ViewModels; 
 
+//todo: better name
 public partial class TrackViewModel : AViewModel {
+  private readonly TrackQueue _queue;
 
   public Track? Track {
     get => this._track;
@@ -40,8 +42,10 @@ public partial class TrackViewModel : AViewModel {
   //public static TrackViewModel Instance = _instance ??= new TrackViewModel();
   //private static TrackViewModel _instance;
 
-  public TrackViewModel(MusicService musicService) {
-    this.Track = musicService.GetTracks().First();
+  public TrackViewModel(TrackQueue queue) {
+    this._queue = queue;
+
+    //this.Track = musicService.GetTracks().First();
     //var queue = TrackQueue.Instance;
     //
     //this._queue = queue;

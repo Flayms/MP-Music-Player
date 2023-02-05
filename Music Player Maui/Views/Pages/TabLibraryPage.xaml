@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<TabbedPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:Pages="using:Music_Player_Maui.Views.Pages"
              xmlns:ViewModels="using:Music_Player_Maui.ViewModels"
@@ -8,35 +8,38 @@
              x:DataType="ViewModels:TabLibraryViewModel">
 
 
-  <TabbedPage.ToolbarItems>
+  <Shell.ToolbarItems>
     <ToolbarItem Order="Primary" Text="Shuffle all" IconImageSource="shuffle.png" Priority="0" />
     <ToolbarItem Order="Primary" Text="Search" IconImageSource="search_small.png" Priority="1"
                  Command="{Binding NavigateToSearchCommand}"/>
-  </TabbedPage.ToolbarItems>
+  </Shell.ToolbarItems>
 
 
-  <NavigationPage Title="One" >
+  <!--<NavigationPage Title="One" >
     <x:Arguments>
       <Pages:SongsPage Title="One" />
     </x:Arguments>
   </NavigationPage>
+
   <NavigationPage Title="Two" >
     <x:Arguments>
       <Pages:SongsPage Title="One" />
     </x:Arguments>
   </NavigationPage>
+
   <NavigationPage Title="Three" >
     <x:Arguments>
       <Pages:SongsPage Title="One" />
     </x:Arguments>
   </NavigationPage>
+
   <NavigationPage Title="Four" >
     <x:Arguments>
       <Pages:SongsPage Title="One" />
     </x:Arguments>
-  </NavigationPage>
+  </NavigationPage>-->
 
-  <!--<TabBar>
+  <TabBar>
     <Tab Title="Songs" Icon="songs.png">
       <ShellContent Route="SongsPage" ContentTemplate="{DataTemplate Pages:SongsPage}" />
     </Tab>
@@ -60,6 +63,6 @@
     <Tab Title="Folders" Icon="folder.png">
       <ShellContent Route="SongsPage" ContentTemplate="{DataTemplate Pages:SearchPage}" />
     </Tab>
-  </TabBar>-->
+  </TabBar>
 
-</TabbedPage>
+</Shell>
