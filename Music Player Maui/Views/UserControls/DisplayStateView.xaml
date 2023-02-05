@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Music_Player_Maui.Views.UserControls.DisplayStateView">
+
+  <VerticalStackLayout x:Name="StackLayout" BackgroundColor="Red">
+
+    <ActivityIndicator x:Name="activityIndicator"
+                       
+                       IsVisible="True"
+                       IsRunning="True"/>
+
+    <Label x:Name="lblEmpty"
+           HorizontalOptions="Center"
+           VerticalOptions="CenterAndExpand"
+           Text="We couldn't find anything here.."
+           IsVisible="False"/>
+
+  </VerticalStackLayout>
+
+</ContentView>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:Converters="using:Music_Player_Maui.Converters"
+             xmlns:ViewModels="using:Music_Player_Maui.ViewModels"
+             xmlns:Models="clr-namespace:Music_Player_Maui.Models"
+             x:Class="Music_Player_Maui.Views.Pages.SongsPage"
+             Title="Songs"
+             x:DataType="ViewModels:SongsViewModel">
+
+  <ContentPage.Resources>
+    <Converters:DisplayStateToContentIsVisibleConverter x:Key="displayStateToContentIsVisible" />
+    <Converters:DisplayStateToIsLoadingConverter x:Key="displayStateToIsLoading" />
+    <Converters:DisplayStateToIsEmptyConverter x:Key="displayStateToIsEmpty" />
+  </ContentPage.Resources>
+
+  <!--<ContentPage.ToolbarItems>
+    <ToolbarItem Order="Primary" Text="Shuffle all" IconImageSource="shuffle.png" Priority="0" />
+    <ToolbarItem Order="Primary" Text="Search" IconImageSource="search_small.png" Priority="1"
+                 Command="{Binding NavigateToSearchCommand}"/>
+  </ContentPage.ToolbarItems>-->
+
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="auto" />
+      <RowDefinition Height="auto" />
+      <RowDefinition Height="auto" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+
+    <Label Text="{Binding AmountOfTracksRead}"
+           IsVisible="{Binding Path=DisplayState, Converter={StaticResource displayStateToIsLoading}}"/>
+
+    <ActivityIndicator IsVisible="{Binding Path=DisplayState, Converter={StaticResource displayStateToIsLoading}}"
+                     IsRunning="{Binding Path=DisplayState, Converter={StaticResource displayStateToIsLoading}}"
+                     Grid.Row="1"/>
+
+    <Label HorizontalOptions="Center"
+         VerticalOptions="CenterAndExpand"
+         Text="We couldn't find anything here.."
+         IsVisible="{Binding Path=DisplayState, Converter={StaticResource displayStateToIsEmpty}}"
+         Grid.Row="2"/>
+
+    <ListView ItemsSource="{Binding Tracks}"
+            IsVisible="{Binding Path=DisplayState, Converter={StaticResource displayStateToContentIsVisible}}"
+            Grid.Row="3"
+            RowHeight="69"
+            SeparatorVisibility="None">
+
+      <ListView.ItemTemplate>
+        <DataTemplate x:DataType="Models:Track">
+          <ViewCell>
+
+            <Frame Padding="0" Margin="7" CornerRadius="7" BackgroundColor="Transparent">
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="auto"/>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="*"/>
+                  <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Frame CornerRadius="7"
+                     Padding="0" IsClippedToBounds="True"
+                     HorizontalOptions="Start"
+                     MinimumWidthRequest="55" MinimumHeightRequest="55" WidthRequest="55" HeightRequest="55"
+                     Margin="0, 0, 5, 0"
+                     Grid.Column="0"
+                     Grid.RowSpan="2">
+                  <Image Aspect="AspectFill"
+                         MinimumWidthRequest="55" MinimumHeightRequest="55" WidthRequest="55" HeightRequest="55"
+                         Source="{Binding Cover.Source}" />
+                </Frame>
+
+                <Label Text="{Binding Title}" LineBreakMode="TailTruncation"
+                       Grid.Column="1" Grid.Row="0"/>
+                <Label Text="{Binding CombinedArtistNames}" TextColor="Grey" LineBreakMode="TailTruncation"
+                       Grid.Column="1" Grid.Row="1" />
+
+                <ImageButton Source="options.png"
+                             WidthRequest="48"
+                             BackgroundColor="Transparent"
+                             Padding="26, 0, 8, 0"
+                             Grid.Column="2" Grid.Row="0" Grid.RowSpan="2">
+                </ImageButton>
+              </Grid>
+            </Frame>
+
+          </ViewCell>
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
+  </Grid>
+
+  <!--<VerticalStackLayout>
+
+
+
+
+  </VerticalStackLayout>-->
+</ContentPage>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+  x:Class="Music_Player_Maui.AppShell"
+  xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+  xmlns:local="clr-namespace:Music_Player_Maui.Views.Pages">
+
+  <FlyoutItem Title="Songs" Icon="music_library.png">
+    <ShellContent Route="SongsPage" ContentTemplate="{DataTemplate local:SongsPage}" />
+  </FlyoutItem>
+
+  <FlyoutItem Title="Genres" Icon="genres.png">
+    <ShellContent Route="SongsPage" ContentTemplate="{DataTemplate local:SongsPage}" />
+  </FlyoutItem>
+
+  <FlyoutItem Title="Artists" Icon="people.png">
+    <ShellContent Route="SongsPage" ContentTemplate="{DataTemplate local:SongsPage}" />
+  </FlyoutItem>
+
+  <FlyoutItem Title="Albums" Icon="albums.png">
+    <ShellContent Route="SongsPage" ContentTemplate="{DataTemplate local:SongsPage}" />
+  </FlyoutItem>
+
+  <FlyoutItem Title="Playlists" Icon="playlist.png">
+    <ShellContent Route="SongsPage" ContentTemplate="{DataTemplate local:SongsPage}" />
+  </FlyoutItem>
+
+  <FlyoutItem Title="Folders" Icon="folder.png">
+    <ShellContent Route="SongsPage" ContentTemplate="{DataTemplate local:SongsPage}" />
+  </FlyoutItem>
+
+
+
+  <FlyoutItem Title="Search" Icon="search.png">
+    <ShellContent Route="SearchPage" ContentTemplate="{DataTemplate local:SearchPage}" />
+  </FlyoutItem>
+
+  <FlyoutItem Title="Settings" Icon="settings.png">
+    <ShellContent Route="SettingsPage" ContentTemplate="{DataTemplate local:SettingsPage}" />
+  </FlyoutItem>
+
+  <!--<TabBar>
+    <Tab Title="Songs" Icon="songs.png">
+      <ShellContent Route="SongsPage" ContentTemplate="{DataTemplate Pages:SongsPage}" />
+    </Tab>
+
+    <Tab Title="Genres" Icon="genres.png">
+      <ShellContent Route="SearchPage" ContentTemplate="{DataTemplate Pages:SearchPage}" />
+    </Tab>
+
+    <Tab Title="Artists" Icon="people.png">
+      <ShellContent Route="SearchPage" ContentTemplate="{DataTemplate Pages:SearchPage}" />
+    </Tab>
+
+    <Tab Title="Albums" Icon="albums.png">
+      <ShellContent Route="SearchPage" ContentTemplate="{DataTemplate Pages:SearchPage}" />
+    </Tab>
+
+    <Tab Title="Playlists" Icon="playlist.png">
+      <ShellContent Route="SongsPage" ContentTemplate="{DataTemplate Pages:SearchPage}" />
+    </Tab>
+
+    <Tab Title="Folders" Icon="folder.png">
+      <ShellContent Route="SongsPage" ContentTemplate="{DataTemplate Pages:SearchPage}" />
+    </Tab>
+  </TabBar>-->
+
+</Shell>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Music_Player_Maui.Views.Pages.SearchPage"
+             Title="Search">
+
+  <VerticalStackLayout>
+    <SearchBar Placeholder="Search for Tracks, Artists, etc.."
+               CancelButtonColor="White" />
+  </VerticalStackLayout>
+</ContentPage>
