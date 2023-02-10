@@ -42,8 +42,8 @@ public static class MauiProgram {
     services.AddSingleton<SettingsPage>();
     services.AddSingleton<SettingsViewModel>();
 
-    services.AddSingleton<BottomTrackView>();
-    services.AddSingleton<TrackViewModel>();
+    services.AddSingleton<BottomTrackPlayerView>();
+    services.AddSingleton<TrackPlayerViewModel>();
 
 #if DEBUG
     builder.Logging.AddDebug();

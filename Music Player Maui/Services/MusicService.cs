@@ -68,8 +68,6 @@ public class MusicService {
       .OrderBy(t => t.Title)
       .ToArray();
 
-    this._queue.Play(this._tracks.First());
-
     this.IsLoading = false;
     this._settings.ReadFromCache = true;
     this._finishedLoadingEvent.Reset();

@@ -1,8 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using Music_Player_Maui.Enums;
+using Music_Player_Maui.Models;
 using Music_Player_Maui.Services;
 using Music_Player_Maui.Views.Pages;
-using Music_Player_Maui.Models;
+using Music_Player_Maui.Extensions;
 
 namespace Music_Player_Maui.ViewModels; 
 
@@ -10,10 +11,10 @@ public partial class SongsViewModel : AViewModel {
   private readonly MusicService _musicLoadingService;
   private readonly TrackQueue _queue;
   private DisplayState _displayState = DisplayState.Loading;
-  private IReadOnlyCollection<TrackCellViewModel>? _tracks;
+  private IReadOnlyList<TrackCellViewModel>? _tracks;
   private string? _amountOfTracksRead;
 
-  public IReadOnlyCollection<TrackCellViewModel>? Tracks {
+  public IReadOnlyList<TrackCellViewModel>? Tracks {
     get => this._tracks;
     set => this.SetProperty(ref this._tracks, value);
   }
@@ -38,7 +39,7 @@ public partial class SongsViewModel : AViewModel {
     this.DisplayState = _GetDisplayState(musicLoadingService.IsLoading, musicLoadingService.HasTracks);
 
     if (this.DisplayState == DisplayState.DisplayingContent) { //todo: kinda double code
-      this.Tracks = this.LoadTrackViewModels();
+      this.Tracks = this._LoadTrackViewModels();
     }
   }
 
@@ -61,13 +62,33 @@ public partial class SongsViewModel : AViewModel {
     }
 
     this.DisplayState = DisplayState.DisplayingContent;
-    this.Tracks = this.LoadTrackViewModels();
+    this.Tracks = this._LoadTrackViewModels();
   }
 
-  private IReadOnlyCollection<TrackCellViewModel> LoadTrackViewModels() {
+  private IReadOnlyList<TrackCellViewModel> _LoadTrackViewModels() {
     var tracks = this._musicLoadingService.GetTracks();
 
-    return tracks.Select(track => new TrackCellViewModel(track, this._queue)).ToList();
+    return tracks.Select(track => {
+      var model = new TrackCellViewModel(track);
+      model.OnTappedEvent += this._Model_OnTappedEvent;
+      return model;
+    }).ToList();
+  }
+
+  private void _Model_OnTappedEvent(object? sender, TrackEventArgs e) {
+    if (sender is not TrackCellViewModel trackModel)
+      return;
+    
+    var trackQueue = this._queue;
+   var queue = new List<Track>();
+   var trackViewModels = this.Tracks;
+   var index = trackViewModels.IndexOf(trackModel);
+
+   for (var i = index; i < trackViewModels.Count; ++i)
+     queue.Add(trackViewModels[i].Track);
+
+   trackQueue.ChangeQueue(queue);
+   trackQueue.Play();
   }
 
   private static DisplayState _GetDisplayState(bool isLoading, bool hasTracks)

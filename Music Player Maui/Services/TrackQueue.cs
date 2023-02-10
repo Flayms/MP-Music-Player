@@ -1,49 +1,50 @@
-﻿using Music_Player_Maui.Models;
+﻿using System.Diagnostics;
+using Music_Player_Maui.Extensions;
+using Music_Player_Maui.Models;
 using Plugin.Maui.Audio;
+using TagLib.Matroska;
+using File = System.IO.File;
+using Track = Music_Player_Maui.Models.Track;
 
 namespace Music_Player_Maui.Services; 
+
+//todo: maybe split between queue logic and actual playing logic
 
 public class TrackQueue {
   private readonly IAudioManager _audioManager;
 
-  // public event EventHandler<TrackEventArgs> NewSongSelected;
+   public event EventHandler<TrackEventArgs>? NewSongSelected;
 
   public List<Track> NextUpTracks { get; private set; } = new();
   public List<Track> QueuedTracks { get; private set; } = new();
   //public List<Track> TrackHistory { get; private set; } = new (); //todo: implement properly!
   public List<Track> AllTracks { get; private set; } = new();
 
-  public Track CurrentTrack {
+  public Track? CurrentTrack {
     get => this._currentTrack;
     private set {
       //if (this._currentTrack != null)
       //this.TrackHistory.Add(this._currentTrack);
 
-      this._currentTrack = value;
-    //  this.NewSongSelected?.Invoke(this, new TrackEventArgs(value));
+      this._currentTrack = value ?? throw new ArgumentNullException(nameof(value));
+      this.NewSongSelected?.Invoke(this, new TrackEventArgs(value));
       this._wasPaused = false;
     }
   }
 
   public int Index { get; private set; } //todo: make index setting public?
 
-  private Track _currentTrack;
+  private Track? _currentTrack;
 
   private bool _wasPaused; //indicates if the track was already paused or if its the first play   
 
   private IAudioPlayer? _currentPlayer;
-  // private readonly IMediaManager _mediaManager;
 
 
   public bool IsShuffle { get; private set; }
 
   public TrackQueue(IAudioManager audioManager) {
     this._audioManager = audioManager;
-
-
-    //  var manager = CrossMediaManager.Current;
-  //  this._mediaManager = manager;
-  //  manager.MediaItemFinished += this._MediaItemFinished;
   }
 
   public void FullyCreateQueue(List<Track> nextUps, List<Track> queued, Track current) {
@@ -55,7 +56,7 @@ public class TrackQueue {
 
   public void ChangeQueue(List<Track> tracks) {
     this.QueuedTracks = tracks;
-  //  this.CurrentTrack = tracks.Dequeue();
+    this.CurrentTrack = tracks.Dequeue();
     this._ReloadFullQueue();
   }
 
@@ -91,7 +92,7 @@ public class TrackQueue {
   }
 
   /// <summary>
-  /// Removes first occurence of this track
+  /// Removes first occurrence of this track
   /// </summary>
   /// <param name="track">The track</param>
   public void Remove(Track track) {
@@ -112,58 +113,76 @@ public class TrackQueue {
     //this.Index = this.TrackHistory.Count + 1;
   }
 
-  //private void _MediaItemFinished(object sender, MediaManager.Media.MediaItemEventArgs e) => this.Next();
-
   public void Play(Track track) {
     this.CurrentTrack = track;
 
-    var stream = File.OpenRead(track.Path);
+    this._currentPlayer?.Stop();
+    this._currentPlayer = this._CreatePlayer(track);
 
+    this._currentPlayer.Play();
+  }
+
+  private IAudioPlayer _CreatePlayer(Track track) {
+    var stream = File.OpenRead(track.Path);
+    var player = this._currentPlayer = this._audioManager.CreatePlayer(stream);
+    player.PlaybackEnded += this._CurrentPlayer_PlaybackEnded;
+
+    return player;
+  } 
+
+  private void _CurrentPlayer_PlaybackEnded(object? sender, EventArgs e) {
+    this._RemoveCurrentPlayerSafely();
+    this.Next();
+  }
+
+  private void _RemoveCurrentPlayerSafely() {
+    if (this._currentPlayer == null)
+      return;
+
+    this._currentPlayer.PlaybackEnded -= this._CurrentPlayer_PlaybackEnded;
+    this._currentPlayer.Stop();
+    this._currentPlayer.Dispose();
+    this._currentPlayer = null;
+  }
+
+  //todo: works fine with first start but doesn't with new song selected, differentiate with check of cross-media-initialization
+  public void Play() {
+    if (this._wasPaused) {
+      this._currentPlayer.Play();
+      return;
+    }
+
+    this._RemoveCurrentPlayerSafely();
+
+    var progress = this._currentPlayer?.CurrentPosition ?? 0;
+
+    if (progress > 0)
+      this._PlayAtTime(progress);
+    else
+      this.Play(this.CurrentTrack);
+  }
+
+  private void _PlayAtTime(double timeInSeconds) {
     this._currentPlayer?.Stop();
 
-    this._currentPlayer = this._audioManager.CreatePlayer(stream);
-    this._currentPlayer.Play();
-
-    //this._mediaManager.Play(track.Path);
-  }
-
-  //todo: works fine with first start but doesnt with new song selected, differentiate with check of crossmediainitization
-  public void Play() {
-    
-
-    //  if (!this._wasPaused) {
-    //    var progress = this.CurrentTrack.GetProgress();
-    //
-    //    if (progress != TimeSpan.Zero)
-    //      this._PlayAtTime(progress);
-    //    else
-    //      this._mediaManager.Play(this.CurrentTrack.Path);
-    //
-    //  } else
-    //    this._mediaManager.Play();
-  }
-
-  private void _PlayAtTime(TimeSpan time) {
-  //  var task = this._mediaManager.Extractor.CreateMediaItem(this.CurrentTrack.Path);
-  //  task.Wait();
-  //
-  //  this._mediaManager.Play(task.Result, time);
-  //  this._mediaManager.SeekTo(time);
+    var player = this._currentPlayer = this._CreatePlayer(this.CurrentTrack);
+    player.Seek(timeInSeconds);
+    player.Play();
   }
 
   public void Pause() {
-   // this._mediaManager.Pause();
-   // this._wasPaused = true;
+    this._currentPlayer!.Pause();
+    this._wasPaused = true;
   }
 
   public void Next() {
-   // if (this.NextUpTracks.Count > 0)
-   //   this.Play(this.NextUpTracks.Dequeue());
-   //
-   // else if (this.QueuedTracks.Count > 0)
-   //   this.Play(this.QueuedTracks.Dequeue());
+   if (this.NextUpTracks.Count > 0)
+     this.Play(this.NextUpTracks.Dequeue());
+   
+   else if (this.QueuedTracks.Count > 0)
+     this.Play(this.QueuedTracks.Dequeue());
 
-    ++this.Index;
+   ++this.Index;
   }
 
   //todo: implement again
@@ -173,7 +192,7 @@ public class TrackQueue {
   }
 
   public void Shuffle() {
-   // this.QueuedTracks.Shuffle();
+    this.QueuedTracks.Shuffle();
     var track = this.QueuedTracks[0];
     this.QueuedTracks.RemoveAt(0);
     this.CurrentTrack = track;
@@ -182,5 +201,27 @@ public class TrackQueue {
     this.Play();
   }
 
+  public void JumpToPercent(double value) {
+    if (this.CurrentTrack == null)
+      throw new ArgumentNullException(nameof(this.CurrentTrack));
+
+    var duration = this._currentPlayer?.Duration ?? 0; //todo: better null checks needed beforehand
+    var position = duration * value;
+    this._currentPlayer?.Seek(position);
+  }
+
+  public double GetProgressPercent() {
+    if (this.CurrentTrack == null)
+      return 0;
+
+    var duration = this._currentPlayer?.Duration ?? 0;
+    var position = this._currentPlayer?.CurrentPosition ?? 0;
+
+    if (duration == 0)
+      return 0;
+
+    var result = position / duration;
+    return result;
+  }
 
 }

@@ -87,6 +87,9 @@
 	  <Compile Update="Views\Pages\TabLibraryPage.xaml.cs">
 	    <DependentUpon>TabLibraryPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\UserControls\BottomTrackPlayerView.xaml.cs">
+	    <DependentUpon>BottomTrackPlayerView.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\UserControls\SmallTrackCell.xaml.cs">
 	    <DependentUpon>SmallTrackCell.xaml</DependentUpon>
 	  </Compile>
@@ -105,7 +108,7 @@
 	  <MauiXaml Update="Views\Pages\SongsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\UserControls\BottomTrackView.xaml">
+	  <MauiXaml Update="Views\UserControls\BottomTrackPlayerView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\UserControls\DisplayStateView.xaml">

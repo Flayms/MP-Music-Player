@@ -1,17 +1,19 @@
-﻿using Music_Player_Maui.Models;
+﻿using System.Diagnostics;
+using System.Timers;
+using Music_Player_Maui.Models;
 using CommunityToolkit.Mvvm.Input;
 using Music_Player_Maui.Services;
+using Timer = System.Threading.Timer;
 
-namespace Music_Player_Maui.ViewModels; 
+namespace Music_Player_Maui.ViewModels;
 
-//todo: better name
-public partial class TrackViewModel : AViewModel {
+public partial class TrackPlayerViewModel : AViewModel {
   private readonly TrackQueue _queue;
 
   public Track? Track {
     get => this._track;
     set {
-      if (!this.SetProperty(ref this._track, value))
+      if (!this.SetProperty(ref this._track!, value))
         return;
 
       this.OnPropertyChanged(nameof(this.Title));
@@ -38,12 +40,13 @@ public partial class TrackViewModel : AViewModel {
 
   //private readonly TrackQueue _queue;
   private Track _track = null!;
+  private Timer _timer;
+  private double _progressPercent;
 
-  //public static TrackViewModel Instance = _instance ??= new TrackViewModel();
-  //private static TrackViewModel _instance;
-
-  public TrackViewModel(TrackQueue queue) {
+  public TrackPlayerViewModel(TrackQueue queue) {
     this._queue = queue;
+
+    this._timer = new Timer(this._UpdateProgress, null, 0, 500);
 
     //this.Track = musicService.GetTracks().First();
     //var queue = TrackQueue.Instance;
@@ -51,7 +54,7 @@ public partial class TrackViewModel : AViewModel {
     //this._queue = queue;
     //this.Track = queue.CurrentTrack;
 
-    //queue.NewSongSelected += this._OnNewSongSelected;
+    queue.NewSongSelected += this._OnNewSongSelected;
 
     //this._GetColors();
   }
@@ -76,30 +79,41 @@ public partial class TrackViewModel : AViewModel {
     this._isPlaying = !this._isPlaying;
     this.OnPropertyChanged(nameof(this.PlayPauseImageSource));
 
-    //if (this._isPlaying)
-    //  this._queue.Play();
-    //else
-    //  this._queue.Pause();
+    if (this._isPlaying)
+      this._queue.Play();
+    else
+      this._queue.Pause();
   }
 
-  //[RelayCommand]
-  //public void NextTapped() => this._queue.Next();
-  //
-  //[RelayCommand]
-  //public void PreviousTapped() => this._queue.Previous();
-  //
-  //[RelayCommand]
-  //public void ShuffleTapped() {
-  //  this._queue.Shuffle();
-  //  this.OnPropertyChanged(nameof(this.ShuffleImageSource));
-  //}
+  [RelayCommand]
+  public void NextTapped() => this._queue.Next();
 
- // private void _OnNewSongSelected(object sender, TrackEventArgs args) {
- //   this.Track = args.Track;
- //   this._isPlaying = true;
- //   this._GetColors();
- // }
- //
- // public void TrackPositionChanged(double value) => this._queue.CurrentTrack.JumpToPercent(value);
+  [RelayCommand]
+  public void PreviousTapped() => this._queue.Previous();
 
+  [RelayCommand]
+  public void ShuffleTapped() {
+    this._queue.Shuffle();
+    //  this.OnPropertyChanged(nameof(this.ShuffleImageSource));
+  }
+
+  private void _OnNewSongSelected(object? sender, TrackEventArgs args) {
+    this.Track = args.Track;
+    this._isPlaying = true;
+    //  this._GetColors();
+  }
+
+  private void _UpdateProgress(object? _) => this.ProgressPercent = this._queue.GetProgressPercent();
+
+  public double ProgressPercent {
+    get => this._progressPercent;
+    set => this.SetProperty(ref this._progressPercent, value);
+  }
+
+  [RelayCommand]
+  public void TrackPositionChanged() {
+    Trace.WriteLine($"Jumping to {this.ProgressPercent}");
+
+    this._queue.JumpToPercent(this.ProgressPercent);
+  }
 }

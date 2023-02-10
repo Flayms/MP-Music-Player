@@ -56,7 +56,7 @@
       </ListView.ItemTemplate>
     </ListView>
 
-    <UserControls:BottomTrackView Grid.Row="4"/>
+    <UserControls:BottomTrackPlayerView Grid.Row="4"/>
   </Grid>
 
 </ContentPage>
