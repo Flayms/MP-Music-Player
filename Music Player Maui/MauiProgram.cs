@@ -45,6 +45,9 @@ public static class MauiProgram {
     services.AddSingleton<BottomTrackPlayerView>();
     services.AddSingleton<TrackPlayerViewModel>();
 
+    services.AddScoped<SearchPage>();
+    services.AddScoped<SearchViewModel>();
+
 #if DEBUG
     builder.Logging.AddDebug();
 #endif

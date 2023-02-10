@@ -43,6 +43,21 @@ public partial class SongsViewModel : AViewModel {
     }
   }
 
+  //todo: implement for searchPage
+  public SongsViewModel(IReadOnlyList<Track> tracks, MusicService musicLoadingService, MusicFileParsingService musicFileParsingService, TrackQueue queue) {
+    //this._musicLoadingService = musicLoadingService;
+    //this._queue = queue;
+
+    //musicLoadingService.LoadingStateChangedEvent += this._OnLoadingChanged;
+    //musicFileParsingService.OnTrackLoaded += this._OnTrackLoaded;
+
+    //this.DisplayState = _GetDisplayState(musicLoadingService.IsLoading, musicLoadingService.HasTracks);
+
+    //if (this.DisplayState == DisplayState.DisplayingContent) { //todo: kinda double code
+    //  this.Tracks = this._LoadTrackViewModels();
+    //}
+  }
+
   private void _OnTrackLoaded(object? sender, MusicFileParsingService.TrackLoadedEventArgs e) {
     this.AmountOfTracksRead = $"Amount of tracks read: {e.AmountOfLoadedTracks} / {e.TotalAmountOfTracks}";
   }

@@ -1,11 +1,37 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ViewModels="using:Music_Player_Maui.ViewModels"
+             xmlns:Models="using:Music_Player_Maui.Models"
+             xmlns:UserControls="using:Music_Player_Maui.Views.UserControls"
              x:Class="Music_Player_Maui.Views.Pages.SearchPage"
-             Title="Search">
+             Title="Search"
+             x:DataType="ViewModels:SearchViewModel">
 
-  <VerticalStackLayout>
-    <SearchBar Placeholder="Search for Tracks, Artists, etc.."
-               CancelButtonColor="White" />
-  </VerticalStackLayout>
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="auto" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+
+    <SearchBar x:Name="searchBar"
+               Placeholder="Search for Tracks, Artists, etc.."
+               CancelButtonColor="White"
+               SearchCommand="{Binding PerformSearchCommand}"
+               SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}"/>
+
+    <!--todo: use SongsPage here!-->
+    <ListView Grid.Row="1"
+              ItemsSource="{Binding Tracks}"
+              RowHeight="69"
+              SeparatorVisibility="None">
+
+      <ListView.ItemTemplate>
+        <DataTemplate x:DataType="Models:Track">
+          <UserControls:SmallTrackCell />
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
+
+  </Grid>
 </ContentPage>

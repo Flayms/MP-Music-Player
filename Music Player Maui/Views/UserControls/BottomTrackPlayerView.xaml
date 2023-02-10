@@ -2,8 +2,14 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ViewModels="clr-namespace:Music_Player_Maui.ViewModels"
+             xmlns:Converters="using:Music_Player_Maui.Converters"
              x:Class="Music_Player_Maui.Views.UserControls.BottomTrackPlayerView"
-             x:DataType="ViewModels:TrackPlayerViewModel">
+             x:DataType="ViewModels:TrackPlayerViewModel"
+             IsVisible="{Binding HasTrack}">
+
+  <ContentView.Resources>
+    <Converters:IsPlayingToImageSourceConverter x:Key="IsPlayingToImageSourceConverter" />
+  </ContentView.Resources>
 
   <VerticalStackLayout Margin="0, 0, 5, 0">
     <Grid>
@@ -25,7 +31,7 @@
         <Label Text="{Binding Title}"/>
         <Label Text="{Binding Producer}"/>
       </StackLayout>
-      <Image Source="{Binding PlayPauseImageSource}" WidthRequest ="20" Margin="10" Grid.Column="2">
+      <Image Source="{Binding Path=IsPlaying, Converter={StaticResource IsPlayingToImageSourceConverter}}" WidthRequest ="20" Margin="10" Grid.Column="2">
         <Image.GestureRecognizers>
           <TapGestureRecognizer Command="{Binding PlayTappedCommand}" />
         </Image.GestureRecognizers>

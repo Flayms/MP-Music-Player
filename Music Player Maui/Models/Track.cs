@@ -9,7 +9,12 @@ public class Track {
   public string Path { get; set; } = null!;
   public string Title { get; set; } = null!;
   public List<Artist> Artists { get; set; } = null!;
-  public string CombinedArtistNames => string.Join($" {Artist.SEPARATOR} ", Artists.Select(a => a.Name));
+  public string CombinedArtistNames => string.Join($" {Artist.SEPARATOR} ", this.Artists.Select(a => a.Name));
+
+  /// <summary>
+  /// Format: "Artists - Title"
+  /// </summary>
+  public string CombinedName => $"{this.CombinedArtistNames} - {this.Title}";
 
   public List<Genre> Genres { get; set; } = null!;
 

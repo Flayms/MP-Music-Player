@@ -19,9 +19,12 @@ public partial class TrackPlayerViewModel : AViewModel {
       this.OnPropertyChanged(nameof(this.Title));
       this.OnPropertyChanged(nameof(this.Producer));
       this.OnPropertyChanged(nameof(this.CoverSource));
-      this.OnPropertyChanged(nameof(this.PlayPauseImageSource));
+      this.OnPropertyChanged(nameof(this.IsPlaying));
+      this.OnPropertyChanged(nameof(this.HasTrack));
     }
   }
+
+  public bool HasTrack => this.Track != null;
 
   //todo: only temp!!
   //public ICollection<Track> Tracks => TrackQueue.Instance.AllTracks;
@@ -29,19 +32,23 @@ public partial class TrackPlayerViewModel : AViewModel {
   public string Title => this.Track?.Title ?? "no song selected";
   public string Producer => this.Track?.CombinedArtistNames ?? "/";
   public ImageSource CoverSource => this.Track?.Cover.Source ?? ImageSource.FromFile("record.png"); //todo: refac!!
-  public string PlayPauseImageSource => this._isPlaying ? "pause.png" : "play.png";
+
   //public string ShuffleImageSource => this._queue.IsShuffle ? "shuffle_selected.png" : "shuffle.png";
 
   //colors used for gradient of trackview
   //public Color Color { get; private set; }
   //public Color ColorDark { get; private set; }
 
-  private bool _isPlaying;
+  public bool IsPlaying {
+    get => this._isPlaying;
+    private set => this.SetProperty(ref this._isPlaying, value);
+  }
 
   //private readonly TrackQueue _queue;
   private Track _track = null!;
   private Timer _timer;
   private double _progressPercent;
+  private bool _isPlaying;
 
   public TrackPlayerViewModel(TrackQueue queue) {
     this._queue = queue;
@@ -76,10 +83,9 @@ public partial class TrackPlayerViewModel : AViewModel {
 
   [RelayCommand]
   public void PlayTapped() {
-    this._isPlaying = !this._isPlaying;
-    this.OnPropertyChanged(nameof(this.PlayPauseImageSource));
+    this.IsPlaying = !this.IsPlaying;
 
-    if (this._isPlaying)
+    if (this.IsPlaying)
       this._queue.Play();
     else
       this._queue.Pause();
@@ -99,7 +105,7 @@ public partial class TrackPlayerViewModel : AViewModel {
 
   private void _OnNewSongSelected(object? sender, TrackEventArgs args) {
     this.Track = args.Track;
-    this._isPlaying = true;
+    this.IsPlaying = true;
     //  this._GetColors();
   }
 
