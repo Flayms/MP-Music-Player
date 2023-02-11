@@ -1,16 +1,15 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Music_Player_Maui.Services;
 
 namespace Music_Player_Maui.ViewModels; 
 
 public partial class SearchViewModel : AViewModel {
-  public IReadOnlyCollection<TrackCellViewModel>? Tracks {
-    get => this._tracks;
-    set => this.SetProperty(ref this._tracks, value);
-  }
+
+  [ObservableProperty]
+  private IReadOnlyCollection<TrackCellViewModel>? _tracks;
 
   private readonly MusicService _musicService;
-  private IReadOnlyCollection<TrackCellViewModel>? _tracks;
 
   public SearchViewModel(MusicService musicService) {
     this._musicService = musicService;

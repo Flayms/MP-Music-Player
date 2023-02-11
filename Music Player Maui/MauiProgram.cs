@@ -48,6 +48,9 @@ public static class MauiProgram {
     services.AddScoped<SearchPage>();
     services.AddScoped<SearchViewModel>();
 
+    services.AddSingleton<QueuePage>();
+    services.AddSingleton<QueueViewModel>();
+
 #if DEBUG
     builder.Logging.AddDebug();
 #endif

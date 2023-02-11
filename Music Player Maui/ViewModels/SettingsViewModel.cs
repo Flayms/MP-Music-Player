@@ -1,21 +1,21 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Storage;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Music_Player_Maui.Services;
 
 namespace Music_Player_Maui.ViewModels; 
 
 public partial class SettingsViewModel : AViewModel {
-  private readonly Settings _settings;
-  private readonly MusicService _musicLoadingService;
+ 
+
+  [ObservableProperty]
   private string _musicDirectoryPath = null!;
 
-  public string MusicDirectoryPath { //todo: go directly to settings here
-    get => this._musicDirectoryPath;
-    private set => this.SetProperty(ref this._musicDirectoryPath, value);
-  }
-
   public string Version => VersionTracking.CurrentVersion;
+
+  private readonly Settings _settings;
+  private readonly MusicService _musicLoadingService;
 
   public SettingsViewModel(Settings settings, MusicService musicLoadingService) {
     this._settings = settings;
@@ -29,7 +29,7 @@ public partial class SettingsViewModel : AViewModel {
 
       //todo: shouldn't be done here
       await Permissions.RequestAsync<Permissions.StorageRead>();
-      await Permissions.RequestAsync <Permissions.StorageWrite>();
+      await Permissions.RequestAsync<Permissions.StorageWrite>();
 
 
       var folder = await FolderPicker.Default.PickAsync(CancellationToken.None);

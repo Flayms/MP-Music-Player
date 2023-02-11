@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Timers;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Music_Player_Maui.Models;
 using CommunityToolkit.Mvvm.Input;
 using Music_Player_Maui.Services;
@@ -10,25 +11,18 @@ namespace Music_Player_Maui.ViewModels;
 public partial class TrackPlayerViewModel : AViewModel {
   private readonly TrackQueue _queue;
 
-  public Track? Track {
-    get => this._track;
-    set {
-      if (!this.SetProperty(ref this._track!, value))
-        return;
+  [ObservableProperty]
+  [NotifyPropertyChangedFor(nameof(Title))]
+  [NotifyPropertyChangedFor(nameof(Producer))]
+  [NotifyPropertyChangedFor(nameof(CoverSource))]
+  [NotifyPropertyChangedFor(nameof(IsPlaying))]
+  [NotifyPropertyChangedFor(nameof(HasTrack))]
+  private Track? _track;
 
-      this.OnPropertyChanged(nameof(this.Title));
-      this.OnPropertyChanged(nameof(this.Producer));
-      this.OnPropertyChanged(nameof(this.CoverSource));
-      this.OnPropertyChanged(nameof(this.IsPlaying));
-      this.OnPropertyChanged(nameof(this.HasTrack));
-    }
-  }
+  [ObservableProperty]
+  private bool _isPlaying;
 
   public bool HasTrack => this.Track != null;
-
-  //todo: only temp!!
-  //public ICollection<Track> Tracks => TrackQueue.Instance.AllTracks;
-
   public string Title => this.Track?.Title ?? "no song selected";
   public string Producer => this.Track?.CombinedArtistNames ?? "/";
   public ImageSource CoverSource => this.Track?.Cover.Source ?? ImageSource.FromFile("record.png"); //todo: refac!!
@@ -39,16 +33,10 @@ public partial class TrackPlayerViewModel : AViewModel {
   //public Color Color { get; private set; }
   //public Color ColorDark { get; private set; }
 
-  public bool IsPlaying {
-    get => this._isPlaying;
-    private set => this.SetProperty(ref this._isPlaying, value);
-  }
-
   //private readonly TrackQueue _queue;
-  private Track _track = null!;
+
   private Timer _timer;
   private double _progressPercent;
-  private bool _isPlaying;
 
   public TrackPlayerViewModel(TrackQueue queue) {
     this._queue = queue;

@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Music_Player_Maui.Enums;
 using Music_Player_Maui.Models;
 using Music_Player_Maui.Services;
@@ -8,26 +9,18 @@ using Music_Player_Maui.Extensions;
 namespace Music_Player_Maui.ViewModels; 
 
 public partial class SongsViewModel : AViewModel {
-  private readonly MusicService _musicLoadingService;
-  private readonly TrackQueue _queue;
+
+  [ObservableProperty]
   private DisplayState _displayState = DisplayState.Loading;
+
+  [ObservableProperty]
   private IReadOnlyList<TrackCellViewModel>? _tracks;
+
+  [ObservableProperty]
   private string? _amountOfTracksRead;
 
-  public IReadOnlyList<TrackCellViewModel>? Tracks {
-    get => this._tracks;
-    set => this.SetProperty(ref this._tracks, value);
-  }
-
-  public DisplayState DisplayState {
-    get => this._displayState;
-    set => this.SetProperty(ref this._displayState, value);
-  }
-
-  public string? AmountOfTracksRead {
-    get => this._amountOfTracksRead;
-    set => this.SetProperty(ref this._amountOfTracksRead, value);
-  }
+  private readonly MusicService _musicLoadingService;
+  private readonly TrackQueue _queue;
 
   public SongsViewModel(MusicService musicLoadingService, MusicFileParsingService musicFileParsingService, TrackQueue queue) {
     this._musicLoadingService = musicLoadingService;
@@ -41,21 +34,6 @@ public partial class SongsViewModel : AViewModel {
     if (this.DisplayState == DisplayState.DisplayingContent) { //todo: kinda double code
       this.Tracks = this._LoadTrackViewModels();
     }
-  }
-
-  //todo: implement for searchPage
-  public SongsViewModel(IReadOnlyList<Track> tracks, MusicService musicLoadingService, MusicFileParsingService musicFileParsingService, TrackQueue queue) {
-    //this._musicLoadingService = musicLoadingService;
-    //this._queue = queue;
-
-    //musicLoadingService.LoadingStateChangedEvent += this._OnLoadingChanged;
-    //musicFileParsingService.OnTrackLoaded += this._OnTrackLoaded;
-
-    //this.DisplayState = _GetDisplayState(musicLoadingService.IsLoading, musicLoadingService.HasTracks);
-
-    //if (this.DisplayState == DisplayState.DisplayingContent) { //todo: kinda double code
-    //  this.Tracks = this._LoadTrackViewModels();
-    //}
   }
 
   private void _OnTrackLoaded(object? sender, MusicFileParsingService.TrackLoadedEventArgs e) {
@@ -117,6 +95,11 @@ public partial class SongsViewModel : AViewModel {
   public async Task NavigateToSearch() {
     //Shell.Current.CurrentPage.Title = "Search";
     await Shell.Current.GoToAsync($"///{nameof(SearchPage)}");
+  }
+
+  [RelayCommand]
+  public async Task NavigateToQueue() {
+    await Shell.Current.GoToAsync(nameof(QueuePage));
   }
 
 }
