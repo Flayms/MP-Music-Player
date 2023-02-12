@@ -12,6 +12,7 @@
     <Grid.RowDefinitions>
       <RowDefinition Height="auto" />
       <RowDefinition Height="*" />
+      <RowDefinition Height="auto"/>
     </Grid.RowDefinitions>
 
     <SearchBar x:Name="searchBar"
@@ -28,10 +29,14 @@
 
       <ListView.ItemTemplate>
         <DataTemplate x:DataType="Models:Track">
-          <UserControls:SmallTrackCell />
+          <ViewCell>
+            <UserControls:SmallTrackView />
+          </ViewCell>
         </DataTemplate>
       </ListView.ItemTemplate>
     </ListView>
+
+    <UserControls:BottomTrackPlayerView Grid.Row="2"/>
 
   </Grid>
 </ContentPage>

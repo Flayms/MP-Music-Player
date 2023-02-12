@@ -5,7 +5,7 @@
              xmlns:Models="clr-namespace:Music_Player_Maui.Models"
              xmlns:ViewModels="clr-namespace:Music_Player_Maui.ViewModels"
              x:Class="Music_Player_Maui.Views.Pages.QueuePage"
-             Title="Queue"
+             Title="Now Playing"
              x:DataType="ViewModels:QueueViewModel">
 
   <Grid>
@@ -18,10 +18,10 @@
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
-    <!--<Label Text="Currently Playing:" FontAttributes="Bold"/>
-    <UserControls:SmallTrackCell Grid.Row="1" BindingContext=""/>-->
+    <Label Text="Currently Playing:" FontAttributes="Bold"/>
+    <UserControls:SmallTrackView Grid.Row="1" BindingContext="{Binding CurrentTrack}"/>
 
-    <!--<Label Grid.Row="2" Text="Next Up:" FontAttributes="Bold"/>
+    <Label Grid.Row="2" Text="Next Up:" FontAttributes="Bold"/>
     <ListView Grid.Row="3"
               ItemsSource="{Binding  NextUpTracks}"
               RowHeight="69"
@@ -29,23 +29,27 @@
 
       <ListView.ItemTemplate>
         <DataTemplate x:DataType="Models:Track">
-          <UserControls:SmallTrackCell />
+          <ViewCell>
+            <UserControls:SmallTrackView />
+          </ViewCell>
         </DataTemplate>
       </ListView.ItemTemplate>
     </ListView>
 
     <Label Grid.Row="4" Text="Next In Queue:" FontAttributes="Bold"/>
-    <ListView Grid.Row="3"
-              ItemsSource="{Binding  QueuedTracks}"
+    <ListView Grid.Row="5"
+              ItemsSource="{Binding QueuedTracks}"
               RowHeight="69"
               SeparatorVisibility="None">
 
       <ListView.ItemTemplate>
         <DataTemplate x:DataType="Models:Track">
-          <UserControls:SmallTrackCell />
+          <ViewCell>
+            <UserControls:SmallTrackView />
+          </ViewCell>
         </DataTemplate>
       </ListView.ItemTemplate>
-    </ListView>-->
+    </ListView>
 
   </Grid>
 

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ViewModels="using:Music_Player_Maui.ViewModels"
+             x:Class="Music_Player_Maui.Views.Pages.GroupsPage"
+             x:DataType="ViewModels:GroupsViewModel"
+             Title="{Binding GroupType}">
+
+  <ListView ItemsSource="{Binding Groups}" RowHeight="60">
+    <ListView.ItemTemplate>
+      <DataTemplate x:DataType="ViewModels:SmallGroupViewModel">
+        <TextCell Text="{Binding Name}"
+                    Detail="{Binding TrackAmountUi}"/>
+      </DataTemplate>
+    </ListView.ItemTemplate>
+  </ListView>
+
+</ContentPage>

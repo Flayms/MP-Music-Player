@@ -51,6 +51,9 @@ public static class MauiProgram {
     services.AddSingleton<QueuePage>();
     services.AddSingleton<QueueViewModel>();
 
+    services.AddScoped<GroupsPage>();
+    services.AddScoped<GroupsViewModel>();
+
 #if DEBUG
     builder.Logging.AddDebug();
 #endif

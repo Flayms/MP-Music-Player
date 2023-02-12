@@ -4,7 +4,7 @@ using Music_Player_Maui.Models;
 namespace Music_Player_Maui.ViewModels; 
 
 //todo: multiple code with trackViewModel
-public partial class TrackCellViewModel : AViewModel {
+public partial class SmallTrackViewModel : AViewModel {
   public Track Track { get; }
 
   public event EventHandler<TrackEventArgs>? OnTappedEvent;
@@ -13,7 +13,7 @@ public partial class TrackCellViewModel : AViewModel {
   public string Producer => this.Track.CombinedArtistNames;
   public ImageSource CoverSource => this.Track.Cover.Source; //todo: refac!!
 
-  public TrackCellViewModel(Track track) {
+  public SmallTrackViewModel(Track track) {
     this.Track = track;
   }
 

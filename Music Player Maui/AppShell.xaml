@@ -14,29 +14,32 @@
   </FlyoutItem>-->
 
   <FlyoutItem Title="Genres" Icon="genres.png">
-    <ShellContent Route="SongsPage" ContentTemplate="{DataTemplate local:SongsPage}" />
+    <ShellContent Route="GroupsPage-Genres" ContentTemplate="{DataTemplate local:GroupsPage}" />
   </FlyoutItem>
 
   <FlyoutItem Title="Artists" Icon="people.png">
-    <ShellContent Route="SongsPage" ContentTemplate="{DataTemplate local:SongsPage}" />
+    <ShellContent Route="GroupsPage-Artists" ContentTemplate="{DataTemplate local:GroupsPage}" />
   </FlyoutItem>
 
   <FlyoutItem Title="Albums" Icon="albums.png">
-    <ShellContent Route="SongsPage" ContentTemplate="{DataTemplate local:SongsPage}" />
+    <ShellContent Route="GroupsPage" ContentTemplate="{DataTemplate local:GroupsPage}" />
   </FlyoutItem>
 
   <FlyoutItem Title="Playlists" Icon="playlist.png">
-    <ShellContent Route="SongsPage" ContentTemplate="{DataTemplate local:SongsPage}" />
+    <ShellContent Route="GroupsPage-Artists" ContentTemplate="{DataTemplate local:GroupsPage}" />
   </FlyoutItem>
 
   <FlyoutItem Title="Folders" Icon="folder.png">
-    <ShellContent Route="SongsPage" ContentTemplate="{DataTemplate local:SongsPage}" />
+    <ShellContent Route="GroupsPage-Artists" ContentTemplate="{DataTemplate local:GroupsPage}" />
   </FlyoutItem>
-
 
 
   <FlyoutItem Title="Search" Icon="search.png">
     <ShellContent Route="SearchPage" ContentTemplate="{DataTemplate local:SearchPage}" />
+  </FlyoutItem>
+
+  <FlyoutItem Title="Now Playing" Icon="now_playing.png">
+    <ShellContent Route="QueuePage" ContentTemplate="{DataTemplate local:QueuePage}" />
   </FlyoutItem>
 
   <FlyoutItem Title="Settings" Icon="settings.png">

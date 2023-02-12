@@ -4,17 +4,17 @@ namespace Music_Player_Maui.ViewModels;
 
 public partial class QueueViewModel : AViewModel {
 
-  public TrackCellViewModel? CurrentTrack => this._queue.CurrentTrack != null ? new TrackCellViewModel(this._queue.CurrentTrack) : null;
+  public SmallTrackViewModel? CurrentTrack => this._queue.CurrentTrack != null ? new SmallTrackViewModel(this._queue.CurrentTrack) : null;
 
   //todo: need to find better way than just copying the lists
-  public List<TrackCellViewModel> NextUpTracks => this._queue.NextUpTracks.Select(t => new TrackCellViewModel(t)).ToList();
+  public List<SmallTrackViewModel> NextUpTracks => this._queue.NextUpTracks.Select(t => new SmallTrackViewModel(t)).ToList();
 
-  public List<TrackCellViewModel> QueuedTracks {
+  public List<SmallTrackViewModel> QueuedTracks {
     get {
       return this._queue.QueuedTracks.Count <= 20
-        ? this._queue.QueuedTracks.Select(t => new TrackCellViewModel(t)).ToList()
+        ? this._queue.QueuedTracks.Select(t => new SmallTrackViewModel(t)).ToList()
         : this._queue.QueuedTracks.GetRange(0, 20)
-          .Select(t => new TrackCellViewModel(t))
+          .Select(t => new SmallTrackViewModel(t))
           .ToList();
     }
   }

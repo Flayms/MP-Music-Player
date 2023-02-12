@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
-<ViewCell  xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<ContentView  xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
            xmlns:ViewModels="using:Music_Player_Maui.ViewModels"
-           x:Class="Music_Player_Maui.Views.UserControls.SmallTrackCell"
-           x:DataType="ViewModels:TrackCellViewModel">
+           x:Class="Music_Player_Maui.Views.UserControls.SmallTrackView"
+           x:DataType="ViewModels:SmallTrackViewModel">
 
   <Frame  Padding="0" Margin="7" CornerRadius="7" BackgroundColor="Transparent">
     <Frame.GestureRecognizers>
@@ -48,4 +48,4 @@
     </Grid>
   </Frame>
 
-</ViewCell>
+</ContentView>

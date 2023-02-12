@@ -3,10 +3,10 @@
 namespace Music_Player_Maui;
 
 public partial class App : Application {
-  private readonly MusicService _musicLoadingServiceX;
+  private readonly MusicService _musicLoadingService;
 
-  public App(MusicService musicLoadingServiceX) {
-    this._musicLoadingServiceX = musicLoadingServiceX;
+  public App(MusicService musicLoadingService) {
+    this._musicLoadingService = musicLoadingService;
     this.InitializeComponent();
 
     this.MainPage = new NavigationPage(new AppShell());
@@ -16,7 +16,7 @@ public partial class App : Application {
   #region Overrides of Application
 
   protected override void OnStart() {
-    Task.Run(this._musicLoadingServiceX.GetTracksAsync);
+    Task.Run(this._musicLoadingService.GetTracksAsync);
 
     base.OnStart();
   }

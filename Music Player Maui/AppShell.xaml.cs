@@ -14,4 +14,5 @@ public partial class AppShell : Shell {
     this.FlyoutBehavior = FlyoutBehavior.Locked;
 #endif
   }
+
 }

@@ -6,7 +6,7 @@ using Music_Player_Maui.Services;
 using Music_Player_Maui.Views.Pages;
 using Music_Player_Maui.Extensions;
 
-namespace Music_Player_Maui.ViewModels; 
+namespace Music_Player_Maui.ViewModels;
 
 public partial class SongsViewModel : AViewModel {
 
@@ -14,22 +14,22 @@ public partial class SongsViewModel : AViewModel {
   private DisplayState _displayState = DisplayState.Loading;
 
   [ObservableProperty]
-  private IReadOnlyList<TrackCellViewModel>? _tracks;
+  private IReadOnlyList<SmallTrackViewModel>? _tracks;
 
   [ObservableProperty]
   private string? _amountOfTracksRead;
 
-  private readonly MusicService _musicLoadingService;
+  private readonly MusicService _musicService;
   private readonly TrackQueue _queue;
 
-  public SongsViewModel(MusicService musicLoadingService, MusicFileParsingService musicFileParsingService, TrackQueue queue) {
-    this._musicLoadingService = musicLoadingService;
+  public SongsViewModel(MusicService musicService, MusicFileParsingService musicFileParsingService, TrackQueue queue) {
+    this._musicService = musicService;
     this._queue = queue;
 
-    musicLoadingService.LoadingStateChangedEvent += this._OnLoadingChanged;
+    musicService.LoadingStateChangedEvent += this._OnLoadingChanged;
     musicFileParsingService.OnTrackLoaded += this._OnTrackLoaded;
 
-    this.DisplayState = _GetDisplayState(musicLoadingService.IsLoading, musicLoadingService.HasTracks);
+    this.DisplayState = _GetDisplayState(musicService.IsLoading, musicService.HasTracks);
 
     if (this.DisplayState == DisplayState.DisplayingContent) { //todo: kinda double code
       this.Tracks = this._LoadTrackViewModels();
@@ -41,7 +41,7 @@ public partial class SongsViewModel : AViewModel {
   }
 
   private void _OnLoadingChanged(object? sender, MusicService.LoadingEventArgs e) {
-    if (sender is not MusicService musicLoadingService)
+    if (sender is not MusicService musicService)
       return;
 
     if (e.IsLoading) {
@@ -49,7 +49,7 @@ public partial class SongsViewModel : AViewModel {
       return;
     }
 
-    if (!musicLoadingService.HasTracks) {
+    if (!musicService.HasTracks) {
       this.DisplayState = DisplayState.Empty;
       return;
     }
@@ -58,30 +58,30 @@ public partial class SongsViewModel : AViewModel {
     this.Tracks = this._LoadTrackViewModels();
   }
 
-  private IReadOnlyList<TrackCellViewModel> _LoadTrackViewModels() {
-    var tracks = this._musicLoadingService.GetTracks();
+  private IReadOnlyList<SmallTrackViewModel> _LoadTrackViewModels() {
+    var tracks = this._musicService.GetTracks();
 
     return tracks.Select(track => {
-      var model = new TrackCellViewModel(track);
-      model.OnTappedEvent += this._Model_OnTappedEvent;
+      var model = new SmallTrackViewModel(track);
+      model.OnTappedEvent += this._OnSmallTrackViewTapped;
       return model;
     }).ToList();
   }
 
-  private void _Model_OnTappedEvent(object? sender, TrackEventArgs e) {
-    if (sender is not TrackCellViewModel trackModel)
+  private void _OnSmallTrackViewTapped(object? sender, TrackEventArgs e) {
+    if (sender is not SmallTrackViewModel trackModel)
       return;
-    
+
     var trackQueue = this._queue;
-   var queue = new List<Track>();
-   var trackViewModels = this.Tracks;
-   var index = trackViewModels.IndexOf(trackModel);
+    var queue = new List<Track>();
+    var trackViewModels = this.Tracks;
+    var index = trackViewModels.IndexOf(trackModel);
 
-   for (var i = index; i < trackViewModels.Count; ++i)
-     queue.Add(trackViewModels[i].Track);
+    for (var i = index; i < trackViewModels.Count; ++i)
+      queue.Add(trackViewModels[i].Track);
 
-   trackQueue.ChangeQueue(queue);
-   trackQueue.Play();
+    trackQueue.ChangeQueue(queue);
+    trackQueue.Play();
   }
 
   private static DisplayState _GetDisplayState(bool isLoading, bool hasTracks)
@@ -98,8 +98,15 @@ public partial class SongsViewModel : AViewModel {
   }
 
   [RelayCommand]
-  public async Task NavigateToQueue() {
-    await Shell.Current.GoToAsync(nameof(QueuePage));
+  public void ShuffleAll() { //todo: also kinda double code?
+    var trackQueue = this._queue;
+
+    var trackViewModels = this.Tracks;
+    var newQueue = new List<SmallTrackViewModel>(trackViewModels); //todo: possible null!
+    newQueue.Shuffle();
+
+    trackQueue.ChangeQueue(newQueue.Select(vm => vm.Track).ToList());
+    trackQueue.Play();
   }
 
 }

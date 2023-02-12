@@ -84,18 +84,24 @@
 	  <Compile Update="Platforms\Windows\CoverRetriever.cs">
 	    <ExcludeFromCurrentConfiguration>false</ExcludeFromCurrentConfiguration>
 	  </Compile>
+	  <Compile Update="Views\Pages\GroupsPage.xaml.cs">
+	    <DependentUpon>GroupsPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\Pages\TabLibraryPage.xaml.cs">
 	    <DependentUpon>TabLibraryPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\UserControls\BottomTrackPlayerView.xaml.cs">
 	    <DependentUpon>BottomTrackPlayerView.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\UserControls\SmallTrackCell.xaml.cs">
-	    <DependentUpon>SmallTrackCell.xaml</DependentUpon>
+	  <Compile Update="Views\UserControls\SmallTrackView.xaml.cs">
+	    <DependentUpon>SmallTrackView.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Views\Pages\GroupsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\Pages\QueuePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -117,7 +123,7 @@
 	  <MauiXaml Update="Views\UserControls\DisplayStateView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\UserControls\SmallTrackCell.xaml">
+	  <MauiXaml Update="Views\UserControls\SmallTrackView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
