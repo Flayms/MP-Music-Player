@@ -43,7 +43,8 @@
                    WidthRequest="48"
                    BackgroundColor="Transparent"
                    Padding="26, 0, 8, 0"
-                   Grid.Column="2" Grid.Row="0" Grid.RowSpan="2">
+                   Grid.Column="2" Grid.Row="0" Grid.RowSpan="2"
+                   Command="{Binding ShowOptionsCommand}">
       </ImageButton>
     </Grid>
   </Frame>

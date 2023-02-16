@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using Music_Player_Maui.Models;
+using Music_Player_Maui.Services;
 
 namespace Music_Player_Maui.ViewModels; 
 
@@ -20,5 +21,11 @@ public partial class SmallTrackViewModel : AViewModel {
   [RelayCommand]
   public void Play() {
     this.OnTappedEvent?.Invoke(this, new TrackEventArgs(this.Track));
+  }
+
+  [RelayCommand]
+  public async void ShowOptions() {
+    //todo: would be better to use DI over constructor
+    await ServiceHelper.Current.GetService<TrackOptionsService>()!.StartBasicOptionsMenuAsync(this.Track);
   }
 }

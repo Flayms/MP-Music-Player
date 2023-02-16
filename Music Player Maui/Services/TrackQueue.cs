@@ -214,7 +214,7 @@ public class TrackQueue {
     if (this.CurrentTrack == null)
       return 0;
 
-    var duration = this._currentPlayer?.Duration ?? 0;
+    var duration = this._currentPlayer?.Duration ?? 0; //todo: throws exception quite often
     var position = this._currentPlayer?.CurrentPosition ?? 0;
 
     if (duration == 0)

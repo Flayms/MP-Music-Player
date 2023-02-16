@@ -25,14 +25,27 @@ public static class MauiProgram {
     services.AddSingleton<Settings>();
 
     _CreateDatabaseService(services);
+    _AddDefaultServices(services);
+    _AddPageAndViewModelServices(services);
 
+#if DEBUG
+    builder.Logging.AddDebug();
+#endif
+
+    return builder.Build();
+  }
+
+  private static void _AddDefaultServices(IServiceCollection services) {
     services.AddSingleton(AudioManager.Current);
 
     services.AddSingleton<TrackQueue>();
     services.AddSingleton<TagReadingService>();
     services.AddSingleton<MusicFileParsingService>();
     services.AddSingleton<MusicService>();
+    services.AddSingleton<TrackOptionsService>();
+  }
 
+  private static void _AddPageAndViewModelServices(IServiceCollection services) {
     services.AddSingleton<SongsPage>();
     services.AddSingleton<SongsViewModel>();
 
@@ -55,13 +68,8 @@ public static class MauiProgram {
     services.AddScoped<GroupsViewModel>();
 
     services.AddTransient<TrackListViewModel>();
-
-#if DEBUG
-    builder.Logging.AddDebug();
-#endif
-
-    return builder.Build();
   }
+
 
   private static void _CreateDatabaseService(IServiceCollection services) {
     services.AddSingleton(provider => {
