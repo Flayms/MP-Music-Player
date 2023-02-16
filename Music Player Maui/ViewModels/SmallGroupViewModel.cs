@@ -2,7 +2,6 @@
 using Music_Player_Maui.Models;
 using Music_Player_Maui.Services;
 using Music_Player_Maui.Views.Pages;
-using Music_Player_Maui.Views.UserControls;
 
 namespace Music_Player_Maui.ViewModels;
 

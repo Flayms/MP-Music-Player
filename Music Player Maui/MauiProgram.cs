@@ -54,7 +54,7 @@ public static class MauiProgram {
     services.AddScoped<GroupsPage>();
     services.AddScoped<GroupsViewModel>();
 
-    services.AddScoped<TrackListViewModel>();
+    services.AddTransient<TrackListViewModel>();
 
 #if DEBUG
     builder.Logging.AddDebug();
