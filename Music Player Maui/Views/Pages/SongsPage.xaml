@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:Converters="using:Music_Player_Maui.Converters"
              xmlns:ViewModels="using:Music_Player_Maui.ViewModels"
-             xmlns:Models="clr-namespace:Music_Player_Maui.Models"
              xmlns:UserControls="clr-namespace:Music_Player_Maui.Views.UserControls"
              x:Class="Music_Player_Maui.Views.Pages.SongsPage"
              Title="Songs"
@@ -44,20 +43,11 @@
          IsVisible="{Binding Path=DisplayState, Converter={StaticResource displayStateToIsEmpty}}"
          Grid.Row="2"/>
 
-    <ListView ItemsSource="{Binding Tracks}"
-            IsVisible="{Binding Path=DisplayState, Converter={StaticResource displayStateToContentIsVisible}}"
-            Grid.Row="3"
-            RowHeight="69"
-            SeparatorVisibility="None">
-
-      <ListView.ItemTemplate>
-        <DataTemplate x:DataType="Models:Track">
-          <ViewCell>
-            <UserControls:SmallTrackView />
-          </ViewCell>
-        </DataTemplate>
-      </ListView.ItemTemplate>
-    </ListView>
+    <UserControls:TrackListView Grid.Row="3"
+                                IsVisible="{Binding Path=DisplayState,
+      Source={RelativeSource AncestorType={x:Type ViewModels:SongsViewModel}},
+      Converter={StaticResource displayStateToContentIsVisible}}"
+                                BindingContext="{Binding TrackListViewModel}" />
 
     <UserControls:BottomTrackPlayerView Grid.Row="4"/>
   </Grid>

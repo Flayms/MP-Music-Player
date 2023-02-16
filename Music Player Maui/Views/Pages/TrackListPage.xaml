@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ViewModels="clr-namespace:Music_Player_Maui.ViewModels"
+             xmlns:UserControls="clr-namespace:Music_Player_Maui.Views.UserControls"
+             x:Class="Music_Player_Maui.Views.Pages.TrackListPage"
+             x:DataType="ViewModels:TrackListViewModel"
+             Title="{Binding Title}">
+
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*" />
+      <RowDefinition Height="auto"/>
+    </Grid.RowDefinitions>
+
+    <UserControls:TrackListView BindingContext="{Binding .}"/>
+    <UserControls:BottomTrackPlayerView Grid.Row="1"/>
+  </Grid>
+
+</ContentPage>

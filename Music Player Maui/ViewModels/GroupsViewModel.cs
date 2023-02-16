@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Music_Player_Maui.Enums;
 using Music_Player_Maui.Models;
 using Music_Player_Maui.Services;
-using TagLib;
 
 namespace Music_Player_Maui.ViewModels;
 

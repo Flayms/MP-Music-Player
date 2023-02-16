@@ -10,7 +10,8 @@
     <ListView.ItemTemplate>
       <DataTemplate x:DataType="ViewModels:SmallGroupViewModel">
         <TextCell Text="{Binding Name}"
-                    Detail="{Binding TrackAmountUi}"/>
+                  Detail="{Binding TrackAmountUi}"
+                  Command="{Binding ShowTracksCommand}"/>
       </DataTemplate>
     </ListView.ItemTemplate>
   </ListView>
