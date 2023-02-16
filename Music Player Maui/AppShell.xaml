@@ -21,7 +21,7 @@
     <ShellContent Route="GroupsPage-Artists" ContentTemplate="{DataTemplate local:GroupsPage}" />
   </FlyoutItem>
 
-  <FlyoutItem Title="Albums" Icon="albums.png">
+  <!--<FlyoutItem Title="Albums" Icon="albums.png">
     <ShellContent Route="GroupsPage" ContentTemplate="{DataTemplate local:GroupsPage}" />
   </FlyoutItem>
 
@@ -31,7 +31,7 @@
 
   <FlyoutItem Title="Folders" Icon="folder.png">
     <ShellContent Route="GroupsPage-Artists" ContentTemplate="{DataTemplate local:GroupsPage}" />
-  </FlyoutItem>
+  </FlyoutItem>-->
 
 
   <FlyoutItem Title="Search" Icon="search.png">

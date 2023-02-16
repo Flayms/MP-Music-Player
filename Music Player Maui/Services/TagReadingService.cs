@@ -24,14 +24,14 @@ public class TagReadingService {
       };
 
       //todo: put in other method
-      var artistsNames = _GetArtists(fileTags);
+      var artistNames = _GetArtists(fileTags);
       var artists = new List<Artist>();
 
-      foreach (var artistsName in artistsNames) {
-        var artist = existingArtists.FirstOrDefault(a => a.Name == artistsName);
+      foreach (var artistName in artistNames) {
+        var artist = existingArtists.FirstOrDefault(a => a.Name.Equals(artistName, StringComparison.InvariantCultureIgnoreCase));
 
         if (artist == null) {
-          artist = new Artist { Name = artistsName };
+          artist = new Artist { Name = artistName };
           existingArtists.Add(artist);
         }
 
@@ -41,12 +41,11 @@ public class TagReadingService {
       track.Artists = artists;
 
       //todo: same here
-
       var genreNames = _GetGenres(fileTags.Genres);
       var genres = new List<Genre>();
 
       foreach (var genreName in genreNames) {
-        var genre = existingGenres.FirstOrDefault(g => g.Name == genreName);
+        var genre = existingGenres.FirstOrDefault(g => g.Name.Equals(genreName, StringComparison.InvariantCultureIgnoreCase));
 
         if (genre == null) {
           genre = new Genre { Name = genreName };
