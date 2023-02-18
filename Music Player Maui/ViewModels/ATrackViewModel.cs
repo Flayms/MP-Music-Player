@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using Music_Player_Maui.Models;
 using CommunityToolkit.Mvvm.Input;
 using Music_Player_Maui.Services;
-using Timer = System.Threading.Timer;
+using Microsoft.UI.Xaml;
 
 namespace Music_Player_Maui.ViewModels;
 
@@ -24,6 +24,11 @@ public abstract partial class ATrackViewModel : AViewModel {
   public string Producer => this.Track?.CombinedArtistNames ?? "/";
   public ImageSource CoverSource => this.Track?.Cover.Source ?? ImageSource.FromFile("record.png"); //todo: refac!!
 
+  public double CurrentPositionInS => this._queue.CurrentTrackPositionInS;
+
+  //todo: currently always shows length of last track after switching
+  public double TrackLengthInS => this._queue.CurrentTrackDurationInS;
+
   //public string ShuffleImageSource => this._queue.IsShuffle ? "shuffle_selected.png" : "shuffle.png";
 
   //colors used for gradient of trackview
@@ -37,11 +42,17 @@ public abstract partial class ATrackViewModel : AViewModel {
   protected ATrackViewModel(TrackQueue queue) {
     this._queue = queue;
 
-    var _ = new Timer(this._UpdateProgress, null, 0, 500);
+
+    var timer = new DispatcherTimer {
+      Interval = new TimeSpan(0, 0, 1)
+    };
+
+    timer.Tick += this._Timer_Tick;
+    timer.Start();
 
     this.Track = queue.CurrentTrack;
 
-    queue.NewSongSelected += this._OnNewSongSelected;
+    queue.NewSongSelected += this.OnNewSongSelected;
     queue.IsPlayingChanged += this._IsPlayingChanged;
 
     //this._GetColors();
@@ -72,12 +83,15 @@ public abstract partial class ATrackViewModel : AViewModel {
       this._queue.Play();
   }
 
-  private void _OnNewSongSelected(object? sender, TrackEventArgs args) {
+  protected virtual void OnNewSongSelected(object? sender, TrackEventArgs args) {
     this.Track = args.Track;
     //  this._GetColors();
   }
 
-  private void _UpdateProgress(object? _) => this.ProgressPercent = this._queue.GetProgressPercent();
+  private void _Timer_Tick(object? sender, object e) {
+    this.ProgressPercent = this._queue.GetProgressPercent();
+    this.OnPropertyChanged(nameof(this.CurrentPositionInS));
+  }
 
   public double ProgressPercent {
     get => this._progressPercent;
@@ -89,6 +103,7 @@ public abstract partial class ATrackViewModel : AViewModel {
     Trace.WriteLine($"Jumping to {this.ProgressPercent}");
 
     this._queue.JumpToPercent(this.ProgressPercent);
+    this.OnPropertyChanged(nameof(this.CurrentPositionInS));
   }
 
 }

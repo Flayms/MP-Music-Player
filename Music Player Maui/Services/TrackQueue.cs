@@ -34,6 +34,9 @@ public class TrackQueue {
 
   public int Index { get; private set; } //todo: make index setting public?
 
+  public double CurrentTrackDurationInS => this._currentPlayer?.Duration ?? 0;
+  public double CurrentTrackPositionInS => this._currentPlayer?.CurrentPosition ?? 0;
+
   public bool IsPlaying {
     get => this._isPlaying;
     private set {
@@ -126,7 +129,7 @@ public class TrackQueue {
   public void Play(Track track) {
     this.CurrentTrack = track;
 
-    this._currentPlayer?.Stop();
+    this._RemoveCurrentPlayerSafely();
     this._currentPlayer = this._CreatePlayer(track);
 
     this._currentPlayer.Play();

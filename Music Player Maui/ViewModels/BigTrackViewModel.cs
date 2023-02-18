@@ -1,4 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using Microsoft.UI.Xaml;
+using Music_Player_Maui.Models;
 using Music_Player_Maui.Services;
 
 namespace Music_Player_Maui.ViewModels; 
@@ -11,6 +13,14 @@ public partial class BigTrackViewModel : ATrackViewModel {
     this._trackOptionsService = trackOptionsService;
   }
 
+  #region Overrides of ATrackViewModel
+
+  protected override void OnNewSongSelected(object? sender, TrackEventArgs args) {
+    base.OnNewSongSelected(sender, args);
+    this.OnPropertyChanged(nameof(this.TrackLengthInS));
+  }
+
+  #endregion
 
   [RelayCommand]
   public void Next() => this._queue.Next();

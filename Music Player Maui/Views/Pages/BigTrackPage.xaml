@@ -9,7 +9,8 @@
              BackgroundColor="#0d0d0d">
 
   <ContentPage.Resources>
-    <Converters:IsPlayingToImageSourceConverter x:Key="IsPlayingToImageSourceConverter" />
+    <Converters:IsPlayingToImageSourceConverter x:Key="IsPlayingToImageSourceConverter"/>
+    <Converters:SecondsToDisplayTimeConverter x:Key="SecondsToDisplayTimeConverter"/>
   </ContentPage.Resources>
 
   <Grid Padding="20,5">
@@ -60,8 +61,10 @@
         <ColumnDefinition Width="auto"/>
       </Grid.ColumnDefinitions>
 
-      <Label Text="0:00"/>
-      <Label Grid.Column="1" Text="4:30"/>
+      <Label Text="{Binding CurrentPositionInS, Converter={StaticResource SecondsToDisplayTimeConverter}}"
+             Grid.Column="0"/>
+      <Label Text="{Binding TrackLengthInS, Converter={StaticResource SecondsToDisplayTimeConverter}}"
+             Grid.Column="1"/>
     </Grid>
 
     <Grid Grid.Row="7" ColumnSpacing="30">
@@ -85,9 +88,8 @@
         </Image.GestureRecognizers>
       </Image>
 
-      <Image Grid.Column="2" Source="{Binding Path=IsPlaying,
-        Converter={StaticResource IsPlayingToImageSourceConverter}}"
-             WidthRequest="20">
+      <Image Source="{Binding IsPlaying, Converter={StaticResource IsPlayingToImageSourceConverter}}"
+             Grid.Column="2" WidthRequest="20">
         <Image.GestureRecognizers>
           <TapGestureRecognizer Command="{Binding PlayTappedCommand}" />
         </Image.GestureRecognizers>
