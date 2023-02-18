@@ -27,6 +27,12 @@ jobs:
       
     - name: Build
       run: dotnet build "Music Player Maui/Music Player Maui.csproj" -c Release -f:net7.0-windows10.0.19041.0
+    
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: uploaded-content
+        path: {{ github.workspace }}
       
   release-project:
     name: Release Project
@@ -36,8 +42,8 @@ jobs:
     - name: Download artifact
       uses: actions/download-artifact@v3
       with:
-        name: static-site #better name
-    - name: Archive site content #better name
+        name: uploaded-content #better name
+    - name: Archive content #better name
       uses: thedoctor0/zip-release@master
       with:
         filename: site.zip #better name
