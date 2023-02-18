@@ -68,6 +68,8 @@ public static class MauiProgram {
     services.AddScoped<GroupsViewModel>();
 
     services.AddTransient<TrackListViewModel>();
+
+    services.AddSingleton<BigTrackViewModel>();
   }
 
 

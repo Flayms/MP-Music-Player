@@ -4,12 +4,13 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using Music_Player_Maui.Models;
 using CommunityToolkit.Mvvm.Input;
 using Music_Player_Maui.Services;
+using Music_Player_Maui.Views.Pages;
 using Timer = System.Threading.Timer;
 
 namespace Music_Player_Maui.ViewModels;
 
 public partial class TrackPlayerViewModel : AViewModel {
-  private readonly TrackQueue _queue;
+  protected readonly TrackQueue _queue;
 
   [ObservableProperty]
   [NotifyPropertyChangedFor(nameof(Title))]
@@ -35,19 +36,14 @@ public partial class TrackPlayerViewModel : AViewModel {
 
   //private readonly TrackQueue _queue;
 
-  private Timer _timer;
   private double _progressPercent;
 
   public TrackPlayerViewModel(TrackQueue queue) {
     this._queue = queue;
 
-    this._timer = new Timer(this._UpdateProgress, null, 0, 500);
+    var _ = new Timer(this._UpdateProgress, null, 0, 500);
 
-    //this.Track = musicService.GetTracks().First();
-    //var queue = TrackQueue.Instance;
-    //
-    //this._queue = queue;
-    //this.Track = queue.CurrentTrack;
+    this.Track = queue.CurrentTrack;
 
     queue.NewSongSelected += this._OnNewSongSelected;
 
@@ -79,18 +75,6 @@ public partial class TrackPlayerViewModel : AViewModel {
       this._queue.Pause();
   }
 
-  [RelayCommand]
-  public void NextTapped() => this._queue.Next();
-
-  [RelayCommand]
-  public void PreviousTapped() => this._queue.Previous();
-
-  [RelayCommand]
-  public void ShuffleTapped() {
-    this._queue.Shuffle();
-    //  this.OnPropertyChanged(nameof(this.ShuffleImageSource));
-  }
-
   private void _OnNewSongSelected(object? sender, TrackEventArgs args) {
     this.Track = args.Track;
     this.IsPlaying = true;
@@ -109,5 +93,14 @@ public partial class TrackPlayerViewModel : AViewModel {
     Trace.WriteLine($"Jumping to {this.ProgressPercent}");
 
     this._queue.JumpToPercent(this.ProgressPercent);
+  }
+
+  [RelayCommand]
+  public void OpenBigTrackPage() {
+    //todo: solve without getting over ServiceHelper
+    var viewModel = ServiceHelper.GetService<BigTrackViewModel>();
+
+    //todo: rather implement as PushModalAsync but needs to look better for windows then
+    Shell.Current.Navigation.PushAsync(new BigTrackPage(viewModel));
   }
 }

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ViewModels="clr-namespace:Music_Player_Maui.ViewModels"
+             xmlns:Converters="clr-namespace:Music_Player_Maui.Converters"
+             x:Class="Music_Player_Maui.Views.Pages.BigTrackPage"
+             Title="{Binding Title}"
+             x:DataType="ViewModels:BigTrackViewModel"
+             BackgroundColor="#0d0d0d">
+
+  <ContentPage.Resources>
+    <Converters:IsPlayingToImageSourceConverter x:Key="IsPlayingToImageSourceConverter" />
+  </ContentPage.Resources>
+
+  <Grid Padding="20,5">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="auto"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="auto"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="auto"/>
+      <RowDefinition Height="auto"/>
+      <RowDefinition Height="auto"/>
+      <RowDefinition Height="auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="auto"/>
+      </Grid.ColumnDefinitions>
+
+      <Image Source="down.png" HorizontalOptions="Start" WidthRequest="20"></Image>
+      <Image Grid.Column="1" Source="options.png" WidthRequest="20"></Image>
+    </Grid>
+
+    <Image Grid.Row="2" Source="{Binding CoverSource}" MinimumWidthRequest="100" MinimumHeightRequest="100" Aspect="AspectFit"/>
+
+    <Label Grid.Row="3" Text="{Binding Title}" FontSize="Large" HorizontalOptions="Center" LineBreakMode="TailTruncation"/>
+    <Label Grid.Row="4" Text="{Binding Producer}" FontSize="Medium" HorizontalOptions="Center"/>
+
+    <Slider Grid.Row="5"
+            Value="{Binding Mode=TwoWay, Path=ProgressPercent}"
+            DragCompletedCommand="{Binding TrackPositionChangedCommand}"/>
+
+    <Grid Grid.Row="6">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="auto"/>
+      </Grid.ColumnDefinitions>
+
+      <Label Text="0:00"/>
+      <Label Grid.Column="1" Text="4:30"/>
+    </Grid>
+
+    <Grid Grid.Row="7" ColumnSpacing="30">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="20"/>
+        <ColumnDefinition Width="20"/>
+        <ColumnDefinition Width="20"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+
+      <Image Source="shuffle.png" WidthRequest="20" HorizontalOptions="End">
+        <Image.GestureRecognizers>
+          <TapGestureRecognizer Command="{Binding ShuffleCommand}" />
+        </Image.GestureRecognizers>
+      </Image>
+
+      <Image Grid.Column="1" Source="previous.png">
+        <Image.GestureRecognizers>
+          <TapGestureRecognizer Command="{Binding PreviousCommand}" />
+        </Image.GestureRecognizers>
+      </Image>
+
+      <Image Grid.Column="2" Source="{Binding Path=IsPlaying,
+        Converter={StaticResource IsPlayingToImageSourceConverter}}"
+             WidthRequest="20">
+        <Image.GestureRecognizers>
+          <TapGestureRecognizer Command="{Binding PlayTappedCommand}" />
+        </Image.GestureRecognizers>
+      </Image>
+
+      <Image Grid.Column="3" Source="next.png">
+        <Image.GestureRecognizers>
+          <TapGestureRecognizer Command="{Binding NextCommand}" />
+        </Image.GestureRecognizers>
+      </Image>
+      <Image Grid.Column="4" Source="again.png" WidthRequest="20" HorizontalOptions="Start"/>
+    </Grid>
+
+    <Image Grid.Row="8" Source="playlist.png" WidthRequest="20" HorizontalOptions="End"/>
+  </Grid>
+</ContentPage>
