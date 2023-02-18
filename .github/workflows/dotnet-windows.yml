@@ -32,11 +32,11 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: uploaded-content
-        path: ${{ env.GITHUB_WORKSPACE }}
+        path: Music Player Maui/bin/Release/net7.0-windows10.0.19041.0/
       
   release-project:
     name: Release Project
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs: build-project
     steps:
     - name: Download artifact
