@@ -1,31 +1,33 @@
 ﻿using System.Diagnostics;
-using System.Timers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Music_Player_Maui.Models;
 using CommunityToolkit.Mvvm.Input;
 using Music_Player_Maui.Services;
-using Timer = System.Threading.Timer;
+using Microsoft.UI.Xaml;
 
 namespace Music_Player_Maui.ViewModels;
 
-public partial class TrackPlayerViewModel : AViewModel {
-  private readonly TrackQueue _queue;
+public abstract partial class ATrackViewModel : AViewModel {
+  protected readonly TrackQueue _queue;
 
   [ObservableProperty]
   [NotifyPropertyChangedFor(nameof(Title))]
   [NotifyPropertyChangedFor(nameof(Producer))]
   [NotifyPropertyChangedFor(nameof(CoverSource))]
-  [NotifyPropertyChangedFor(nameof(IsPlaying))]
   [NotifyPropertyChangedFor(nameof(HasTrack))]
   private Track? _track;
 
-  [ObservableProperty]
-  private bool _isPlaying;
+  public bool IsPlaying => this._queue.IsPlaying;
 
   public bool HasTrack => this.Track != null;
   public string Title => this.Track?.Title ?? "no song selected";
   public string Producer => this.Track?.CombinedArtistNames ?? "/";
   public ImageSource CoverSource => this.Track?.Cover.Source ?? ImageSource.FromFile("record.png"); //todo: refac!!
+
+  public double CurrentPositionInS => this._queue.CurrentTrackPositionInS;
+
+  //todo: currently always shows length of last track after switching
+  public double TrackLengthInS => this._queue.CurrentTrackDurationInS;
 
   //public string ShuffleImageSource => this._queue.IsShuffle ? "shuffle_selected.png" : "shuffle.png";
 
@@ -35,24 +37,28 @@ public partial class TrackPlayerViewModel : AViewModel {
 
   //private readonly TrackQueue _queue;
 
-  private Timer _timer;
   private double _progressPercent;
 
-  public TrackPlayerViewModel(TrackQueue queue) {
+  protected ATrackViewModel(TrackQueue queue) {
     this._queue = queue;
 
-    this._timer = new Timer(this._UpdateProgress, null, 0, 500);
 
-    //this.Track = musicService.GetTracks().First();
-    //var queue = TrackQueue.Instance;
-    //
-    //this._queue = queue;
-    //this.Track = queue.CurrentTrack;
+    var timer = new DispatcherTimer {
+      Interval = new TimeSpan(0, 0, 1)
+    };
 
-    queue.NewSongSelected += this._OnNewSongSelected;
+    timer.Tick += this._Timer_Tick;
+    timer.Start();
+
+    this.Track = queue.CurrentTrack;
+
+    queue.NewSongSelected += this.OnNewSongSelected;
+    queue.IsPlayingChanged += this._IsPlayingChanged;
 
     //this._GetColors();
   }
+
+  private void _IsPlayingChanged(object? sender, IsPlayingEventArgs e) => this.OnPropertyChanged(nameof(this.IsPlaying));
 
   //private void _GetColors() {
   //  var color = this._track.Cover.GetDominantColor();
@@ -71,33 +77,21 @@ public partial class TrackPlayerViewModel : AViewModel {
 
   [RelayCommand]
   public void PlayTapped() {
-    this.IsPlaying = !this.IsPlaying;
-
     if (this.IsPlaying)
-      this._queue.Play();
-    else
       this._queue.Pause();
+    else
+      this._queue.Play();
   }
 
-  [RelayCommand]
-  public void NextTapped() => this._queue.Next();
-
-  [RelayCommand]
-  public void PreviousTapped() => this._queue.Previous();
-
-  [RelayCommand]
-  public void ShuffleTapped() {
-    this._queue.Shuffle();
-    //  this.OnPropertyChanged(nameof(this.ShuffleImageSource));
-  }
-
-  private void _OnNewSongSelected(object? sender, TrackEventArgs args) {
+  protected virtual void OnNewSongSelected(object? sender, TrackEventArgs args) {
     this.Track = args.Track;
-    this.IsPlaying = true;
     //  this._GetColors();
   }
 
-  private void _UpdateProgress(object? _) => this.ProgressPercent = this._queue.GetProgressPercent();
+  private void _Timer_Tick(object? sender, object e) {
+    this.ProgressPercent = this._queue.GetProgressPercent();
+    this.OnPropertyChanged(nameof(this.CurrentPositionInS));
+  }
 
   public double ProgressPercent {
     get => this._progressPercent;
@@ -109,5 +103,7 @@ public partial class TrackPlayerViewModel : AViewModel {
     Trace.WriteLine($"Jumping to {this.ProgressPercent}");
 
     this._queue.JumpToPercent(this.ProgressPercent);
+    this.OnPropertyChanged(nameof(this.CurrentPositionInS));
   }
+
 }

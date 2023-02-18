@@ -4,9 +4,10 @@
              xmlns:ViewModels="clr-namespace:Music_Player_Maui.ViewModels"
              xmlns:Converters="using:Music_Player_Maui.Converters"
              x:Class="Music_Player_Maui.Views.UserControls.BottomTrackPlayerView"
-             x:DataType="ViewModels:TrackPlayerViewModel"
+             x:DataType="ViewModels:BottomTrackViewModel"
              IsVisible="{Binding HasTrack}">
 
+  <!--todo: maybe move all converters to one global place-->
   <ContentView.Resources>
     <Converters:IsPlayingToImageSourceConverter x:Key="IsPlayingToImageSourceConverter" />
   </ContentView.Resources>
@@ -14,7 +15,7 @@
   <VerticalStackLayout Margin="0, 0, 5, 0">
     <Grid>
       <Grid.GestureRecognizers>
-        <TapGestureRecognizer />
+        <TapGestureRecognizer Command="{Binding OpenBigTrackPageCommand}"/>
       </Grid.GestureRecognizers>
 
       <Grid.ColumnDefinitions>
