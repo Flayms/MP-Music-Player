@@ -10,10 +10,10 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
 
+  build-project:
+    name: Build project
     runs-on: windows-latest
-
     steps:
     - uses: actions/checkout@v3
     
@@ -28,6 +28,20 @@ jobs:
     - name: Build
       run: dotnet build "Music Player Maui/Music Player Maui.csproj" -c Release -f:net7.0-windows10.0.19041.0
       
+  release-project:
+    name: Release Project
+    runs-on: ubuntu-latest
+    needs: build-project
+    steps:
+    - name: Download artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: static-site #better name
+    - name: Archive site content #better name
+      uses: thedoctor0/zip-release@master
+      with:
+        filename: site.zip #better name
+    
     - name: Create GitHub Release
       id: create_release
       uses: actions/create-release@v1
@@ -36,9 +50,6 @@ jobs:
       with:
         tag_name: ${{ github.run_number }}
         release_name: Release ${{ github.run_number }}
-    
-
-
 
 
 
