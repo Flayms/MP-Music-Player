@@ -32,7 +32,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: uploaded-content
-        path: {{ github.workspace }}
+        path: {{ GITHUB_WORKSPACE }}
       
   release-project:
     name: Release Project
