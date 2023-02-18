@@ -56,7 +56,7 @@ public static class MauiProgram {
     services.AddSingleton<SettingsViewModel>();
 
     services.AddSingleton<BottomTrackPlayerView>();
-    services.AddSingleton<TrackPlayerViewModel>();
+    services.AddSingleton<BottomTrackViewModel>();
 
     services.AddScoped<SearchPage>();
     services.AddScoped<SearchViewModel>();

@@ -3,7 +3,7 @@ using Music_Player_Maui.Services;
 
 namespace Music_Player_Maui.ViewModels; 
 
-public partial class BigTrackViewModel : TrackPlayerViewModel {
+public partial class BigTrackViewModel : ATrackViewModel {
   public BigTrackViewModel(TrackQueue queue) : base(queue) { }
 
 

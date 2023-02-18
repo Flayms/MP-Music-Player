@@ -4,12 +4,11 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using Music_Player_Maui.Models;
 using CommunityToolkit.Mvvm.Input;
 using Music_Player_Maui.Services;
-using Music_Player_Maui.Views.Pages;
 using Timer = System.Threading.Timer;
 
 namespace Music_Player_Maui.ViewModels;
 
-public partial class TrackPlayerViewModel : AViewModel {
+public abstract partial class ATrackViewModel : AViewModel {
   protected readonly TrackQueue _queue;
 
   [ObservableProperty]
@@ -38,7 +37,7 @@ public partial class TrackPlayerViewModel : AViewModel {
 
   private double _progressPercent;
 
-  public TrackPlayerViewModel(TrackQueue queue) {
+  public ATrackViewModel(TrackQueue queue) {
     this._queue = queue;
 
     var _ = new Timer(this._UpdateProgress, null, 0, 500);
@@ -95,12 +94,4 @@ public partial class TrackPlayerViewModel : AViewModel {
     this._queue.JumpToPercent(this.ProgressPercent);
   }
 
-  [RelayCommand]
-  public void OpenBigTrackPage() {
-    //todo: solve without getting over ServiceHelper
-    var viewModel = ServiceHelper.GetService<BigTrackViewModel>();
-
-    //todo: rather implement as PushModalAsync but needs to look better for windows then
-    Shell.Current.Navigation.PushAsync(new BigTrackPage(viewModel));
-  }
 }
