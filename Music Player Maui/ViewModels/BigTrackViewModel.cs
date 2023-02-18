@@ -2,6 +2,7 @@
 using Microsoft.UI.Xaml;
 using Music_Player_Maui.Models;
 using Music_Player_Maui.Services;
+using Music_Player_Maui.Views.Pages;
 
 namespace Music_Player_Maui.ViewModels; 
 
@@ -42,5 +43,10 @@ public partial class BigTrackViewModel : ATrackViewModel {
   [RelayCommand]
   public async void ClosePage() {
     await Shell.Current.Navigation.PopModalAsync();
+  }
+
+  [RelayCommand]
+  public async void OpenQueuePage() {
+    await Shell.Current.GoToAsync($"///{nameof(QueuePage)}");
   }
 }

@@ -103,6 +103,10 @@
       <Image Grid.Column="4" Source="again.png" WidthRequest="20" HorizontalOptions="Start"/>
     </Grid>
 
-    <Image Grid.Row="8" Source="playlist.png" WidthRequest="20" HorizontalOptions="End"/>
+    <Image Grid.Row="8" Source="playlist.png" WidthRequest="20" HorizontalOptions="End">
+      <Image.GestureRecognizers>
+        <TapGestureRecognizer Command="{Binding OpenQueuePageCommand}" />
+      </Image.GestureRecognizers>
+    </Image>
   </Grid>
 </ContentPage>
