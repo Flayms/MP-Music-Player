@@ -14,6 +14,7 @@ public class TrackQueue {
   private readonly IAudioManager _audioManager;
 
    public event EventHandler<TrackEventArgs>? NewSongSelected;
+   public event EventHandler<IsPlayingEventArgs>? IsPlayingChanged;
 
   public List<Track> NextUpTracks { get; private set; } = new();
   public List<Track> QueuedTracks { get; private set; } = new();
@@ -25,7 +26,6 @@ public class TrackQueue {
     private set {
       //if (this._currentTrack != null)
       //this.TrackHistory.Add(this._currentTrack);
-
       this._currentTrack = value ?? throw new ArgumentNullException(nameof(value));
       this.NewSongSelected?.Invoke(this, new TrackEventArgs(value));
       this._wasPaused = false;
@@ -34,11 +34,21 @@ public class TrackQueue {
 
   public int Index { get; private set; } //todo: make index setting public?
 
+  public bool IsPlaying {
+    get => this._isPlaying;
+    private set {
+      this._isPlaying = value; 
+      this.IsPlayingChanged?.Invoke(this, new IsPlayingEventArgs(this.IsPlaying));
+    }
+  }
+
+
   private Track? _currentTrack;
 
   private bool _wasPaused; //indicates if the track was already paused or if its the first play   
 
   private IAudioPlayer? _currentPlayer;
+  private bool _isPlaying;
 
 
   public bool IsShuffle { get; private set; }
@@ -120,6 +130,8 @@ public class TrackQueue {
     this._currentPlayer = this._CreatePlayer(track);
 
     this._currentPlayer.Play();
+
+    this.IsPlaying = true;
   }
 
   private IAudioPlayer _CreatePlayer(Track track) {
@@ -147,6 +159,8 @@ public class TrackQueue {
 
   //todo: works fine with first start but doesn't with new song selected, differentiate with check of cross-media-initialization
   public void Play() {
+    this.IsPlaying = true;
+
     if (this._wasPaused) {
       this._currentPlayer.Play();
       return;
@@ -168,11 +182,13 @@ public class TrackQueue {
     var player = this._currentPlayer = this._CreatePlayer(this.CurrentTrack);
     player.Seek(timeInSeconds);
     player.Play();
+    this.IsPlaying = true;
   }
 
   public void Pause() {
     this._currentPlayer!.Pause();
     this._wasPaused = true;
+    this.IsPlaying = false;
   }
 
   public void Next() {

@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Timers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Music_Player_Maui.Models;
 using CommunityToolkit.Mvvm.Input;
@@ -15,12 +14,10 @@ public abstract partial class ATrackViewModel : AViewModel {
   [NotifyPropertyChangedFor(nameof(Title))]
   [NotifyPropertyChangedFor(nameof(Producer))]
   [NotifyPropertyChangedFor(nameof(CoverSource))]
-  [NotifyPropertyChangedFor(nameof(IsPlaying))]
   [NotifyPropertyChangedFor(nameof(HasTrack))]
   private Track? _track;
 
-  [ObservableProperty]
-  private bool _isPlaying;
+  public bool IsPlaying => this._queue.IsPlaying;
 
   public bool HasTrack => this.Track != null;
   public string Title => this.Track?.Title ?? "no song selected";
@@ -37,7 +34,7 @@ public abstract partial class ATrackViewModel : AViewModel {
 
   private double _progressPercent;
 
-  public ATrackViewModel(TrackQueue queue) {
+  protected ATrackViewModel(TrackQueue queue) {
     this._queue = queue;
 
     var _ = new Timer(this._UpdateProgress, null, 0, 500);
@@ -45,9 +42,12 @@ public abstract partial class ATrackViewModel : AViewModel {
     this.Track = queue.CurrentTrack;
 
     queue.NewSongSelected += this._OnNewSongSelected;
+    queue.IsPlayingChanged += this._IsPlayingChanged;
 
     //this._GetColors();
   }
+
+  private void _IsPlayingChanged(object? sender, IsPlayingEventArgs e) => this.OnPropertyChanged(nameof(this.IsPlaying));
 
   //private void _GetColors() {
   //  var color = this._track.Cover.GetDominantColor();
@@ -66,17 +66,14 @@ public abstract partial class ATrackViewModel : AViewModel {
 
   [RelayCommand]
   public void PlayTapped() {
-    this.IsPlaying = !this.IsPlaying;
-
     if (this.IsPlaying)
-      this._queue.Play();
-    else
       this._queue.Pause();
+    else
+      this._queue.Play();
   }
 
   private void _OnNewSongSelected(object? sender, TrackEventArgs args) {
     this.Track = args.Track;
-    this.IsPlaying = true;
     //  this._GetColors();
   }
 

@@ -32,8 +32,17 @@
         <ColumnDefinition Width="auto"/>
       </Grid.ColumnDefinitions>
 
-      <Image Source="down.png" HorizontalOptions="Start" WidthRequest="20"></Image>
-      <Image Grid.Column="1" Source="options.png" WidthRequest="20"></Image>
+      <Image Source="down.png" HorizontalOptions="Start" WidthRequest="20">
+        <Image.GestureRecognizers>
+          <TapGestureRecognizer Command="{Binding ClosePageCommand}" />
+        </Image.GestureRecognizers>
+      </Image>
+
+      <Image Grid.Column="1" Source="options.png" WidthRequest="20">
+        <Image.GestureRecognizers>
+          <TapGestureRecognizer Command="{Binding ShowOptionsCommand}" />
+        </Image.GestureRecognizers>
+      </Image>
     </Grid>
 
     <Image Grid.Row="2" Source="{Binding CoverSource}" MinimumWidthRequest="100" MinimumHeightRequest="100" Aspect="AspectFit"/>
