@@ -31,7 +31,7 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v3
       with:
-        name: uploaded-content
+        name: windows-build
         path: Music Player Maui/bin/Release/net7.0-windows10.0.19041.0/
       
   release-project:
@@ -42,28 +42,27 @@ jobs:
     - name: Download artifact
       uses: actions/download-artifact@v3
       with:
-        name: uploaded-content #better name
-    - name: Archive content #better name
-      uses: thedoctor0/zip-release@master
+        name: windows-build
+
+    - name: Create Github Release
+      uses: ncipollo/release-action@v1.12.0
       with:
-        filename: site.zip #better name
+        artifacts: "windows-build.zip"
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+   # - name: Archive content
+   #   uses: thedoctor0/zip-release@master
+   #   with:
+   #     filename: site.zip #better name
     
-    - name: Create GitHub Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} #is provided by action, doesn't need to be manually set
-      with:
-        tag_name: ${{ github.run_number }}
-        release_name: Release ${{ github.run_number }}
-
-
-
-
-
-
-
-
+  #   - name: Create GitHub Release
+  #    id: create_release
+  #    uses: actions/create-release@v1
+  #    env:
+  #      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} #is provided by action, doesn't need to be manually set
+  #    with:
+  #      tag_name: ${{ github.run_number }}
+  #      release_name: Release ${{ github.run_number }}
 
 
 
