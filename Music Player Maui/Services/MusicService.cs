@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Music_Player_Maui.Models;
 
-namespace Music_Player_Maui.Services; 
+namespace Music_Player_Maui.Services;
 
 /// <summary>
 /// A service giving access to all the tracks, genres, artists, etc
@@ -63,8 +63,6 @@ public class MusicService {
       this._InitDatabase();
 
     this._tracks = this._context.Tracks
-      .Include(t => t.Artists)
-      .Include(t => t.Genres)
       .OrderBy(t => t.Title)
       .ToArray();
 

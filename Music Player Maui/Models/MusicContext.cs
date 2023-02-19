@@ -5,6 +5,7 @@ namespace Music_Player_Maui.Models;
 
 public class MusicContext : DbContext {
 
+
   private readonly string _filePath;
 
   public MusicContext(string filePath) {
@@ -22,26 +23,35 @@ public class MusicContext : DbContext {
   }
 
   protected override void OnModelCreating(ModelBuilder modelBuilder) {
-    modelBuilder.Entity<Track>()
+    var trackBuilder = modelBuilder.Entity<Track>();
+    trackBuilder
       .ToTable("Tracks")
       .HasKey(t => t.Id);
 
+    trackBuilder
+      .Navigation(t => t.Artists)
+      .AutoInclude();
+
+    trackBuilder
+      .Navigation(t => t.Genres)
+      .AutoInclude();
+
     modelBuilder.Entity<Artist>()
       .ToTable("Artists")
-      .HasKey(t => t.Id);
+      .HasKey(a => a.Id);
 
     modelBuilder.Entity<Genre>()
       .ToTable("Genres")
-      .HasKey(t => t.Id);
+      .HasKey(g => g.Id);
 
     base.OnModelCreating(modelBuilder);
   }
 
   #endregion
 
-  public DbSet<Track> Tracks { get; set; }
-  public DbSet<Artist> Artists { get; set; }
-  public DbSet<Genre> Genres { get; set; }
+  public DbSet<Track> Tracks { get; set; } = null!;
+  public DbSet<Artist> Artists { get; set; } = null!;
+  public DbSet<Genre> Genres { get; set; } = null!;
 
   public void ClearAllData() {
     foreach (var track in this.Tracks) {

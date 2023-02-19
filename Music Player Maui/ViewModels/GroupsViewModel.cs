@@ -1,24 +1,20 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Microsoft.EntityFrameworkCore;
 using Music_Player_Maui.Enums;
 using Music_Player_Maui.Models;
-using Music_Player_Maui.Services;
 
 namespace Music_Player_Maui.ViewModels;
 
 public partial class GroupsViewModel : AViewModel {
-  private readonly MusicService _musicService;
   private readonly MusicContext _context;
 
   [ObservableProperty]
   private GroupType _groupType;
 
   [ObservableProperty]
-  private IReadOnlyCollection<SmallGroupViewModel> _groups;
+  private IReadOnlyCollection<SmallGroupViewModel>? _groups;
 
   //todo: don't go over context here!
-  public GroupsViewModel(MusicService musicService, MusicContext context) {
-    this._musicService = musicService;
+  public GroupsViewModel(MusicContext context) {
     this._context = context;
   }
 
@@ -29,25 +25,19 @@ public partial class GroupsViewModel : AViewModel {
 
     switch (groupType) {
       case GroupType.Artists:
-        var artists = context.Artists
-          .Include(a => a.Tracks)
-          .ToList();
-
-        var artistGroups = artists
+        var artistGroups = context.Artists
+          .OrderBy(g => g.Name)
           .Select(artist => new SmallGroupViewModel(artist.Name, artist.Tracks))
-          .ToList();
+          .ToArray();
 
         this.Groups = artistGroups;
         break;
 
       case GroupType.Genres:
-        var genres = context.Genres
-          .Include(a => a.Tracks)
-          .ToList();
-
-        var genreGroups = genres
+        var genreGroups = context.Genres
+          .OrderBy(g => g.Name)
           .Select(artist => new SmallGroupViewModel(artist.Name, artist.Tracks))
-          .ToList();
+          .ToArray();
 
         this.Groups = genreGroups;
         break;
