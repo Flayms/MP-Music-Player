@@ -10,6 +10,7 @@ public class Track {
   public string Title { get; set; } = null!;
   public List<Artist> Artists { get; set; } = null!;
   public string CombinedArtistNames => string.Join($" {Artist.SEPARATOR} ", this.Artists.Select(a => a.Name));
+  public string CombinedGenreNames => string.Join($" {Genre.SEPARATOR} ", this.Genres.Select(a => a.Name));
 
   /// <summary>
   /// Format: "Artists - Title"
@@ -26,7 +27,7 @@ public class Track {
 
   #region Overrides of Object
 
-  public override string ToString() => this.Title;
+  public override string ToString() => this.CombinedName;
 
   #endregion
 

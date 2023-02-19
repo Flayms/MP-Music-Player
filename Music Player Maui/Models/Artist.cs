@@ -2,6 +2,7 @@
 
 public class Artist {
 
+  //todo: allow multiple characters and make changeable over settings
   public const string SEPARATOR = "&";
 
   public int Id { get; set; }
