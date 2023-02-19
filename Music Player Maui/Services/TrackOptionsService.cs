@@ -58,7 +58,6 @@ public class TrackOptionsService {
 
   private void _ExecuteOption(TrackOption option, Track track) {
     var queue = this._queue;
-    //var playlist = PlaylistList.Instance;
 
     switch (option) {
       case TrackOption.PlayNext:

@@ -26,7 +26,7 @@ public class Track {
 
   #region Overrides of Object
 
-  public override string ToString() => this.Title;
+  public override string ToString() => this.CombinedName;
 
   #endregion
 

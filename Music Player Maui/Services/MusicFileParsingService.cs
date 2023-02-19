@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Music_Player_Maui.Models;
+﻿using Music_Player_Maui.Models;
 
 namespace Music_Player_Maui.Services;
 
@@ -7,7 +6,6 @@ public class MusicFileParsingService {
   public class TrackLoadedEventArgs : EventArgs {
     public int AmountOfLoadedTracks { get; }
     public int TotalAmountOfTracks { get; }
-
 
     public TrackLoadedEventArgs(int amountOfLoadedTracks, int totalAmountOfTracks) {
       this.AmountOfLoadedTracks = amountOfLoadedTracks;
@@ -80,6 +78,9 @@ public class MusicFileParsingService {
       this.OnTrackLoaded?.Invoke(this, new TrackLoadedEventArgs(tracks.Count, files.Length));
     }
 
+    tracks = tracks.OrderBy(t => t.Title).ToList();
+    artists = artists.OrderBy(a => a.Name).ToList();
+    genres = genres.OrderBy(g => g.Name).ToList();
     return true;
   }
 
