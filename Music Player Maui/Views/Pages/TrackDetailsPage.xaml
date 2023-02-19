@@ -1,12 +1,25 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ViewModels="clr-namespace:Music_Player_Maui.ViewModels"
              x:Class="Music_Player_Maui.Views.Pages.TrackDetailsPage"
-             Title="TrackDetailsPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             Title="Track Details"
+             x:DataType="ViewModels:TrackDetailsViewModel">
+  <!--todo: display more beautifully and maybe make tags editable here-->
+  <VerticalStackLayout>
+    <Label Text="FileName:" HorizontalOptions="Center" />
+    <Label Text="{Binding FileName}" HorizontalOptions="Center" />
+
+    <Label Text="FilePath:" HorizontalOptions="Center" />
+    <Label Text="{Binding FilePath}" HorizontalOptions="Center" />
+
+    <Label Text="Title:" HorizontalOptions="Center" />
+    <Label Text="{Binding Title}" HorizontalOptions="Center" />
+
+    <Label Text="Artists:" HorizontalOptions="Center" />
+    <Label Text="{Binding Artists}" HorizontalOptions="Center" />
+
+    <Label Text="Genre:" HorizontalOptions="Center" />
+    <Label Text="{Binding Genres}" HorizontalOptions="Center" />
+  </VerticalStackLayout>
 </ContentPage>

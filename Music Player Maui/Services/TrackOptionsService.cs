@@ -95,7 +95,8 @@ public class TrackOptionsService {
         throw new NotImplementedException();
 
       case TrackOption.Details:
-        await Shell.Current.Navigation.PushAsync(new TrackDetailsPage());
+        var model = new TrackDetailsViewModel(track);
+        await Shell.Current.Navigation.PushAsync(new TrackDetailsPage(model));
         break;
 
       default:
