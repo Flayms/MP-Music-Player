@@ -94,7 +94,6 @@ public class MusicFileParsingService {
   }
 
   private static void _AttachTracksToArtists(IEnumerable<Artist> artists, IList<Track> tracks) {
-    //attach tracks to artists
     foreach (var artist in artists) {
       artist.Tracks = tracks
         .Where(t => t.Artists
