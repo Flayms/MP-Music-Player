@@ -32,7 +32,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: windows-build
-        path: Music Player Maui/bin/Release/net7.0-windows10.0.19041.0/
+        path: Music Player Maui/bin/Release/net7.0-windows10.0.19041.0/win10-x64
       
   release-project:
     name: Release Project
@@ -48,7 +48,7 @@ jobs:
     - name: Archive content
       uses: thedoctor0/zip-release@master
       with:
-        filename: windows-build.zip #better name
+        filename: windows-build.zip
 
     - name: Create Release
       id: create_release
@@ -67,16 +67,9 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
         asset_path: ./windows-build.zip
-        asset_name: windows-build.zip
+        asset_name: mp-music-player.win10-x64.zip
         asset_content_type: application/zip
 
-
-   # - name: Create Github Release
-   #   uses: ncipollo/release-action@v1.12.0
-   #   with:
-   #     artifacts: "windows-build.zip"
-   #     token: ${{ secrets.GITHUB_TOKEN }}
-    
   #   - name: Create GitHub Release
   #    id: create_release
   #    uses: actions/create-release@v1
@@ -85,6 +78,3 @@ jobs:
   #    with:
   #      tag_name: ${{ github.run_number }}
   #      release_name: Release ${{ github.run_number }}
-
-
-
