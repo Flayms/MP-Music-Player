@@ -66,22 +66,46 @@ public class TagReadingService {
 
   private static string[] _GetArtists(Tag fileTags) {
     //artists
-    var artists = fileTags.Performers; //todo: check if performers or composers have values as well
-    if (artists.Length != 0)
-      return artists;
 
+    //first try to read already separated performers
+    var artists = fileTags.Performers;
+    if (artists.Length != 0) {
+      var allArtists = new List<string>();
+
+      foreach (var artist in artists)
+        allArtists.AddRange(_SplitArtists(artist));
+
+      return allArtists.Distinct(StringComparer.InvariantCulture).ToArray();
+    }
+
+    //otherwise self split them
     var joinedArtists = fileTags.JoinedPerformers;
     if (joinedArtists != null)
-      artists = joinedArtists.Split('&').Select(a => a.Trim()).ToArray();
+      artists = _SplitArtists(joinedArtists).ToArray();
 
     return artists;
   }
 
+  private static IEnumerable<string> _SplitArtists(string joinedArtists) {
+    return joinedArtists
+      .Split(Artist.SEPARATOR)
+      .Select(a => a.Trim())
+      .Where(a => a != string.Empty)
+      .Distinct(StringComparer.InvariantCulture);
+  }
+
   //todo: shouldn't split genres by default
-  private static string[] _GetGenres(string[] tGenres) => tGenres.Length > 0
-    ? tGenres
-      .SelectMany(g => g.Split(Genre.SEPARATOR),
-        (_, singleGenre) => singleGenre.Trim())
-    .ToArray()
-    : tGenres;
+  private static string[] _GetGenres(string[] tGenres) {
+    var newList = tGenres.Length > 0
+      ? tGenres
+        .SelectMany(g => g.Split(Genre.SEPARATOR),
+          (_, singleGenre) => singleGenre.Trim())
+      : tGenres;
+
+    return newList
+      .Select(g => g.Trim())
+      .Where(g => g != string.Empty)
+      .Distinct(StringComparer.InvariantCulture)
+      .ToArray();
+  }
 }
