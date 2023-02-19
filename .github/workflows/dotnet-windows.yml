@@ -44,11 +44,19 @@ jobs:
       with:
         name: windows-build
 
-    - name: Create Github Release
-      uses: ncipollo/release-action@v1.12.0
+    - uses: "marvinpinto/action-automatic-releases@latest"
       with:
-        artifacts: "windows-build.zip"
-        token: ${{ secrets.GITHUB_TOKEN }}
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "${{ github.run_number }}"
+        prerelease: true
+        title: "${{ github.run_number }}"
+        files: windows-build.zip
+
+   # - name: Create Github Release
+   #   uses: ncipollo/release-action@v1.12.0
+   #   with:
+   #     artifacts: "windows-build.zip"
+   #     token: ${{ secrets.GITHUB_TOKEN }}
 
    # - name: Archive content
    #   uses: thedoctor0/zip-release@master
