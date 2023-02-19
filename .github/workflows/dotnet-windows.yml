@@ -48,10 +48,10 @@ jobs:
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "${{ github.run_number }}"
         prerelease: true
-        title: "${{ github.run_number }}"
-        files: windows-build.zip
+        title: "v${{ github.run_number }}"
+        files: windows-build
 
    # - name: Create Github Release
    #   uses: ncipollo/release-action@v1.12.0
