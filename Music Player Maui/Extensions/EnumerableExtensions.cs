@@ -14,6 +14,12 @@ public static class EnumerableExtensions {
     }
   }
 
+  /// <summary>
+  /// Removes and returns the item at the beginning of the <see cref="IList{T}"/>.
+  /// </summary>
+  /// <typeparam name="T"></typeparam>
+  /// <param name="this"></param>
+  /// <returns></returns>
   public static T Dequeue<T>(this IList<T> @this) {
     var item = @this.First();
     @this.RemoveAt(0);

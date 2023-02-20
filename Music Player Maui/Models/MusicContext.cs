@@ -5,6 +5,10 @@ namespace Music_Player_Maui.Models;
 
 public class MusicContext : DbContext {
 
+  public DbSet<Track> Tracks { get; set; } = null!;
+  public DbSet<Artist> Artists { get; set; } = null!;
+  public DbSet<Genre> Genres { get; set; } = null!;
+  public DbSet<QueuedTrack> QueuedTracks { get; set; } = null!;
 
   private readonly string _filePath;
 
@@ -44,14 +48,18 @@ public class MusicContext : DbContext {
       .ToTable("Genres")
       .HasKey(g => g.Id);
 
+    var queueBuilder = modelBuilder.Entity<QueuedTrack>(); 
+    queueBuilder
+      .ToTable("QueuedTracks")
+      .HasKey(q => q.Id);
+
+    queueBuilder.Navigation(q => q.Track)
+      .AutoInclude();
+
     base.OnModelCreating(modelBuilder);
   }
 
   #endregion
-
-  public DbSet<Track> Tracks { get; set; } = null!;
-  public DbSet<Artist> Artists { get; set; } = null!;
-  public DbSet<Genre> Genres { get; set; } = null!;
 
   public void ClearAllData() {
     foreach (var track in this.Tracks) {

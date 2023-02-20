@@ -1,32 +1,37 @@
-﻿using System.Diagnostics;
+﻿using Music_Player_Maui.Enums;
 using Music_Player_Maui.Extensions;
 using Music_Player_Maui.Models;
 using Plugin.Maui.Audio;
-using TagLib.Matroska;
 using File = System.IO.File;
 using Track = Music_Player_Maui.Models.Track;
 
-namespace Music_Player_Maui.Services; 
+namespace Music_Player_Maui.Services;
 
 //todo: maybe split between queue logic and actual playing logic
 
 public class TrackQueue {
   private readonly IAudioManager _audioManager;
 
-   public event EventHandler<TrackEventArgs>? NewSongSelected;
-   public event EventHandler<IsPlayingEventArgs>? IsPlayingChanged;
+  private readonly QueuedTracksRepository _queuedTrackRepository;
+  // private readonly MusicContext _context;
 
-  public List<Track> NextUpTracks { get; private set; } = new();
-  public List<Track> QueuedTracks { get; private set; } = new();
-  //public List<Track> TrackHistory { get; private set; } = new (); //todo: implement properly!
+  public event EventHandler<TrackEventArgs>? NewSongSelected;
+  public event EventHandler<IsPlayingEventArgs>? IsPlayingChanged;
+
+  public IReadOnlyCollection<Track> NextUpTracks => this._queuedTrackRepository.NextUpTracks;
+  public IReadOnlyCollection<Track> QueuedTracks => this._queuedTrackRepository.QueuedTracks;
+
+  //todo: maybe make repo property for this and read directly from there
   public List<Track> AllTracks { get; private set; } = new();
 
   public Track? CurrentTrack {
-    get => this._currentTrack;
+    get => this._queuedTrackRepository.CurrentTrack;
+
+    //todo: maybe does too much for a setter
     private set {
-      //if (this._currentTrack != null)
-      //this.TrackHistory.Add(this._currentTrack);
       this._currentTrack = value ?? throw new ArgumentNullException(nameof(value));
+      this._queuedTrackRepository.SetNewCurrentTrack(value);
+
       this.NewSongSelected?.Invoke(this, new TrackEventArgs(value));
       this._wasPaused = false;
     }
@@ -40,7 +45,7 @@ public class TrackQueue {
   public bool IsPlaying {
     get => this._isPlaying;
     private set {
-      this._isPlaying = value; 
+      this._isPlaying = value;
       this.IsPlayingChanged?.Invoke(this, new IsPlayingEventArgs(this.IsPlaying));
     }
   }
@@ -56,62 +61,64 @@ public class TrackQueue {
 
   public bool IsShuffle { get; private set; }
 
-  public TrackQueue(IAudioManager audioManager) {
+  public TrackQueue(IAudioManager audioManager, QueuedTracksRepository queuedTrackRepository) {
     this._audioManager = audioManager;
+    this._queuedTrackRepository = queuedTrackRepository;
+
   }
 
-  public void FullyCreateQueue(List<Track> nextUps, List<Track> queued, Track current) {
-    this.NextUpTracks = nextUps;
-    this.QueuedTracks = queued;
-    this.CurrentTrack = current;
-    this._ReloadFullQueue();
-  }
+  //public void FullyCreateQueue(List<Track> nextUps, List<Track> queued, Track current) {
+  //  this.NextUpTracks = nextUps;
+  //  this.QueuedTracks = queued;
+  //  this.CurrentTrack = current;
+  //  this._ReloadFullQueue();
+  //}
 
+  //also handles all the db-stuff
   public void ChangeQueue(List<Track> tracks) {
-    this.QueuedTracks = tracks;
     this.CurrentTrack = tracks.Dequeue();
+    this._queuedTrackRepository.ChangeQueue(tracks);
     this._ReloadFullQueue();
   }
 
-  public void AddNext(Track track) {
-    this.NextUpTracks.Insert(0, track);
+  public void InsertNextUp(Track track) {
+    this._queuedTrackRepository.InsertNextUp(track);
     this._ReloadFullQueue();
   }
 
-  public void AddToQueue(Track track) {
-    this.NextUpTracks.Add(track);
+  public void AddToNextUp(Track track) {
+    this._queuedTrackRepository.AddToNextUp(track);
     this._ReloadFullQueue();
   }
 
   public void AddToEndOfQueue(Track track) {
-    this.QueuedTracks.Add(track);
+    this._queuedTrackRepository.AddToEndOfQueue(track);
     this._ReloadFullQueue();
   }
 
-  public void JumpToNextUpTrack(Track track) => this._JumpToClickedTrack(track, this.NextUpTracks);
-
-  public void JumpToQueueTrack(Track track) => this._JumpToClickedTrack(track, this.QueuedTracks);
-
-  private void _JumpToClickedTrack(Track track, List<Track> tracks) {
-    for (var i = 0; i < tracks.Count; ++i) {
-      if (tracks[i] == track) {
-        tracks.RemoveRange(0, i + 1);
-        this.Play(track);
-        break;
-      }
-    }
-
-    this._ReloadFullQueue();
-  }
+  //todo: implement these again
+  //public void JumpToNextUpTrack(Track track) => this._JumpToClickedTrack(track, this.NextUpTracks);
+  //
+  //public void JumpToQueueTrack(Track track) => this._JumpToClickedTrack(track, this.QueuedTracks);
+  //
+  //private void _JumpToClickedTrack(Track track, IReadOnlyCollection<Track> tracks) {
+  //  for (var i = 0; i < tracks.Count; ++i) {
+  //    if (tracks[i] == track) {
+  //      tracks.RemoveRange(0, i + 1);
+  //      this.Play(track);
+  //      break;
+  //    }
+  //  }
+  //
+  //  this._ReloadFullQueue();
+  //}
 
   /// <summary>
   /// Removes first occurrence of this track
   /// </summary>
   /// <param name="track">The track</param>
   public void Remove(Track track) {
-    if (!this.NextUpTracks.Remove(track))
-      this.QueuedTracks.Remove(track);
-
+    this._queuedTrackRepository.RemoveFromQueue(track);
     this._ReloadFullQueue();
   }
 
@@ -143,7 +150,7 @@ public class TrackQueue {
     player.PlaybackEnded += this._CurrentPlayer_PlaybackEnded;
 
     return player;
-  } 
+  }
 
   private void _CurrentPlayer_PlaybackEnded(object? sender, EventArgs e) {
     this._RemoveCurrentPlayerSafely();
@@ -160,7 +167,6 @@ public class TrackQueue {
     this._currentPlayer = null;
   }
 
-  //todo: works fine with first start but doesn't with new song selected, differentiate with check of cross-media-initialization
   public void Play() {
     this.IsPlaying = true;
 
@@ -176,7 +182,7 @@ public class TrackQueue {
     if (progress > 0)
       this._PlayAtTime(progress);
     else
-      this.Play(this.CurrentTrack);
+      this.Play(this.CurrentTrack); //todo: initializing CurrentTrack twice like this
   }
 
   private void _PlayAtTime(double timeInSeconds) {
@@ -195,13 +201,13 @@ public class TrackQueue {
   }
 
   public void Next() {
-   if (this.NextUpTracks.Count > 0)
-     this.Play(this.NextUpTracks.Dequeue());
-   
-   else if (this.QueuedTracks.Count > 0)
-     this.Play(this.QueuedTracks.Dequeue());
+    //end of queue reached
+    if (!this._queuedTrackRepository.TryDequeueTrack(out var nextTrack))
+      return;
 
-   ++this.Index;
+    this.Play(nextTrack);
+
+    ++this.Index;
   }
 
   //todo: implement again
@@ -210,13 +216,15 @@ public class TrackQueue {
     //this._PlayTrackAsync();
   }
 
+  //todo: check if this still works like intended
+  //todo: decide what should happen exactly with nextUp tracks on shuffle
   public void Shuffle() {
-    this.QueuedTracks.Shuffle();
-    var track = this.QueuedTracks[0];
-    this.QueuedTracks.RemoveAt(0);
-    this.CurrentTrack = track;
-    this.IsShuffle = true;
+    var tracks = new List<Track>(this.QueuedTracks);
+
+    tracks.Shuffle();
+    this.ChangeQueue(tracks);
     this._ReloadFullQueue();
+    this.IsShuffle = true;
     this.Play();
   }
 

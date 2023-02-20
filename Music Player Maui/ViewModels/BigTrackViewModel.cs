@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using Microsoft.UI.Xaml;
 using Music_Player_Maui.Models;
 using Music_Player_Maui.Services;
 using Music_Player_Maui.Views.Pages;
@@ -24,14 +23,14 @@ public partial class BigTrackViewModel : ATrackViewModel {
   #endregion
 
   [RelayCommand]
-  public void Next() => this._queue.Next();
+  public void Next() => this.queue.Next();
 
   [RelayCommand]
-  public void Previous() => this._queue.Previous();
+  public void Previous() => this.queue.Previous();
 
   [RelayCommand]
   public void Shuffle() {
-    this._queue.Shuffle();
+    this.queue.Shuffle();
     //  this.OnPropertyChanged(nameof(this.ShuffleImageSource));
   }
 

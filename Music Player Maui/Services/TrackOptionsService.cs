@@ -1,4 +1,5 @@
 ﻿using Music_Player_Maui.Enums;
+using Music_Player_Maui.Models;
 using Music_Player_Maui.ViewModels;
 using Music_Player_Maui.Views.Pages;
 using Track = Music_Player_Maui.Models.Track;
@@ -63,11 +64,11 @@ public class TrackOptionsService {
 
     switch (option) {
       case TrackOption.PlayNext:
-        queue.AddNext(track);
+        queue.InsertNextUp(track);
         break;
 
       case TrackOption.AddToQueue:
-        queue.AddToQueue(track);
+        queue.AddToNextUp(track);
         break;
 
       case TrackOption.AddToEndOfQueue:
@@ -110,13 +111,19 @@ public class TrackOptionsService {
       return;
     }
 
-    var artistNames = track.Artists.Select(a => a.Name).ToArray();
-    var selectText = await Shell.Current.DisplayActionSheet("Select Artist", _CANCEL_TEXT, null, artistNames);
+    Artist artist;
 
-    if (selectText is null or _CANCEL_TEXT)
-      return;
+    if (track.Artists.Count == 1)
+      artist = track.Artists.First();
+    else {
+      var artistNames = track.Artists.Select(a => a.Name).ToArray();
+      var selectText = await Shell.Current.DisplayActionSheet("Select Artist", _CANCEL_TEXT, null, artistNames);
 
-    var artist = track.Artists.First(a => a.Name == selectText);
+      if (selectText is null or _CANCEL_TEXT)
+        return;
+
+      artist = track.Artists.First(a => a.Name == selectText);
+    }
 
     var model = ServiceHelper.GetService<TrackListViewModel>();
     model.TrackViewModels = artist.Tracks.Select(t => new SmallTrackViewModel(t)).ToList();
@@ -124,4 +131,5 @@ public class TrackOptionsService {
 
     await Shell.Current.Navigation.PushAsync(new TrackListPage(model));
   }
+
 }

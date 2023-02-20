@@ -8,7 +8,7 @@ using Microsoft.UI.Xaml;
 namespace Music_Player_Maui.ViewModels;
 
 public abstract partial class ATrackViewModel : AViewModel {
-  protected readonly TrackQueue _queue;
+  protected readonly TrackQueue queue;
 
   [ObservableProperty]
   [NotifyPropertyChangedFor(nameof(Title))]
@@ -17,17 +17,17 @@ public abstract partial class ATrackViewModel : AViewModel {
   [NotifyPropertyChangedFor(nameof(HasTrack))]
   private Track? _track;
 
-  public bool IsPlaying => this._queue.IsPlaying;
+  public bool IsPlaying => this.queue.IsPlaying;
 
   public bool HasTrack => this.Track != null;
   public string Title => this.Track?.Title ?? "no song selected";
   public string Producer => this.Track?.CombinedArtistNames ?? "/";
   public ImageSource CoverSource => this.Track?.Cover.Source ?? ImageSource.FromFile("record.png"); //todo: refac!!
 
-  public double CurrentPositionInS => this._queue.CurrentTrackPositionInS;
+  public double CurrentPositionInS => this.queue.CurrentTrackPositionInS;
 
   //todo: currently always shows length of last track after switching
-  public double TrackLengthInS => this._queue.CurrentTrackDurationInS;
+  public double TrackLengthInS => this.queue.CurrentTrackDurationInS;
 
   //public string ShuffleImageSource => this._queue.IsShuffle ? "shuffle_selected.png" : "shuffle.png";
 
@@ -40,11 +40,11 @@ public abstract partial class ATrackViewModel : AViewModel {
   private double _progressPercent;
 
   protected ATrackViewModel(TrackQueue queue) {
-    this._queue = queue;
+    this.queue = queue;
 
 
     var timer = new DispatcherTimer {
-      Interval = new TimeSpan(0, 0, 1)
+      Interval = new TimeSpan(0, 0, 10)
     };
 
     timer.Tick += this._Timer_Tick;
@@ -78,9 +78,9 @@ public abstract partial class ATrackViewModel : AViewModel {
   [RelayCommand]
   public void PlayTapped() {
     if (this.IsPlaying)
-      this._queue.Pause();
+      this.queue.Pause();
     else
-      this._queue.Play();
+      this.queue.Play();
   }
 
   protected virtual void OnNewSongSelected(object? sender, TrackEventArgs args) {
@@ -89,7 +89,7 @@ public abstract partial class ATrackViewModel : AViewModel {
   }
 
   private void _Timer_Tick(object? sender, object e) {
-    this.ProgressPercent = this._queue.GetProgressPercent();
+    this.ProgressPercent = this.queue.GetProgressPercent();
     this.OnPropertyChanged(nameof(this.CurrentPositionInS));
   }
 
@@ -102,7 +102,7 @@ public abstract partial class ATrackViewModel : AViewModel {
   public void TrackPositionChanged() {
     Trace.WriteLine($"Jumping to {this.ProgressPercent}");
 
-    this._queue.JumpToPercent(this.ProgressPercent);
+    this.queue.JumpToPercent(this.ProgressPercent);
     this.OnPropertyChanged(nameof(this.CurrentPositionInS));
   }
 

@@ -43,6 +43,7 @@ public static class MauiProgram {
     services.AddSingleton<MusicFileParsingService>();
     services.AddSingleton<MusicService>();
     services.AddSingleton<TrackOptionsService>();
+    services.AddSingleton<QueuedTracksRepository>();
   }
 
   private static void _AddPageAndViewModelServices(IServiceCollection services) {
