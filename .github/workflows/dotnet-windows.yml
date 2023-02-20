@@ -6,8 +6,6 @@ name: Build .NET MAUI Windows
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
 
@@ -33,6 +31,7 @@ jobs:
       with:
         name: windows-build
         path: Music Player Maui/bin/Release/net7.0-windows10.0.19041.0/win10-x64
+        retention-days: 5
       
   release-project:
     name: Release Project
