@@ -44,12 +44,14 @@ public partial class SearchViewModel : AViewModel {
       return;
 
     var trackQueue = this._queue;
-    var queue = new List<Track>();
+
     var trackViewModels = this.Tracks;
     var index = trackViewModels.IndexOf(trackModel);
 
-    for (var i = index; i < trackViewModels.Count; ++i)
-      queue.Add(trackViewModels[i].Track);
+    var queue = trackViewModels
+      .Skip(index)
+      .Take(trackViewModels.Count)
+      .Select(t => t.Track);
 
     trackQueue.ChangeQueue(queue);
     trackQueue.Play();

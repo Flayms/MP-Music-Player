@@ -13,7 +13,7 @@ public partial class QueueViewModel : AViewModel {
     get {
       return this._queue.QueuedTracks.Count <= 20
         ? this._queue.QueuedTracks.Select(t => new SmallTrackViewModel(t)).ToList()
-        : this._queue.QueuedTracks.GetRange(0, 20)
+        : this._queue.QueuedTracks.Take(20)
           .Select(t => new SmallTrackViewModel(t))
           .ToList();
     }

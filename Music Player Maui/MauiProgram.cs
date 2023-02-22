@@ -4,6 +4,7 @@ using Music_Player_Maui.Services;
 using Music_Player_Maui.ViewModels;
 using Music_Player_Maui.Views.Pages;
 using Music_Player_Maui.Models;
+using Music_Player_Maui.Services.Repositories;
 using Music_Player_Maui.Views.UserControls;
 using Plugin.Maui.Audio;
 
@@ -43,6 +44,7 @@ public static class MauiProgram {
     services.AddSingleton<MusicFileParsingService>();
     services.AddSingleton<MusicService>();
     services.AddSingleton<TrackOptionsService>();
+    services.AddSingleton<IQueuedTracksRepository, QueuedTracksRepository>();
   }
 
   private static void _AddPageAndViewModelServices(IServiceCollection services) {
