@@ -6,6 +6,8 @@ name: Build .NET MAUI Windows
 on:
   push:
     branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
 
@@ -35,6 +37,7 @@ jobs:
       
   release-project:
     name: Release Project
+    if: ${{ github.event_name == 'push' }}
     runs-on: windows-latest
     permissions: write-all
     needs: build-project
