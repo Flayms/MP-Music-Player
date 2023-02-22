@@ -2,7 +2,7 @@
 using Music_Player_Maui.Enums;
 using Music_Player_Maui.Models;
 
-namespace Music_Player_Maui.Services.Repositories; 
+namespace Music_Player_Maui.Services.Repositories;
 
 //todo: helper method for getting tracks of specific type
 public class QueuedTracksRepository : IQueuedTracksRepository {
@@ -46,7 +46,7 @@ public class QueuedTracksRepository : IQueuedTracksRepository {
     newNextUps.Add(track);
 
     this._queuedTracks.RemoveRange(currentlyNextUpTracks);
-    this._queuedTracks.AddRange(newNextUps.Select(t => new QueuedTrack { Track = t, Type = QueuedType.NextUp}));
+    this._queuedTracks.AddRange(newNextUps.Select(t => new QueuedTrack { Track = t, Type = QueuedType.NextUp }));
     this._context.SaveChanges();
   }
 

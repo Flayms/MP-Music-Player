@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
+using Music_Player_Maui.Enums;
 using Music_Player_Maui.Extensions;
 using Music_Player_Maui.Models;
 using Music_Player_Maui.Services.Repositories;
@@ -10,19 +12,22 @@ namespace Music_Player_Maui.Services;
 
 //todo: maybe split between queue logic and actual playing logic
 
+//todo: separate caching and reading from repo logic
 public class TrackQueue {
   private readonly IAudioManager _audioManager;
 
   private readonly IQueuedTracksRepository _queuedTrackRepository;
 
   private readonly Settings _settings;
+
+  private readonly MusicContext _context;
   // private readonly MusicContext _context;
 
   public event EventHandler<TrackEventArgs>? NewSongSelected;
   public event EventHandler<IsPlayingEventArgs>? IsPlayingChanged;
 
-  public IReadOnlyCollection<Track> NextUpTracks => this._queuedTrackRepository.NextUpTracks;
-  public IReadOnlyCollection<Track> QueuedTracks => this._queuedTrackRepository.QueuedTracks;
+  public IList<Track> NextUpTracks { get; private set; }
+  public IList<Track> QueuedTracks { get; private set; }
 
   //todo: maybe make repo property for this and read directly from there
   public List<Track> AllTracks { get; private set; } = new();
@@ -31,7 +36,7 @@ public class TrackQueue {
 
   public void ChangeCurrentTrack(Track track) {
     this.CurrentTrack = track;
-    this._settings.CurrentTrackId = track.Id;
+    Task.Run(() => this._settings.CurrentTrackId = track.Id);
 
     this.NewSongSelected?.Invoke(this, new TrackEventArgs(track));
     this._wasPaused = false;
@@ -62,11 +67,16 @@ public class TrackQueue {
     this._audioManager = audioManager;
     this._queuedTrackRepository = queuedTrackRepository;
     this._settings = settings;
+    this._context = context;
 
+    //todo: too slow for constructor code
     var id = this._settings.CurrentTrackId;
     if (id != null)
       //todo: firstOrDefault or first??
       this.CurrentTrack = context.Tracks.FirstOrDefault(t => t.Id == id);
+
+    this.NextUpTracks = queuedTrackRepository.NextUpTracks.ToList();
+    this.QueuedTracks = queuedTrackRepository.QueuedTracks.ToList();
   }
 
   //public void FullyCreateQueue(List<Track> nextUps, List<Track> queued, Track current) {
@@ -89,26 +99,26 @@ public class TrackQueue {
     this.ChangeCurrentTrack(list.Dequeue());
     Trace.WriteLine($"change current track time: {sw.ElapsedMilliseconds}");
     sw.Restart();
-    this._queuedTrackRepository.ChangeQueue(list);
 
     Trace.WriteLine($"db change queue time: {sw.ElapsedMilliseconds}");
+    
     this._ReloadFullQueue();
 
     Trace.WriteLine($"reload queue time: {sw.ElapsedMilliseconds}");
   }
 
   public void InsertNextUp(Track track) {
-    this._queuedTrackRepository.InsertNextUp(track);
+    this.NextUpTracks.Insert(0, track);
     this._ReloadFullQueue();
   }
 
   public void AddToNextUp(Track track) {
-    this._queuedTrackRepository.AddToNextUp(track);
+    this.NextUpTracks.Add(track);
     this._ReloadFullQueue();
   }
 
   public void AddToEndOfQueue(Track track) {
-    this._queuedTrackRepository.AddToEndOfQueue(track);
+    this.QueuedTracks.Add(track);
     this._ReloadFullQueue();
   }
 
@@ -266,6 +276,23 @@ public class TrackQueue {
 
     var result = position / duration;
     return result;
+  }
+
+  public void SaveToDb() {
+
+    //todo: don't delete history
+    this._context.QueuedTracks.Clear();
+
+    var queuedTracks = this.QueuedTracks
+      .Select(t => new QueuedTrack { Track = t, Type = QueuedType.Queued })
+      .Concat(this.NextUpTracks
+        .Select(t => new QueuedTrack { Track = t, Type = QueuedType.NextUp}))
+      //todo: current track can be null!
+      .Concat(new[] {new QueuedTrack {Track = this.CurrentTrack, Type = QueuedType.Current}});
+
+    this._context.QueuedTracks.AddRange(queuedTracks);
+
+    this._context.SaveChanges();
   }
 
 }
