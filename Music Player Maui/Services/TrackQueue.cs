@@ -1,6 +1,7 @@
-﻿using Music_Player_Maui.Enums;
+﻿using System.Diagnostics;
 using Music_Player_Maui.Extensions;
 using Music_Player_Maui.Models;
+using Music_Player_Maui.Services.Repositories;
 using Plugin.Maui.Audio;
 using File = System.IO.File;
 using Track = Music_Player_Maui.Models.Track;
@@ -12,7 +13,9 @@ namespace Music_Player_Maui.Services;
 public class TrackQueue {
   private readonly IAudioManager _audioManager;
 
-  private readonly QueuedTracksRepository _queuedTrackRepository;
+  private readonly IQueuedTracksRepository _queuedTrackRepository;
+
+  private readonly Settings _settings;
   // private readonly MusicContext _context;
 
   public event EventHandler<TrackEventArgs>? NewSongSelected;
@@ -24,17 +27,14 @@ public class TrackQueue {
   //todo: maybe make repo property for this and read directly from there
   public List<Track> AllTracks { get; private set; } = new();
 
-  public Track? CurrentTrack {
-    get => this._queuedTrackRepository.CurrentTrack;
+  public Track? CurrentTrack { get; private set; }
 
-    //todo: maybe does too much for a setter
-    private set {
-      this._currentTrack = value ?? throw new ArgumentNullException(nameof(value));
-      this._queuedTrackRepository.SetNewCurrentTrack(value);
+  public void ChangeCurrentTrack(Track track) {
+    this.CurrentTrack = track;
+    this._settings.CurrentTrackId = track.Id;
 
-      this.NewSongSelected?.Invoke(this, new TrackEventArgs(value));
-      this._wasPaused = false;
-    }
+    this.NewSongSelected?.Invoke(this, new TrackEventArgs(track));
+    this._wasPaused = false;
   }
 
   public int Index { get; private set; } //todo: make index setting public?
@@ -50,9 +50,6 @@ public class TrackQueue {
     }
   }
 
-
-  private Track? _currentTrack;
-
   private bool _wasPaused; //indicates if the track was already paused or if its the first play   
 
   private IAudioPlayer? _currentPlayer;
@@ -61,10 +58,15 @@ public class TrackQueue {
 
   public bool IsShuffle { get; private set; }
 
-  public TrackQueue(IAudioManager audioManager, QueuedTracksRepository queuedTrackRepository) {
+  public TrackQueue(IAudioManager audioManager, IQueuedTracksRepository queuedTrackRepository, Settings settings, MusicContext context) {
     this._audioManager = audioManager;
     this._queuedTrackRepository = queuedTrackRepository;
+    this._settings = settings;
 
+    var id = this._settings.CurrentTrackId;
+    if (id != null)
+      //todo: firstOrDefault or first??
+      this.CurrentTrack = context.Tracks.FirstOrDefault(t => t.Id == id);
   }
 
   //public void FullyCreateQueue(List<Track> nextUps, List<Track> queued, Track current) {
@@ -75,10 +77,24 @@ public class TrackQueue {
   //}
 
   //also handles all the db-stuff
-  public void ChangeQueue(List<Track> tracks) {
-    this.CurrentTrack = tracks.Dequeue();
-    this._queuedTrackRepository.ChangeQueue(tracks);
+  public void ChangeQueue(IEnumerable<Track> tracks) {
+    var sw = new Stopwatch();
+    sw.Start();
+
+    //todo: should be done with enumeration instead of changing to list
+    var list = tracks.ToList();
+    Trace.WriteLine($"Create linked list: {sw.ElapsedMilliseconds}");
+    sw.Restart();
+
+    this.ChangeCurrentTrack(list.Dequeue());
+    Trace.WriteLine($"change current track time: {sw.ElapsedMilliseconds}");
+    sw.Restart();
+    this._queuedTrackRepository.ChangeQueue(list);
+
+    Trace.WriteLine($"db change queue time: {sw.ElapsedMilliseconds}");
     this._ReloadFullQueue();
+
+    Trace.WriteLine($"reload queue time: {sw.ElapsedMilliseconds}");
   }
 
   public void InsertNextUp(Track track) {
@@ -134,7 +150,7 @@ public class TrackQueue {
   }
 
   public void Play(Track track) {
-    this.CurrentTrack = track;
+    this.ChangeCurrentTrack(track);
 
     this._RemoveCurrentPlayerSafely();
     this._currentPlayer = this._CreatePlayer(track);
@@ -218,11 +234,12 @@ public class TrackQueue {
 
   //todo: check if this still works like intended
   //todo: decide what should happen exactly with nextUp tracks on shuffle
+  //todo: check performance
   public void Shuffle() {
     var tracks = new List<Track>(this.QueuedTracks);
 
     tracks.Shuffle();
-    this.ChangeQueue(tracks);
+    this.ChangeQueue(new LinkedList<Track>(tracks));
     this._ReloadFullQueue();
     this.IsShuffle = true;
     this.Play();

@@ -92,7 +92,7 @@ public partial class SongsViewModel : AViewModel {
     var newQueue = new List<SmallTrackViewModel>(trackViewModels); //todo: possible null!
     newQueue.Shuffle();
 
-    trackQueue.ChangeQueue(newQueue.Select(vm => vm.Track).ToList());
+    trackQueue.ChangeQueue(newQueue.Select(vm => vm.Track));
     trackQueue.Play();
   }
 

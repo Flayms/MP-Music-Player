@@ -2,10 +2,10 @@
 using Music_Player_Maui.Enums;
 using Music_Player_Maui.Models;
 
-namespace Music_Player_Maui.Services; 
+namespace Music_Player_Maui.Services.Repositories; 
 
 //todo: helper method for getting tracks of specific type
-public class QueuedTracksRepository {
+public class QueuedTracksRepository : IQueuedTracksRepository {
 
   private readonly MusicContext _context;
   private DbSet<QueuedTrack> _queuedTracks => this._context.QueuedTracks;
@@ -21,32 +21,12 @@ public class QueuedTracksRepository {
     .Select(qt => qt.Track)
     .ToList();
 
-  public Track? CurrentTrack => this._queuedTracks.FirstOrDefault(qt => qt.Type == QueuedType.Current)?.Track;
-
   public QueuedTracksRepository(MusicContext context) {
     this._context = context;
   }
 
-  public void SetNewCurrentTrack(Track track) {
-    //only ever has one current track
-    var currentDbTrack = this._queuedTracks
-      .FirstOrDefault(qt => qt.Type == QueuedType.Current);
-
-    if (currentDbTrack != null) {
-      this._queuedTracks.Remove(currentDbTrack);
-      this._queuedTracks.Add(new QueuedTrack { Track = currentDbTrack.Track, Type = QueuedType.History });
-    }
-
-    //todo: maybe create constructor for queuedTrack
-    this._queuedTracks.Add(new QueuedTrack { Track = track, Type = QueuedType.Current });
-    this._context.SaveChanges();
-  }
-  
-  /// <summary>
-  /// Removes all queued tracks in the repository and adds the new list.
-  /// </summary>
-  /// <param name="tracks">The tracks to be added.</param>
-  public void ChangeQueue(List<Track> tracks) {
+  /// <inheritdoc cref="IQueuedTracksRepository.ChangeQueue"/>
+  public void ChangeQueue(IReadOnlyCollection<Track> tracks) {
     //cleanup db
     var currentlyQueued = this._context.QueuedTracks
       .Where(qt => qt.Type == QueuedType.Queued);

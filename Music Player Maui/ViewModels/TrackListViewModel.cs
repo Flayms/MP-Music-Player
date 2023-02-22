@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Diagnostics;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Music_Player_Maui.Extensions;
 using Music_Player_Maui.Models;
 using Music_Player_Maui.Services;
@@ -29,19 +30,27 @@ public partial class TrackListViewModel : AViewModel {
     this._queue = queue;
   }
 
+  //todo: same code as in searchViewModel
   private void _OnSmallTrackViewTapped(object? sender, TrackEventArgs e) {
     if (sender is not SmallTrackViewModel trackModel)
       return;
 
     var trackQueue = this._queue;
-    var queue = new List<Track>();
+
+    var sw = new Stopwatch();
+    sw.Start();
+
     var trackViewModels = this.TrackViewModels;
     var index = trackViewModels.IndexOf(trackModel);
 
-    for (var i = index; i < trackViewModels.Count; ++i)
-      queue.Add(trackViewModels[i].Track);
+    var queue = trackViewModels
+      .Skip(index)
+      .Take(trackViewModels.Count)
+      .Select(t => t.Track);
 
     trackQueue.ChangeQueue(queue);
+
+    Trace.WriteLine($"tvm: change queue: {sw.ElapsedMilliseconds}");
     trackQueue.Play();
   }
 }
