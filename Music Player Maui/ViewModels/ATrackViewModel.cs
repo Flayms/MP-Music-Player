@@ -44,7 +44,7 @@ public abstract partial class ATrackViewModel : AViewModel {
 
 
     var timer = new DispatcherTimer {
-      Interval = new TimeSpan(0, 0, 10)
+      Interval = new TimeSpan(0, 0, 1)
     };
 
     timer.Tick += this._Timer_Tick;

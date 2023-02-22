@@ -77,6 +77,11 @@ public class MusicContext : DbContext {
       this.Genres.Remove(genre);
     }
 
+    foreach (var queuedTrack in this.QueuedTracks) {
+      this.QueuedTracks.Attach(queuedTrack);
+      this.QueuedTracks.Remove(queuedTrack);
+    }
+
     this.SaveChanges();
   }
 }

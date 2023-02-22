@@ -75,7 +75,7 @@ public static class MauiProgram {
 
 
   private static void _CreateDatabaseService(IServiceCollection services) {
-    services.AddSingleton(provider => {
+    services.AddScoped(provider => {
       const string dbName = "sqliteDb.db";
       var applicationDataPath = FileSystem.Current.AppDataDirectory;
       var dbFilePath = Path.Combine(applicationDataPath, dbName);
