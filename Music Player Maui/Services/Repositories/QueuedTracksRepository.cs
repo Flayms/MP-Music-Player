@@ -17,7 +17,7 @@ public class QueuedTracksRepository : IQueuedTracksRepository {
     .ToList();
 
   public IReadOnlyCollection<Track> QueuedTracks => this._queuedTracks
-    .Where(qt => qt.Type == QueuedType.NextUp)
+    .Where(qt => qt.Type == QueuedType.Queued)
     .Select(qt => qt.Track)
     .ToList();
 

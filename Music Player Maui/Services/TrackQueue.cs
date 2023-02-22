@@ -100,6 +100,8 @@ public class TrackQueue {
     Trace.WriteLine($"change current track time: {sw.ElapsedMilliseconds}");
     sw.Restart();
 
+    this.QueuedTracks = list;
+
     Trace.WriteLine($"db change queue time: {sw.ElapsedMilliseconds}");
     
     this._ReloadFullQueue();
