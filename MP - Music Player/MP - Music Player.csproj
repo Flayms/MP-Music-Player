@@ -14,7 +14,7 @@
 		<LangVersion>default</LangVersion>
 
 		<!-- Display name -->
-		<ApplicationTitle>MPMusicPlayer</ApplicationTitle>
+		<ApplicationTitle>MP - Music Player</ApplicationTitle>
 
 		<!-- App Identifier -->
 		<ApplicationId>mp_music_player</ApplicationId>
