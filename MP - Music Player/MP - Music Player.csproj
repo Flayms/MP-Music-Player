@@ -17,7 +17,7 @@
 		<ApplicationTitle>MPMusicPlayer</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.mp_music_player</ApplicationId>
+		<ApplicationId>mp_music_player</ApplicationId>
 		<ApplicationIdGuid>0a01ae86-fb75-4a38-8c2c-16947f9c16fc</ApplicationIdGuid>
 
 		<!-- Versions -->
@@ -139,10 +139,5 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
-
-	<ProjectExtensions>
-		<VisualStudio>
-	</VisualStudio>
-	</ProjectExtensions>
 
 </Project>
