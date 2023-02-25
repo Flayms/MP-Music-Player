@@ -93,9 +93,15 @@ public class AudioPlayer {
     if (this._currentPlayer == null)
       return;
 
-    this._currentPlayer.PlaybackEnded -= this._CurrentPlayer_PlaybackEnded;
-    this._currentPlayer.Stop();
-    this._currentPlayer.Dispose();
-    this._currentPlayer = null;
+    try {
+      this._currentPlayer.PlaybackEnded -= this._CurrentPlayer_PlaybackEnded;
+      this._currentPlayer.Stop();
+      this._currentPlayer.Dispose();
+      this._currentPlayer = null;
+
+      //throws when a track gets double-clicked instead of once
+    } catch (System.Runtime.InteropServices.COMException e) {
+
+    }
   }
 }
