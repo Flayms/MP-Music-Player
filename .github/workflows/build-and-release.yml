@@ -6,6 +6,8 @@ name: Build .NET MAUI Windows
 on:
   push:
     branches: [ "main" ]
+    paths-ignore:
+    - ".github/workflows/**"
   pull_request:
     branches: [ "main" ]
 
@@ -25,14 +27,23 @@ jobs:
     - name: Install MAUI workload
       run: dotnet workload install maui
       
-    - name: Build
+    - name: Build Windows
       run: dotnet build "Music Player Maui/Music Player Maui.csproj" -c Release -f:net7.0-windows10.0.19041.0
-    
-    - name: Upload Artifact
+    - name: Upload Windows-Artifact
       uses: actions/upload-artifact@v3
       with:
         name: windows-build
         path: Music Player Maui/bin/Release/net7.0-windows10.0.19041.0/win10-x64
+        retention-days: 5
+        
+    - name: Build Android
+      run: dotnet build "Music Player Maui/Music Player Maui.csproj" -c Release -f:net7.0-android
+    
+    - name: Upload Android-Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: android-build
+        path: Music Player Maui/bin/Release/net7.0-android
         retention-days: 5
       
   release-project:
@@ -42,15 +53,26 @@ jobs:
     permissions: write-all
     needs: build-project
     steps:
-    - name: Download artifact
+    
+    - name: Download windows artifact
       uses: actions/download-artifact@v3
       with:
         name: windows-build
 
-    - name: Archive content
+    - name: Archive windows content
       uses: thedoctor0/zip-release@master
       with:
         filename: windows-build.zip
+        
+    - name: Download android artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: android-build
+
+    - name: Archive android content
+      uses: thedoctor0/zip-release@master
+      with:
+        filename: android-build.zip
 
     - name: Create Release
       id: create_release
@@ -61,8 +83,8 @@ jobs:
         prerelease: true
         title: "v0.1.${{ github.run_number }}"
 
-    - name: Upload Release Asset
-      id: upload-release-asset 
+    - name: Upload Windows Release Asset
+      id: upload-windows-release-asset 
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -70,6 +92,17 @@ jobs:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
         asset_path: ./windows-build.zip
         asset_name: mp-music-player.win10-x64.zip
+        asset_content_type: application/zip
+        
+    - name: Upload Android Release Asset
+      id: upload-android-release-asset 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+        asset_path: ./android-build.zip
+        asset_name: mp-music-player.android.zip
         asset_content_type: application/zip
 
   #   - name: Create GitHub Release
