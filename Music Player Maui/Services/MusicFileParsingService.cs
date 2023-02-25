@@ -48,14 +48,24 @@ public class MusicFileParsingService {
     var path = this._settings.MusicDirectory;
     //path = "/storage/9C33-6BBD/Music/music4phone";
 
-    //todo: use searchPattern instead
-    var files = Directory
-      .EnumerateFiles(path, "*", SearchOption.AllDirectories)
-      .Select(f => new FileInfo(f))
-      .Where(f => _supportedFormats.Contains(f.Extension))
-      .ToArray();
+    var directory = new DirectoryInfo(path);
 
-    return files;
+    if (!directory.Exists)
+      return Array.Empty<FileInfo>();
+
+    try {
+
+      //todo: use searchPattern instead
+      var files = directory
+        .EnumerateFiles("*", SearchOption.AllDirectories)
+        //.Select(f => new FileInfo(f))
+        .Where(f => _supportedFormats.Contains(f.Extension))
+        .ToArray();
+
+      return files;
+    } catch (UnauthorizedAccessException) {
+      return Array.Empty<FileInfo>();
+    }
   }
 
 

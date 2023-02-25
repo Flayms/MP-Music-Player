@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using Music_Player_Maui.Models;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.UI.Xaml;
 using Music_Player_Maui.Services;
 
 namespace Music_Player_Maui.ViewModels;
@@ -20,7 +19,7 @@ public abstract partial class ATrackViewModel : AViewModel {
   public bool IsPlaying => this.queue.IsPlaying;
 
   public bool HasTrack => this.Track != null;
-  public string Title => this.Track?.Title ?? "no song selected";
+  public string Title => this.Track?.Title ?? "nldo song selected";
   public string Producer => this.Track?.CombinedArtistNames ?? "/";
   public ImageSource CoverSource => this.Track?.Cover.Source ?? ImageSource.FromFile("record.png"); //todo: refac!!
 
@@ -43,10 +42,8 @@ public abstract partial class ATrackViewModel : AViewModel {
     this.queue = queue;
 
 
-    var timer = new DispatcherTimer {
-      Interval = new TimeSpan(0, 0, 1)
-    };
-   
+    var timer = Application.Current!.Dispatcher.CreateTimer();
+    timer.Interval = new TimeSpan(0, 0, 1);
     timer.Tick += this._Timer_Tick;
     timer.Start();
 
