@@ -68,7 +68,6 @@ public class MusicFileParsingService {
     }
   }
 
-
   private bool _LoadTracks(CancellationToken cancellationToken, FileInfo[] files, out List<Track> tracks, out List<Artist> artists, out List<Genre> genres) {
     tracks = new List<Track>();
     artists = new List<Artist>();
