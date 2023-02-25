@@ -8,4 +8,11 @@ public class DbQueuedTrack {
   public ulong Id { get; set; }
   public Track Track { get; set; } = null!;
   public QueuedType Type { get; set; }
+
+  public DbQueuedTrack() { }
+
+  public DbQueuedTrack(Track track, QueuedType type) {
+    this.Track = track;
+    this.Type = type;
+  }
 }

@@ -11,10 +11,4 @@ public interface IQueuedTracksRepository {
   /// </summary>
   /// <param name="tracks">The tracks to be added.</param>
   void ChangeQueue(IReadOnlyCollection<Track> tracks);
-
-  void InsertNextUp(Track track);
-  void AddToNextUp(Track track);
-  void AddToEndOfQueue(Track track);
-  void RemoveFromQueue(Track track);
-  bool TryDequeueTrack(out Track track);
 }
