@@ -79,9 +79,9 @@ jobs:
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: "0.1.${{ github.run_number }}"
+        automatic_release_tag: "0.2.${{ github.run_number }}"
         prerelease: true
-        title: "v0.1.${{ github.run_number }}"
+        title: "v0.2.${{ github.run_number }}"
 
     - name: Upload Windows Release Asset
       id: upload-windows-release-asset 
