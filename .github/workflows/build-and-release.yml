@@ -61,7 +61,7 @@ jobs:
     - name: Archive windows content
       uses: thedoctor0/zip-release@master
       with:
-        path: ./download/windows
+        path: ./download/windows/
         filename: windows-build.zip
         
     - name: Download android artifact
@@ -73,7 +73,7 @@ jobs:
     - name: Archive android content
       uses: thedoctor0/zip-release@master
       with:
-        path: ./download/android
+        path: ./download/android/
         filename: android-build.zip
 
     - name: Create Release
