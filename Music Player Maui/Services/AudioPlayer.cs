@@ -2,10 +2,7 @@
 using Plugin.Maui.Audio;
 using Exception = System.Exception;
 
-namespace Music_Player_Maui.Services; 
-
-//todo: add doc-comments
-//todo: sometimes throws exceptions, sometimes handles stuff safely -> need to be more consistent
+namespace Music_Player_Maui.Services;
 
 /// <summary>
 /// Save-Wrapper for all the audio-playback-logic
@@ -21,7 +18,16 @@ public class AudioPlayer {
   /// <summary>
   /// Gets the duration of the current track in seconds or 0 if nothing is playing.
   /// </summary>
-  public double DurationInS => this._currentPlayer?.Duration ?? 0;
+  public double DurationInS {
+    get {
+      try {
+        var duration = this._currentPlayer?.Duration ?? 0;
+        return duration;
+      } catch (System.Runtime.InteropServices.COMException e) {
+        return 0;
+      }
+    }
+  }
 
   /// <summary>
   /// Gets the position of the current track in seconds or 0 if nothing is playing.
@@ -32,17 +38,31 @@ public class AudioPlayer {
     this._audioManager = audioManager;
   }
 
+  /// <summary>
+  /// Starts playback on the given <see cref="Track"/>.
+  /// </summary>
+  /// <param name="track">The track to play.</param>
   public void Play(Track track) {
     this._currentPlayer = this._CreatePlayer(track);
     this._currentPlayer.Play();
   }
 
+  /// <summary>
+  /// Starts playback on the given <see cref="Track"/> at a specific position.
+  /// </summary>
+  /// <param name="track">The track to play.</param>
+  /// <param name="timeInSeconds">The position to seek to in seconds.</param>
   public void PlayAtTime(Track track, double timeInSeconds) {
     var player = this._currentPlayer = this._CreatePlayer(track);
     player.Seek(timeInSeconds);
     player.Play();
   }
 
+  /// <summary>
+  /// Sets the current playback position.
+  /// </summary>
+  /// <param name="positionInS">The position in seconds to seek to.</param>
+  /// <exception cref="Exception">Throws if no track is selected.</exception>
   public void Seek(double positionInS) {
     if (this._currentPlayer == null)
       throw new Exception("Can't seek if no track is selected!");

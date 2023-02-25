@@ -184,12 +184,13 @@ public class TrackQueue {
     this.IsPlaying = false;
   }
 
+  //todo: what if end of queue reached
   public void Next() {
-    //end of queue reached
-    if (!this._queuedTrackRepository.TryDequeueTrack(out var nextTrack))
-      return;
+    if (this.NextUpTracks.Count > 0)
+      this.Play(this.NextUpTracks.Dequeue());
 
-    this.Play(nextTrack);
+    else if (this.QueuedTracks.Count > 0)
+      this.Play(this.QueuedTracks.Dequeue());
 
     ++this.Index;
   }
