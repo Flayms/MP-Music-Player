@@ -1,8 +1,8 @@
-﻿using Music_Player_Maui.Models;
+﻿using MP_Music_Player.Models;
 using Plugin.Maui.Audio;
 using Exception = System.Exception;
 
-namespace Music_Player_Maui.Services;
+namespace MP_Music_Player.Services;
 
 /// <summary>
 /// Save-Wrapper for all the audio-playback-logic

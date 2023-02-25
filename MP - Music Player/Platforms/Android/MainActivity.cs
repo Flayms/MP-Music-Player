@@ -6,7 +6,7 @@ using Android.OS;
 using AndroidX.Core.App;
 using AndroidX.Core.Content;
 
-namespace Music_Player_Maui;
+namespace MP_Music_Player;
 
 [Activity(Theme = "@style/Maui.SplashTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize | ConfigChanges.Density)]
 public class MainActivity : MauiAppCompatActivity {
@@ -16,6 +16,7 @@ public class MainActivity : MauiAppCompatActivity {
   protected override void OnCreate(Bundle savedInstanceState) {
     Instance = this;
 
+    this.CheckAppPermissions();
     base.OnCreate(savedInstanceState);
   }
 

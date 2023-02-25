@@ -1,10 +1,10 @@
 ﻿using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Music_Player_Maui.Models;
+using MP_Music_Player.Models;
 using CommunityToolkit.Mvvm.Input;
-using Music_Player_Maui.Services;
+using MP_Music_Player.Services;
 
-namespace Music_Player_Maui.ViewModels;
+namespace MP_Music_Player.ViewModels;
 
 public abstract partial class ATrackViewModel : AViewModel {
   protected readonly TrackQueue queue;
@@ -19,7 +19,7 @@ public abstract partial class ATrackViewModel : AViewModel {
   public bool IsPlaying => this.queue.IsPlaying;
 
   public bool HasTrack => this.Track != null;
-  public string Title => this.Track?.Title ?? "nldo song selected";
+  public string Title => this.Track?.Title ?? "no song selected";
   public string Producer => this.Track?.CombinedArtistNames ?? "/";
   public ImageSource CoverSource => this.Track?.Cover.Source ?? ImageSource.FromFile("record.png"); //todo: refac!!
 

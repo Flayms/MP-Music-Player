@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:ViewModels="using:Music_Player_Maui.ViewModels"
-             x:Class="Music_Player_Maui.Views.Pages.GroupsPage"
+             xmlns:ViewModels="using:MP_Music_Player.ViewModels"
+             x:Class="MP_Music_Player.Views.Pages.GroupsPage"
              x:DataType="ViewModels:GroupsViewModel"
              Title="{Binding GroupType}">
 

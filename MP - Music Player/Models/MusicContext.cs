@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using Music_Player_Maui.Extensions;
+using MP_Music_Player.Extensions;
 
-namespace Music_Player_Maui.Models;
+namespace MP_Music_Player.Models;
 
 public class MusicContext : DbContext {
 

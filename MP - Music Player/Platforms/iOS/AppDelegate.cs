@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace Music_Player_Maui;
+namespace MP_Music_Player;
 
 [Register("AppDelegate")]
 public class AppDelegate : MauiUIApplicationDelegate

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Music_Player_Maui.Models;
+namespace MP_Music_Player.Models;
 
 public class Track {
   private Cover? _cover;

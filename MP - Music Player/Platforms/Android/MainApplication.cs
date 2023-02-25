@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace Music_Player_Maui;
+namespace MP_Music_Player;
 
 [Application]
 public class MainApplication : MauiApplication

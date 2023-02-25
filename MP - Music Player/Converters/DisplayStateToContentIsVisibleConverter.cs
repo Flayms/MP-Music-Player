@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
-using Music_Player_Maui.Enums;
+using MP_Music_Player.Enums;
 
-namespace Music_Player_Maui.Converters;
+namespace MP_Music_Player.Converters;
 
 public class DisplayStateToContentIsVisibleConverter : AValueConverter<DisplayState, bool> {
   #region Implementation of IValueConverter

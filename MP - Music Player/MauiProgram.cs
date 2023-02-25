@@ -1,15 +1,15 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
-using Music_Player_Maui.Services;
-using Music_Player_Maui.ViewModels;
-using Music_Player_Maui.Views.Pages;
-using Music_Player_Maui.Models;
-using Music_Player_Maui.Services.Repositories;
-using Music_Player_Maui.Views.UserControls;
+using MP_Music_Player.Services;
+using MP_Music_Player.ViewModels;
+using MP_Music_Player.Views.Pages;
+using MP_Music_Player.Models;
+using MP_Music_Player.Services.Repositories;
+using MP_Music_Player.Views.UserControls;
 using Plugin.Maui.Audio;
-using AudioPlayer = Music_Player_Maui.Services.AudioPlayer;
+using AudioPlayer = MP_Music_Player.Services.AudioPlayer;
 
-namespace Music_Player_Maui;
+namespace MP_Music_Player;
 
 public static class MauiProgram {
   public static MauiApp CreateMauiApp() {

@@ -1,10 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Music_Player_Maui.Extensions;
-using Music_Player_Maui.Models;
-using Music_Player_Maui.Services;
+using MP_Music_Player.Extensions;
+using MP_Music_Player.Models;
+using MP_Music_Player.Services;
 
-namespace Music_Player_Maui.ViewModels; 
+namespace MP_Music_Player.ViewModels; 
 
 public partial class SearchViewModel : AViewModel {
 

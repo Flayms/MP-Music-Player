@@ -1,7 +1,7 @@
-using Music_Player_Maui.Services;
-using Music_Player_Maui.ViewModels;
+using MP_Music_Player.Services;
+using MP_Music_Player.ViewModels;
 
-namespace Music_Player_Maui.Views.Pages;
+namespace MP_Music_Player.Views.Pages;
 
 public partial class SongsPage : ContentPage {
   public SongsPage() {

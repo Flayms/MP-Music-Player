@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Music_Player_Maui.Enums;
-using Music_Player_Maui.Models;
+using MP_Music_Player.Enums;
+using MP_Music_Player.Models;
 
-namespace Music_Player_Maui.Services.Repositories;
+namespace MP_Music_Player.Services.Repositories;
 
 //todo: helper method for getting tracks of specific type
 public class QueuedTracksRepository : IQueuedTracksRepository {

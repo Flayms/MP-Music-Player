@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:ViewModels="clr-namespace:Music_Player_Maui.ViewModels"
-             xmlns:Converters="using:Music_Player_Maui.Converters"
-             x:Class="Music_Player_Maui.Views.UserControls.BottomTrackPlayerView"
+             xmlns:ViewModels="clr-namespace:MP_Music_Player.ViewModels"
+             xmlns:Converters="using:MP_Music_Player.Converters"
+             x:Class="MP_Music_Player.Views.UserControls.BottomTrackPlayerView"
              x:DataType="ViewModels:BottomTrackViewModel"
              IsVisible="{Binding HasTrack}">
 

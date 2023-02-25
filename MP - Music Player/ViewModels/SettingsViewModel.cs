@@ -2,9 +2,9 @@
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Music_Player_Maui.Services;
+using MP_Music_Player.Services;
 
-namespace Music_Player_Maui.ViewModels; 
+namespace MP_Music_Player.ViewModels; 
 
 public partial class SettingsViewModel : AViewModel {
  

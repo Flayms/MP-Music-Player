@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace Music_Player_Maui.Converters; 
+namespace MP_Music_Player.Converters; 
 
 public class SecondsToDisplayTimeConverter : AValueConverter<double, string> {
   #region Overrides of AValueConverter<double,string>

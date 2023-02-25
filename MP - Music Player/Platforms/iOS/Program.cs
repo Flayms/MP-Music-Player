@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace Music_Player_Maui;
+namespace MP_Music_Player;
 
 public class Program
 {

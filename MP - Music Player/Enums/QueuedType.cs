@@ -1,4 +1,4 @@
-﻿namespace Music_Player_Maui.Enums; 
+﻿namespace MP_Music_Player.Enums; 
 
 public enum QueuedType {
 
