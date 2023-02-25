@@ -2,8 +2,8 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using Music_Player_Maui.Models;
 using CommunityToolkit.Mvvm.Input;
-using Music_Player_Maui.Services;
 using Microsoft.UI.Xaml;
+using Music_Player_Maui.Services;
 
 namespace Music_Player_Maui.ViewModels;
 
@@ -46,9 +46,9 @@ public abstract partial class ATrackViewModel : AViewModel {
     var timer = new DispatcherTimer {
       Interval = new TimeSpan(0, 0, 1)
     };
-
-    timer.Tick += this._Timer_Tick;
-    timer.Start();
+   //
+   // timer.Tick += this._Timer_Tick;
+   // timer.Start();
 
     this.Track = queue.CurrentTrack;
 

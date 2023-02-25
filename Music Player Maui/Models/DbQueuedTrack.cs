@@ -2,7 +2,7 @@
 
 namespace Music_Player_Maui.Models; 
 
-public class QueuedTrack {
+public class DbQueuedTrack {
 
   //allows bigger values since id-incrementation of queue could become quite high
   public ulong Id { get; set; }

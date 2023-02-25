@@ -9,7 +9,8 @@ public class MusicContext : DbContext {
   public DbSet<Track> Tracks { get; set; } = null!;
   public DbSet<Artist> Artists { get; set; } = null!;
   public DbSet<Genre> Genres { get; set; } = null!;
-  public DbSet<QueuedTrack> QueuedTracks { get; set; } = null!;
+  public DbSet<DbQueuedTrack> QueuedTracks { get; set; } = null!;
+  public DbSet<DbCurrentTrack> CurrentTracks { get; set; } = null!; //always only one entry
 
   private readonly string _filePath;
 
@@ -49,13 +50,17 @@ public class MusicContext : DbContext {
       .ToTable("Genres")
       .HasKey(g => g.Id);
 
-    var queueBuilder = modelBuilder.Entity<QueuedTrack>(); 
+    var queueBuilder = modelBuilder.Entity<DbQueuedTrack>(); 
     queueBuilder
       .ToTable("QueuedTracks")
       .HasKey(q => q.Id);
 
-    queueBuilder.Navigation(q => q.Track)
+    queueBuilder.Navigation(qt => qt.Track)
       .AutoInclude();
+
+    modelBuilder.Entity<DbCurrentTrack>()
+      .ToTable("CurrentTrack")
+      .HasKey(t => t.Id);
 
     base.OnModelCreating(modelBuilder);
   }
