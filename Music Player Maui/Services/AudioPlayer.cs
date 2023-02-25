@@ -48,6 +48,14 @@ public class AudioPlayer {
   }
 
   /// <summary>
+  /// Adds the given <see cref="Track"/> without starting playback.
+  /// </summary>
+  /// <param name="track">The track to set.</param>
+  public void SetTrack(Track track) {
+    this._currentPlayer = this._CreatePlayer(track);
+  }
+
+  /// <summary>
   /// Starts playback on the given <see cref="Track"/> at a specific position.
   /// </summary>
   /// <param name="track">The track to play.</param>

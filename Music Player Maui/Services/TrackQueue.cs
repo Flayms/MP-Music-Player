@@ -6,13 +6,10 @@ using Track = Music_Player_Maui.Models.Track;
 
 namespace Music_Player_Maui.Services;
 
-//todo: maybe split between queue logic and actual playing logic
-
-//todo: separate caching and reading from repo logic
 public class TrackQueue {
 
- private readonly AudioPlayer _audioPlayer;
- private readonly IQueuedTracksRepository _queuedTrackRepository;
+  private readonly AudioPlayer _audioPlayer;
+  private readonly IQueuedTracksRepository _queuedTrackRepository;
 
   private readonly Settings _settings;
 
@@ -21,11 +18,8 @@ public class TrackQueue {
   public event EventHandler<TrackEventArgs>? NewSongSelected;
   public event EventHandler<IsPlayingEventArgs>? IsPlayingChanged;
 
-  public IList<Track> NextUpTracks { get; private set; }
-  public IList<Track> QueuedTracks { get; private set; }
-
-  //todo: maybe make repo property for this and read directly from there
-  public List<Track> AllTracks { get; private set; } = new();
+  public IList<Track> NextUpTracks { get; private set; } = new List<Track>();
+  public IList<Track> QueuedTracks { get; private set; } = new List<Track>();
 
   public Track? CurrentTrack { get; private set; }
 
@@ -57,12 +51,22 @@ public class TrackQueue {
     this._settings = settings;
     this._context = context;
 
-    //todo: too slow for constructor code
-    this.CurrentTrack = this._context.CurrentTracks.FirstOrDefault()?.Track;
-    this.NextUpTracks = queuedTrackRepository.NextUpTracks.ToList();
-    this.QueuedTracks = queuedTrackRepository.QueuedTracks.ToList();
-
     audioPlayer.PlaybackEnded += this._AudioPlayer_PlaybackEnded;
+  }
+
+  public void LoadTracksFromDb() {
+    //todo: too slow for constructor code
+    var dbCurrentTrack = this._context.CurrentTracks.FirstOrDefault();
+
+    if (dbCurrentTrack != null) {
+      var track = this.CurrentTrack = dbCurrentTrack.Track;
+      this._audioPlayer.SetTrack(track);
+      this._audioPlayer.Seek(dbCurrentTrack.ProgressInSeconds);
+      this.NewSongSelected?.Invoke(this, new TrackEventArgs(track));
+    }
+
+    this.NextUpTracks = this._queuedTrackRepository.NextUpTracks.ToList();
+    this.QueuedTracks = this._queuedTrackRepository.QueuedTracks.ToList();
   }
 
   //todo: shouldn't do the saving in settings
@@ -85,22 +89,18 @@ public class TrackQueue {
 
     this.ChangeCurrentTrack(list.Dequeue());
     this.QueuedTracks = list;
-    this._ReloadFullQueue();
   }
 
   public void InsertNextUp(Track track) {
     this.NextUpTracks.Insert(0, track);
-    this._ReloadFullQueue();
   }
 
   public void AddToNextUp(Track track) {
     this.NextUpTracks.Add(track);
-    this._ReloadFullQueue();
   }
 
   public void AddToEndOfQueue(Track track) {
     this.QueuedTracks.Add(track);
-    this._ReloadFullQueue();
   }
 
   //todo: implement these again
@@ -127,22 +127,6 @@ public class TrackQueue {
   public void Remove(Track track) {
     if (!this.NextUpTracks.Remove(track))
       this.QueuedTracks.Remove(track);
-
-    this._ReloadFullQueue();
-  }
-
-  /// <summary>
-  /// Refills the Property <see cref="AllTracks"/> with all tracks in current Queue.
-  /// </summary>
-  private void _ReloadFullQueue() {
-    //var tracks = new List<Track>(this.TrackHistory) { this.CurrentTrack };
-    var tracks = new List<Track> { this.CurrentTrack };
-    tracks.AddRange(this.NextUpTracks);
-    tracks.AddRange(this.QueuedTracks);
-    this.AllTracks = tracks;
-
-    this.Index = 0;
-    //this.Index = this.TrackHistory.Count + 1;
   }
 
   public void Play(Track track) {
@@ -168,8 +152,15 @@ public class TrackQueue {
       return;
     }
 
-    //start first time playback from start
-    this._audioPlayer.Play(this.CurrentTrack);
+    var playbackPosition = this._audioPlayer.PositionInS;
+
+    if (playbackPosition < 0)
+      //start first time playback from start
+      this._audioPlayer.Play(this.CurrentTrack);
+    else
+      // start playing at specific time for the first time
+      this._audioPlayer.PlayAtTime(this.CurrentTrack, playbackPosition);
+
     this.IsPlaying = true;
   }
 
@@ -196,15 +187,11 @@ public class TrackQueue {
     //this._PlayTrackAsync();
   }
 
-  //todo: check if this still works like intended
-  //todo: decide what should happen exactly with nextUp tracks on shuffle
-  //todo: check performance
   public void Shuffle() {
     var tracks = new List<Track>(this.QueuedTracks);
 
     tracks.Shuffle();
     this.ChangeQueue(tracks);
-    this._ReloadFullQueue();
     this.IsShuffle = true;
     this.Play();
   }
@@ -213,7 +200,7 @@ public class TrackQueue {
     if (this.CurrentTrack == null)
       throw new NullReferenceException(nameof(this.CurrentTrack));
 
-    var duration = this._audioPlayer.DurationInS; //todo: better null checks needed beforehand
+    var duration = this._audioPlayer.DurationInS;
     var position = duration * value;
 
     if (!this._audioPlayer.HasTrackSelected)
@@ -226,7 +213,7 @@ public class TrackQueue {
     if (this.CurrentTrack == null)
       return 0;
 
-    var duration = this._audioPlayer.DurationInS; //todo: throws exception quite often
+    var duration = this._audioPlayer.DurationInS;
     var position = this._audioPlayer.PositionInS;
 
     if (duration == 0)
@@ -245,8 +232,8 @@ public class TrackQueue {
       .Select(t => new DbQueuedTrack(t, QueuedType.Queued))
       .Concat(this.NextUpTracks
         .Select(t => new DbQueuedTrack(t, QueuedType.NextUp)));
-      //todo: current track can be null!
-     // .Concat(new[] {new DbQueuedTrack {Track = this.CurrentTrack, Type = QueuedType.Current}});
+    //todo: current track can be null!
+    // .Concat(new[] {new DbQueuedTrack {Track = this.CurrentTrack, Type = QueuedType.Current}});
 
     this._context.CurrentTracks.Clear();
     var currentPosition = this._audioPlayer.PositionInS;

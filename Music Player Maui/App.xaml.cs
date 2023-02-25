@@ -18,9 +18,13 @@ public partial class App : Application {
   #region Overrides of Application
 
   protected override void OnStart() {
-    Task.Run(this._musicLoadingService.GetTracksAsync);
-
+    Task.Run(this._SetupAsync);
     base.OnStart();
+  }
+
+  private async void _SetupAsync() {
+    await this._musicLoadingService.GetTracksAsync();
+    this._queue.LoadTracksFromDb();
   }
 
   protected override void OnSleep() {
