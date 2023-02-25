@@ -1,6 +1,6 @@
-﻿using Music_Player_Maui.Models;
+﻿using MP_Music_Player.Models;
 
-namespace Music_Player_Maui.ViewModels; 
+namespace MP_Music_Player.ViewModels; 
 
 //todo: add format, length bit-rate, sampling-rate, Album
 //todo: add links to discogs, genius, last.fm... like in Hi-Fi Cast

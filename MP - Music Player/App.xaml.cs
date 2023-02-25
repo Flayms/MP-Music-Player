@@ -1,6 +1,6 @@
-﻿using Music_Player_Maui.Services;
+﻿using MP_Music_Player.Services;
 
-namespace Music_Player_Maui;
+namespace MP_Music_Player;
 
 public partial class App : Application {
   private readonly MusicService _musicLoadingService;

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:Converters="using:Music_Player_Maui.Converters"
-             xmlns:ViewModels="using:Music_Player_Maui.ViewModels"
-             xmlns:UserControls="clr-namespace:Music_Player_Maui.Views.UserControls"
-             x:Class="Music_Player_Maui.Views.Pages.SongsPage"
+             xmlns:Converters="using:MP_Music_Player.Converters"
+             xmlns:ViewModels="using:MP_Music_Player.ViewModels"
+             xmlns:UserControls="clr-namespace:MP_Music_Player.Views.UserControls"
+             x:Class="MP_Music_Player.Views.Pages.SongsPage"
              Title="Songs"
              x:DataType="ViewModels:SongsViewModel">
 

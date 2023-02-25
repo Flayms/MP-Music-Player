@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using Music_Player_Maui.Services;
-using Music_Player_Maui.Views.Pages;
+using MP_Music_Player.Services;
+using MP_Music_Player.Views.Pages;
 
-namespace Music_Player_Maui.ViewModels; 
+namespace MP_Music_Player.ViewModels; 
 
 public partial class BottomTrackViewModel : ATrackViewModel {
   public BottomTrackViewModel(TrackQueue queue) : base(queue) { }

@@ -1,6 +1,6 @@
-﻿using Music_Player_Maui.Services;
+﻿using MP_Music_Player.Services;
 
-namespace Music_Player_Maui.Models; 
+namespace MP_Music_Player.Models; 
 
 public class Cover {
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:ViewModels="clr-namespace:Music_Player_Maui.ViewModels"
-             xmlns:Converters="clr-namespace:Music_Player_Maui.Converters"
-             x:Class="Music_Player_Maui.Views.Pages.BigTrackPage"
+             xmlns:ViewModels="clr-namespace:MP_Music_Player.ViewModels"
+             xmlns:Converters="clr-namespace:MP_Music_Player.Converters"
+             x:Class="MP_Music_Player.Views.Pages.BigTrackPage"
              Title="{Binding Title}"
              x:DataType="ViewModels:BigTrackViewModel"
              BackgroundColor="#0d0d0d">

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Music_Player_Maui.Models;
+using MP_Music_Player.Models;
 
-namespace Music_Player_Maui.Services;
+namespace MP_Music_Player.Services;
 
 /// <summary>
 /// A service giving access to all the tracks, genres, artists, etc

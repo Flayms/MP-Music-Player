@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace Music_Player_Maui.ViewModels; 
+namespace MP_Music_Player.ViewModels; 
 
 public abstract class AViewModel : ObservableObject {
   //public event PropertyChangedEventHandler PropertyChanged;

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Shell
-  x:Class="Music_Player_Maui.AppShell"
+  x:Class="MP_Music_Player.AppShell"
   xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-  xmlns:local="clr-namespace:Music_Player_Maui.Views.Pages">
+  xmlns:local="clr-namespace:MP_Music_Player.Views.Pages">
 
   <FlyoutItem Title="Songs" Icon="music_library.png">
     <ShellContent Route="SongsPage" ContentTemplate="{DataTemplate local:SongsPage}" />

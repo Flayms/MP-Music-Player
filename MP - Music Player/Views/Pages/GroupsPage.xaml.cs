@@ -1,7 +1,7 @@
-using Music_Player_Maui.Enums;
-using Music_Player_Maui.ViewModels;
+using MP_Music_Player.Enums;
+using MP_Music_Player.ViewModels;
 
-namespace Music_Player_Maui.Views.Pages;
+namespace MP_Music_Player.Views.Pages;
 
 public partial class GroupsPage : ContentPage {
 

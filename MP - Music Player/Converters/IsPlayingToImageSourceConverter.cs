@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace Music_Player_Maui.Converters; 
+namespace MP_Music_Player.Converters; 
 
 internal class IsPlayingToImageSourceConverter : AValueConverter<bool, string> {
   #region Implementation of IValueConverter

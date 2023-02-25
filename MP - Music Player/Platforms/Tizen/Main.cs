@@ -2,7 +2,7 @@ using System;
 using Microsoft.Maui;
 using Microsoft.Maui.Hosting;
 
-namespace Music_Player_Maui;
+namespace MP_Music_Player;
 
 class Program : MauiApplication
 {

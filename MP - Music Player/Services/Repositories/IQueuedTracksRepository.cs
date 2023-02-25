@@ -1,6 +1,6 @@
-﻿using Music_Player_Maui.Models;
+﻿using MP_Music_Player.Models;
 
-namespace Music_Player_Maui.Services.Repositories;
+namespace MP_Music_Player.Services.Repositories;
 
 public interface IQueuedTracksRepository {
   IReadOnlyCollection<Track> NextUpTracks { get; }

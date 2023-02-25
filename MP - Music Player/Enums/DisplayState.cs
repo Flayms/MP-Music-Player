@@ -1,4 +1,4 @@
-﻿namespace Music_Player_Maui.Enums; 
+﻿namespace MP_Music_Player.Enums; 
 
 /// <summary>
 /// A state that a list for displayable content is currently in.

@@ -1,6 +1,6 @@
 ﻿using Android.Media;
 
-namespace Music_Player_Maui.Services; 
+namespace MP_Music_Player.Services; 
 
 public partial class CoverRetriever {
 

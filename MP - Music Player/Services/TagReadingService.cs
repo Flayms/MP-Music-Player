@@ -1,7 +1,7 @@
-﻿using Music_Player_Maui.Models;
+﻿using MP_Music_Player.Models;
 using TagLib;
 
-namespace Music_Player_Maui.Services;
+namespace MP_Music_Player.Services;
 
 public class TagReadingService {
 

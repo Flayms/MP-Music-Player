@@ -1,6 +1,6 @@
-﻿using Music_Player_Maui.Views.Pages;
+﻿using MP_Music_Player.Views.Pages;
 
-namespace Music_Player_Maui;
+namespace MP_Music_Player;
 
 public partial class AppShell : Shell {
   public AppShell() {

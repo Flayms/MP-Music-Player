@@ -1,4 +1,4 @@
-﻿namespace Music_Player_Maui.Extensions; 
+﻿namespace MP_Music_Player.Extensions; 
 
 public static class EnumerableExtensions {
 

@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Music_Player_Maui.Enums;
-using Music_Player_Maui.Models;
+using MP_Music_Player.Enums;
+using MP_Music_Player.Models;
 
-namespace Music_Player_Maui.ViewModels;
+namespace MP_Music_Player.ViewModels;
 
 public partial class GroupsViewModel : AViewModel {
   private readonly MusicContext _context;

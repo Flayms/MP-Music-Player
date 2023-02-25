@@ -1,6 +1,6 @@
-﻿using Music_Player_Maui.Models;
+﻿using MP_Music_Player.Models;
 
-namespace Music_Player_Maui.Services;
+namespace MP_Music_Player.Services;
 
 public class MusicFileParsingService {
   public class TrackLoadedEventArgs : EventArgs {

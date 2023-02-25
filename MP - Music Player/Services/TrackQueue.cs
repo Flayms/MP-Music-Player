@@ -1,10 +1,10 @@
-﻿using Music_Player_Maui.Enums;
-using Music_Player_Maui.Extensions;
-using Music_Player_Maui.Models;
-using Music_Player_Maui.Services.Repositories;
-using Track = Music_Player_Maui.Models.Track;
+﻿using MP_Music_Player.Enums;
+using MP_Music_Player.Extensions;
+using MP_Music_Player.Models;
+using MP_Music_Player.Services.Repositories;
+using Track = MP_Music_Player.Models.Track;
 
-namespace Music_Player_Maui.Services;
+namespace MP_Music_Player.Services;
 
 public class TrackQueue {
 

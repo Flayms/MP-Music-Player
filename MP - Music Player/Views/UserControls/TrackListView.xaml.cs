@@ -1,6 +1,6 @@
-using Music_Player_Maui.ViewModels;
+using MP_Music_Player.ViewModels;
 
-namespace Music_Player_Maui.Views.UserControls;
+namespace MP_Music_Player.Views.UserControls;
 
 //todo: should be view instead of page and used at in songsPage as well
 public partial class TrackListView : ContentView {

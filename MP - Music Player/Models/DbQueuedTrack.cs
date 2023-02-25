@@ -1,6 +1,6 @@
-﻿using Music_Player_Maui.Enums;
+﻿using MP_Music_Player.Enums;
 
-namespace Music_Player_Maui.Models; 
+namespace MP_Music_Player.Models; 
 
 public class DbQueuedTrack {
 

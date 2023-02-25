@@ -1,6 +1,6 @@
-using Music_Player_Maui.Enums;
+using MP_Music_Player.Enums;
 
-namespace Music_Player_Maui.Views.UserControls;
+namespace MP_Music_Player.Views.UserControls;
 
 //todo: not working atm probably bc of maui
 

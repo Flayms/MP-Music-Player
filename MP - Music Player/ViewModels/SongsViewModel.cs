@@ -1,11 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Music_Player_Maui.Enums;
-using Music_Player_Maui.Services;
-using Music_Player_Maui.Views.Pages;
-using Music_Player_Maui.Extensions;
+using MP_Music_Player.Enums;
+using MP_Music_Player.Services;
+using MP_Music_Player.Views.Pages;
+using MP_Music_Player.Extensions;
 
-namespace Music_Player_Maui.ViewModels;
+namespace MP_Music_Player.ViewModels;
 
 public partial class SongsViewModel : AViewModel {
 

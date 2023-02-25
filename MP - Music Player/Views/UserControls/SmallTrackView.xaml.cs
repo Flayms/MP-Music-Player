@@ -1,4 +1,4 @@
-namespace Music_Player_Maui.Views.UserControls;
+namespace MP_Music_Player.Views.UserControls;
 
 public partial class SmallTrackView : ContentView {
   public SmallTrackView() {

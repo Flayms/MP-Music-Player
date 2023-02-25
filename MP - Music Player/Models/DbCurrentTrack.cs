@@ -1,4 +1,4 @@
-﻿namespace Music_Player_Maui.Models; 
+﻿namespace MP_Music_Player.Models; 
 
 public class DbCurrentTrack {
   public int Id { get; set; }
