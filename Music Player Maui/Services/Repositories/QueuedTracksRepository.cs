@@ -8,7 +8,7 @@ namespace Music_Player_Maui.Services.Repositories;
 public class QueuedTracksRepository : IQueuedTracksRepository {
 
   private readonly MusicContext _context;
-  private DbSet<QueuedTrack> _queuedTracks => this._context.QueuedTracks;
+  private DbSet<DbQueuedTrack> _queuedTracks => this._context.QueuedTracks;
 
   //todo: decide if its better for these to be properties or methods
   public IReadOnlyCollection<Track> NextUpTracks => this._queuedTracks
@@ -33,7 +33,7 @@ public class QueuedTracksRepository : IQueuedTracksRepository {
     this._queuedTracks.RemoveRange(currentlyQueued);
 
     //now add the items
-    this._queuedTracks.AddRange(tracks.Select(t => new QueuedTrack { Track = t, Type = QueuedType.Queued }));
+    this._queuedTracks.AddRange(tracks.Select(t => new DbQueuedTrack { Track = t, Type = QueuedType.Queued }));
     this._context.SaveChanges();
   }
 
@@ -46,17 +46,17 @@ public class QueuedTracksRepository : IQueuedTracksRepository {
     newNextUps.Add(track);
 
     this._queuedTracks.RemoveRange(currentlyNextUpTracks);
-    this._queuedTracks.AddRange(newNextUps.Select(t => new QueuedTrack { Track = t, Type = QueuedType.NextUp }));
+    this._queuedTracks.AddRange(newNextUps.Select(t => new DbQueuedTrack { Track = t, Type = QueuedType.NextUp }));
     this._context.SaveChanges();
   }
 
   public void AddToNextUp(Track track) {
-    this._queuedTracks.Add(new QueuedTrack { Track = track, Type = QueuedType.NextUp });
+    this._queuedTracks.Add(new DbQueuedTrack { Track = track, Type = QueuedType.NextUp });
     this._context.SaveChanges();
   }
 
   public void AddToEndOfQueue(Track track) {
-    this._queuedTracks.Add(new QueuedTrack { Track = track, Type = QueuedType.Queued });
+    this._queuedTracks.Add(new DbQueuedTrack { Track = track, Type = QueuedType.Queued });
     this._context.SaveChanges();
   }
 

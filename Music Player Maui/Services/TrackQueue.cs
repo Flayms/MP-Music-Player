@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using Microsoft.EntityFrameworkCore;
 using Music_Player_Maui.Enums;
 using Music_Player_Maui.Extensions;
 using Music_Player_Maui.Models;
@@ -286,11 +285,16 @@ public class TrackQueue {
     this._context.QueuedTracks.Clear();
 
     var queuedTracks = this.QueuedTracks
-      .Select(t => new QueuedTrack { Track = t, Type = QueuedType.Queued })
+      .Select(t => new DbQueuedTrack { Track = t, Type = QueuedType.Queued })
       .Concat(this.NextUpTracks
-        .Select(t => new QueuedTrack { Track = t, Type = QueuedType.NextUp}))
+        .Select(t => new DbQueuedTrack { Track = t, Type = QueuedType.NextUp }));
       //todo: current track can be null!
-      .Concat(new[] {new QueuedTrack {Track = this.CurrentTrack, Type = QueuedType.Current}});
+     // .Concat(new[] {new DbQueuedTrack {Track = this.CurrentTrack, Type = QueuedType.Current}});
+
+    this._context.CurrentTracks.Clear();
+    var currentPosition = this._currentPlayer?.CurrentPosition ?? 0;
+    if (this.CurrentTrack != null)
+      this._context.CurrentTracks.Add(new DbCurrentTrack { Track = this.CurrentTrack, ProgressInSeconds = currentPosition });
 
     this._context.QueuedTracks.AddRange(queuedTracks);
 

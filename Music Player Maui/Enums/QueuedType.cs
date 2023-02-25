@@ -8,11 +8,6 @@ public enum QueuedType {
   History,
 
   /// <summary>
-  /// The current playing track. Always only one item.
-  /// </summary>
-  Current,
-
-  /// <summary>
   /// tracks the user selected as "play next".
   /// </summary>
   NextUp,
