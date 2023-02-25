@@ -79,7 +79,11 @@ public class TrackQueue {
     this._wasPaused = false;
   }
 
-  //also handles all the db-stuff
+  /// <summary>
+  /// Changes the current-queue to the newly provided <see cref="tracks"/>, including setting the first track as <see cref="CurrentTrack"/>.
+  /// </summary>
+  /// <remarks>Doesn't change <see cref="NextUpTracks"/>, because user specific picks should be kept.</remarks>
+  /// <param name="tracks"></param>
   public void ChangeQueue(IEnumerable<Track> tracks) {
     //todo: should be done with enumeration instead of changing to list
     var list = tracks.ToList();
@@ -154,8 +158,13 @@ public class TrackQueue {
 
   private void _AudioPlayer_PlaybackEnded(object? sender, EventArgs e) => this.Next();
 
-  //todo: to unclear what this method does
+  /// <summary>
+  /// Resumes or starts playback.
+  /// </summary>
+  /// <exception cref="Exception">Throws if there's no current track set.</exception>
   public void Play() {
+    if (this.CurrentTrack == null)
+      throw new Exception("Can't play if there's no current track set!");
 
     //resume playback
     if (this._wasPaused) {
@@ -164,19 +173,8 @@ public class TrackQueue {
       return;
     }
 
-    //todo: refac
-    var progress = this._audioPlayer.PositionInS;
-
-    if (progress > 0)
-      this._PlayAtTime(progress);
-    else
-      this.Play(this.CurrentTrack); //todo: initializing CurrentTrack twice like this
-
-    this.IsPlaying = true;
-  }
-
-  private void _PlayAtTime(double timeInSeconds) {
-    this._audioPlayer.PlayAtTime(this.CurrentTrack, timeInSeconds);
+    //start first time playback from start
+    this._audioPlayer.Play(this.CurrentTrack);
     this.IsPlaying = true;
   }
 
@@ -209,7 +207,7 @@ public class TrackQueue {
     var tracks = new List<Track>(this.QueuedTracks);
 
     tracks.Shuffle();
-    this.ChangeQueue(new LinkedList<Track>(tracks));
+    this.ChangeQueue(tracks);
     this._ReloadFullQueue();
     this.IsShuffle = true;
     this.Play();
