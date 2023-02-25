@@ -23,9 +23,9 @@ public class AudioPlayer {
       try {
         var duration = this._currentPlayer?.Duration ?? 0;
         return duration;
-      } catch (System.Runtime.InteropServices.COMException e) {
-        return 0;
-      }
+      } catch (System.Runtime.InteropServices.COMException) { }
+
+      return 0;
     }
   }
 
@@ -120,8 +120,6 @@ public class AudioPlayer {
       this._currentPlayer = null;
 
       //throws when a track gets double-clicked instead of once
-    } catch (System.Runtime.InteropServices.COMException e) {
-
-    }
+    } catch (System.Runtime.InteropServices.COMException) { }
   }
 }

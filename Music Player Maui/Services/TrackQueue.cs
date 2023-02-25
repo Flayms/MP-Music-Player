@@ -58,11 +58,7 @@ public class TrackQueue {
     this._context = context;
 
     //todo: too slow for constructor code
-    var id = this._settings.CurrentTrackId;
-    if (id != null)
-      //todo: firstOrDefault or first??
-      this.CurrentTrack = context.Tracks.FirstOrDefault(t => t.Id == id);
-
+    this.CurrentTrack = this._context.CurrentTracks.FirstOrDefault()?.Track;
     this.NextUpTracks = queuedTrackRepository.NextUpTracks.ToList();
     this.QueuedTracks = queuedTrackRepository.QueuedTracks.ToList();
 
@@ -73,7 +69,6 @@ public class TrackQueue {
   public void ChangeCurrentTrack(Track track) {
     this.CurrentTrack = track;
     this._audioPlayer.Stop();
-    Task.Run(() => this._settings.CurrentTrackId = track.Id);
 
     this.NewSongSelected?.Invoke(this, new TrackEventArgs(track));
     this._wasPaused = false;
@@ -247,9 +242,9 @@ public class TrackQueue {
     this._context.QueuedTracks.Clear();
 
     var queuedTracks = this.QueuedTracks
-      .Select(t => new DbQueuedTrack { Track = t, Type = QueuedType.Queued })
+      .Select(t => new DbQueuedTrack(t, QueuedType.Queued))
       .Concat(this.NextUpTracks
-        .Select(t => new DbQueuedTrack { Track = t, Type = QueuedType.NextUp }));
+        .Select(t => new DbQueuedTrack(t, QueuedType.NextUp)));
       //todo: current track can be null!
      // .Concat(new[] {new DbQueuedTrack {Track = this.CurrentTrack, Type = QueuedType.Current}});
 

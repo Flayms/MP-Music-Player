@@ -58,9 +58,13 @@ public class MusicContext : DbContext {
     queueBuilder.Navigation(qt => qt.Track)
       .AutoInclude();
 
-    modelBuilder.Entity<DbCurrentTrack>()
-      .ToTable("CurrentTrack")
-      .HasKey(t => t.Id);
+    var currentTrackBuilder = modelBuilder.Entity<DbCurrentTrack>();
+    currentTrackBuilder.ToTable("CurrentTrack")
+    .HasKey(t => t.Id);
+
+    currentTrackBuilder
+      .Navigation(ct => ct.Track)
+      .AutoInclude();
 
     base.OnModelCreating(modelBuilder);
   }
