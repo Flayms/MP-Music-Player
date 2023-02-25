@@ -31,7 +31,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: windows-build
-        path: MP Music Player/bin/Release/net7.0-windows10.0.19041.0/win10-x64
+        path: MP - Music Player/bin/Release/net7.0-windows10.0.19041.0/win10-x64
         retention-days: 1
         
     - name: Build Android

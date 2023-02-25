@@ -10,7 +10,7 @@
 
   <Shell.ToolbarItems>
     <ToolbarItem Order="Primary" Text="Shuffle all" IconImageSource="shuffle.png" Priority="0" />
-    <ToolbarItem Order="Primary" Text="Search" IconImageSource="search_small.png" Priority="1"
+    <ToolbarItem Order="Primary" Text="Search" IconImageSource="search.png" Priority="1"
                  Command="{Binding NavigateToSearchCommand}"/>
   </Shell.ToolbarItems>
 
