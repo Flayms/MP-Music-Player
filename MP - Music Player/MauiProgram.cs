@@ -74,7 +74,6 @@ public static class MauiProgram {
     services.AddSingleton<BigTrackViewModel>();
   }
 
-
   private static void _CreateDatabaseService(IServiceCollection services) {
     services.AddSingleton(provider => {
       const string dbName = "sqliteDb.db";
