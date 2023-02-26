@@ -1,6 +1,6 @@
-﻿namespace MP_Music_Player.Models; 
+﻿namespace MP_Music_Player.Models.EventArgs; 
 
-public class TrackEventArgs : EventArgs {
+public class TrackEventArgs : System.EventArgs {
   public Track Track { get; }
 
   public TrackEventArgs(Track track) {

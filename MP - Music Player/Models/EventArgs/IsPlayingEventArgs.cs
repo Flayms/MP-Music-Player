@@ -1,6 +1,6 @@
-﻿namespace MP_Music_Player.Models; 
+﻿namespace MP_Music_Player.Models.EventArgs; 
 
-public class IsPlayingEventArgs : EventArgs {
+public class IsPlayingEventArgs : System.EventArgs {
 
   public bool IsPlaying { get; }
 
