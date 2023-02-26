@@ -1,6 +1,7 @@
 ﻿using MP_Music_Player.Enums;
 using MP_Music_Player.Extensions;
 using MP_Music_Player.Models;
+using MP_Music_Player.Models.EventArgs;
 using MP_Music_Player.Services.Repositories;
 using Track = MP_Music_Player.Models.Track;
 

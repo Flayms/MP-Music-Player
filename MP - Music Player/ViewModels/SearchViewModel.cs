@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MP_Music_Player.Extensions;
-using MP_Music_Player.Models;
+using MP_Music_Player.Models.EventArgs;
 using MP_Music_Player.Services;
 
 namespace MP_Music_Player.ViewModels; 

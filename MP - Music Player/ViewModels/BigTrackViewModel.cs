@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using MP_Music_Player.Models;
+using MP_Music_Player.Models.EventArgs;
 using MP_Music_Player.Services;
 using MP_Music_Player.Views.Pages;
 
