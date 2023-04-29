@@ -32,11 +32,14 @@ public partial class SettingsViewModel : AViewModel {
       await Permissions.RequestAsync<Permissions.StorageWrite>();
 
 
-      var folder = await FolderPicker.Default.PickAsync(CancellationToken.None);
+      var folderPickerResult = await FolderPicker.Default.PickAsync(CancellationToken.None);
+      if (!folderPickerResult.IsSuccessful)
+        return;
 
-      this.MusicDirectoryPath = folder.Path;
-      this._settings.MusicDirectory = folder.Path;
+      var folderPath = folderPickerResult.Folder.Path;
 
+      this.MusicDirectoryPath = folderPath;
+      this._settings.MusicDirectory = folderPath;
 
 #pragma warning disable CS4014
       Task.Run(this._musicLoadingService.Init);
