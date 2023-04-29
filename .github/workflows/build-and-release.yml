@@ -1,30 +1,29 @@
 # This workflow will build a .NET project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 
+# todo: make release asset uploads work again
+# todo: extract version from project
+# todo: android upload just apk instead of big zip
+# todo: format release log better
+
 name: Build and Release
 
+# Controls when the workflow will run
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
 
+  # building the project for windows and android and uploading the build as artifacts
   build-project:
     name: Build project
     runs-on: windows-latest
     steps:
+
+    # Checks-out repository under $GITHUB_WORKSPACE, so job can access it
     - uses: actions/checkout@v3
-    
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 7.0.x
-        
-    - name: Install MAUI workload
-      run: dotnet workload install maui
       
+    # Windows
     - name: Build Windows
       run: dotnet build "MP - Music Player/MP - Music Player.csproj" -c Release -f:net7.0-windows10.0.19041.0
     - name: Upload Windows-Artifact
@@ -33,7 +32,8 @@ jobs:
         name: windows-build
         path: MP - Music Player/bin/Release/net7.0-windows10.0.19041.0/win10-x64
         retention-days: 1
-        
+
+    # Android  
     - name: Build Android
       run: dotnet build "MP - Music Player/MP - Music Player.csproj" -c Release -f:net7.0-android
     
@@ -43,15 +43,19 @@ jobs:
         name: android-build
         path: MP - Music Player/bin/Release/net7.0-android
         retention-days: 1
-      
+
+  # Creates GitHub-Release with Release-Notes   
   release-project:
     name: Release Project
-    if: ${{ github.event_name == 'push' }}
     runs-on: windows-latest
     permissions: write-all
     needs: build-project
     steps:
     
+    # Need to checkout again
+    - uses: actions/checkout@v3
+    
+    # Download previous artifacts and zip em up
     - name: Download windows artifact
       uses: actions/download-artifact@v3
       with:
@@ -76,42 +80,34 @@ jobs:
         path: ./download/android/
         filename: android-build.zip
 
-    - name: Create Release
-      id: create_release
-      uses: "marvinpinto/action-automatic-releases@latest"
+    # Creating Release Log
+    # Needs to fetch before otherwise doesn't know last commits
+    - name: Git Fetch
+      shell: bash
+      run: git fetch --depth=500
+
+    - name: create release log
+      shell: bash
+      run: git log $(git describe --tags --abbrev=0)..HEAD --no-merges --oneline > "${{ github.workspace }}\new-in-this-release.log"
+      
+    - name: show release log file
+      run: cat "${{ github.workspace }}\new-in-this-release.log"
+      
+    - name: workspace directory
+      shell: bash
+      run: echo "${{ github.workspace }}\new-in-this-release.log"
+    
+    - name: list files
+      run: ls
+
+    - name: Release
+      uses: softprops/action-gh-release@v1
       with:
-        repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: "0.2.${{ github.run_number }}"
+        tag_name: "0.3.${{ github.run_number }}"
+        name: "v0.3.${{ github.run_number }}"
         prerelease: true
-        title: "v0.2.${{ github.run_number }}"
-
-    - name: Upload Windows Release Asset
-      id: upload-windows-release-asset 
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: ./windows-build.zip
-        asset_name: mp-music-player.win10-x64.zip
-        asset_content_type: application/zip
-        
-    - name: Upload Android Release Asset
-      id: upload-android-release-asset 
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: ./android-build.zip
-        asset_name: mp-music-player.android.zip
-        asset_content_type: application/zip
-
-  #   - name: Create GitHub Release
-  #    id: create_release
-  #    uses: actions/create-release@v1
-  #    env:
-  #      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} #is provided by action, doesn't need to be manually set
-  #    with:
-  #      tag_name: ${{ github.run_number }}
-  #      release_name: Release ${{ github.run_number }}
+        body_path: "${{ github.workspace }}\\new-in-this-release.log"
+        token: ${{ secrets.GITHUB_TOKEN }}
+        files: |
+          android-build.zip
+          windows-build.zip
