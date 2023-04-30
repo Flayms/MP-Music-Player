@@ -99,12 +99,15 @@ jobs:
     
     - name: list files
       run: ls
+      
+    - name: Receive Version (env.Tag_Name + env.Release_Name)
+      run: python ".github/workflows/receive-version.py"
 
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: "0.3.${{ github.run_number }}"
-        name: "v0.3.${{ github.run_number }}"
+        tag_name: "${{ env.Tag_Name }}"
+        name: "${{ env.Release_Name }}"
         prerelease: true
         body_path: "${{ github.workspace }}\\new-in-this-release.log"
         token: ${{ secrets.GITHUB_TOKEN }}
