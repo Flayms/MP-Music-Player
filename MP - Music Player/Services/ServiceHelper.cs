@@ -2,7 +2,7 @@
 
 public static class ServiceHelper {
 
-  public static TService GetService<TService>() => Current.GetService<TService>();
+  public static TService GetService<TService>() => Current.GetService<TService>() ?? throw new NullReferenceException();
 
   public static IServiceProvider Current =>
 #if WINDOWS10_0_17763_0_OR_GREATER

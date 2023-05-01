@@ -1,10 +1,8 @@
-# This workflow will build a .NET project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+# This workflow builds and releases the project on github
 
-# todo: make release asset uploads work again
-# todo: extract version from project
-# todo: android upload just apk instead of big zip
 # todo: format release log better
+# todo: make releases signed by github again
+# todo: rename android apk
 
 name: Build and Release
 
@@ -62,7 +60,7 @@ jobs:
         name: windows-build
         path: ./download/windows
 
-    - name: Archive windows content
+    - name: Zip windows build
       uses: thedoctor0/zip-release@master
       with:
         path: ./download/windows/
@@ -73,12 +71,6 @@ jobs:
       with:
         name: android-build
         path: ./download/android
-
-    - name: Archive android content
-      uses: thedoctor0/zip-release@master
-      with:
-        path: ./download/android/
-        filename: android-build.zip
 
     # Creating Release Log
     # Needs to fetch before otherwise doesn't know last commits
@@ -112,5 +104,5 @@ jobs:
         body_path: "${{ github.workspace }}\\new-in-this-release.log"
         token: ${{ secrets.GITHUB_TOKEN }}
         files: |
-          android-build.zip
+          ./download/android/mp_music_player.mp_music_player-Signed.apk
           windows-build.zip

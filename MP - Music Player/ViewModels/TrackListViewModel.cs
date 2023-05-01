@@ -9,12 +9,15 @@ namespace MP_Music_Player.ViewModels;
 public partial class TrackListViewModel : AViewModel {
 
   [ObservableProperty]
-  private string _title;
+  private string? _title;
 
-  public IReadOnlyList<SmallTrackViewModel> TrackViewModels {
+  public IReadOnlyList<SmallTrackViewModel>? TrackViewModels {
     get => this._trackViewModels;
     set {
       if (!this.SetProperty(ref this._trackViewModels, value))
+        return;
+
+      if (value == null)
         return;
 
       foreach (var smallTrackViewModel in value) {
@@ -24,7 +27,7 @@ public partial class TrackListViewModel : AViewModel {
   }
 
   private readonly TrackQueue _queue;
-  private IReadOnlyList<SmallTrackViewModel> _trackViewModels;
+  private IReadOnlyList<SmallTrackViewModel>? _trackViewModels;
 
   public TrackListViewModel(TrackQueue queue) {
     this._queue = queue;

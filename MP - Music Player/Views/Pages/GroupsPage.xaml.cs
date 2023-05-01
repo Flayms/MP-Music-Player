@@ -13,7 +13,7 @@ public partial class GroupsPage : ContentPage {
     this.BindingContext = this._viewModel = viewModel;
   }
 
-  protected override async void OnNavigatedTo(NavigatedToEventArgs args) {
+  protected override void OnNavigatedTo(NavigatedToEventArgs args) {
     // Hack: Get the GroupType
     var groupType = this.GetGroupTypeFromRoute();
 
@@ -29,6 +29,6 @@ public partial class GroupsPage : ContentPage {
     var route = Shell.Current.CurrentState.Location
       .OriginalString.Split("-").LastOrDefault();
 
-    return Enum.Parse<GroupType>(route);
+    return Enum.Parse<GroupType>(route!);
   }
 }

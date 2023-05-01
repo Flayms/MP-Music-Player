@@ -80,10 +80,10 @@ public class TrackQueue {
   }
 
   /// <summary>
-  /// Changes the current-queue to the newly provided <see cref="tracks"/>, including setting the first track as <see cref="CurrentTrack"/>.
+  /// Changes the current-queue to the newly provided tracks, including setting the first track as <see cref="CurrentTrack"/>.
   /// </summary>
   /// <remarks>Doesn't change <see cref="NextUpTracks"/>, because user specific picks should be kept.</remarks>
-  /// <param name="tracks"></param>
+  /// <param name="tracks">The new tracks to use as the queue.</param>
   public void ChangeQueue(IEnumerable<Track> tracks) {
     //todo: should be done with enumeration instead of changing to list
     var list = tracks.ToList();

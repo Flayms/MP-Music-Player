@@ -36,7 +36,8 @@ public partial class BigTrackViewModel : ATrackViewModel {
 
   [RelayCommand]
   public async void ShowOptions() {
-    await this._trackOptionsService.StartBasicOptionsMenuAsync(this.Track);
+    //todo: what if track is null here?
+    await this._trackOptionsService.StartBasicOptionsMenuAsync(this.Track ?? throw new NullReferenceException());
   }
 
   [RelayCommand]

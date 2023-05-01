@@ -45,7 +45,7 @@ public partial class SearchViewModel : AViewModel {
 
     var trackQueue = this._queue;
 
-    var trackViewModels = this.Tracks;
+    var trackViewModels = this.Tracks!;
     var index = trackViewModels.IndexOf(trackModel);
 
     var queue = trackViewModels

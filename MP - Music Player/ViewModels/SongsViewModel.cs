@@ -86,12 +86,18 @@ public partial class SongsViewModel : AViewModel {
 
   [RelayCommand]
   public void ShuffleAll() { //todo: also kinda double code?
-    var trackQueue = this._queue;
+    if (this.TrackListViewModel == null || this.DisplayState != DisplayState.DisplayingContent)
+      return;
 
     var trackViewModels = this.TrackListViewModel.TrackViewModels;
+
+    if (trackViewModels == null)
+      throw new ArgumentNullException();
+
     var newQueue = new List<SmallTrackViewModel>(trackViewModels); //todo: possible null!
     newQueue.Shuffle();
 
+    var trackQueue = this._queue;
     trackQueue.ChangeQueue(newQueue.Select(vm => vm.Track));
     trackQueue.Play();
   }

@@ -2,7 +2,7 @@
 
 public class Settings {
 
-  public string MusicDirectory {
+  public string? MusicDirectory {
     get => this._musicDirectory;
     set {
       this._musicDirectory = value;
@@ -19,7 +19,7 @@ public class Settings {
     }
   }
 
-  private string _musicDirectory;
+  private string? _musicDirectory;
   private bool _readFromCache;
 
   public Settings() {
