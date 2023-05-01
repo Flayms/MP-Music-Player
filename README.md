@@ -1,3 +1,5 @@
+[![Build and Release](https://github.com/Flayms/MP-Music-Player/actions/workflows/build-and-release.yml/badge.svg?event=workflow_dispatch)](https://github.com/Flayms/MP-Music-Player/actions/workflows/build-and-release.yml)
+
 # MP - Music Player
  A simple Music-Player for Windows and Android, build with .NET MAUI.
  
