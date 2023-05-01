@@ -105,6 +105,9 @@
 	  <MauiXaml Update="Views\Pages\GroupsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Pages\HistoryPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\Pages\QueuePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

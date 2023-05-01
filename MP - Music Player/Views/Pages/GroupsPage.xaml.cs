@@ -21,14 +21,14 @@ public partial class GroupsPage : ContentPage {
 
   protected override void OnNavigatedTo(NavigatedToEventArgs args) {
     // Hack: Get the GroupType
-    var groupType = this.GetGroupTypeFromRoute();
+    var groupType = _GetGroupTypeFromRoute();
 
     this._viewModel.SetGroupType(groupType);
     base.OnNavigatedTo(args);
   }
 
 
-  private GroupType GetGroupTypeFromRoute() {
+  private static GroupType _GetGroupTypeFromRoute() {
     // Hack: As the shell can't define query parameters
     // in XAML, we have to parse the route. 
     // as a convention the last route section defines the GroupType.

@@ -5,7 +5,6 @@ using MP_Music_Player.Views.Pages;
 
 namespace MP_Music_Player.ViewModels; 
 
-// ReSharper disable once PartialTypeWithSinglePart
 public partial class BigTrackViewModel : ATrackViewModel {
   private const int _PREVIOUS_TIMEOUT_IN_S = 5;
 

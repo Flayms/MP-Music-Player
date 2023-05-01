@@ -5,6 +5,8 @@ using MP_Music_Player.ViewModels;
 using MP_Music_Player.Views.Pages;
 using MP_Music_Player.Models;
 using MP_Music_Player.Services.Repositories;
+using MP_Music_PLayer.ViewModels;
+using MP_Music_PLayer.Views.Pages;
 using MP_Music_Player.Views.UserControls;
 using Plugin.Maui.Audio;
 using AudioPlayer = MP_Music_Player.Services.AudioPlayer;
@@ -68,6 +70,9 @@ public static class MauiProgram {
 
     services.AddScoped<GroupsPage>();
     services.AddScoped<GroupsViewModel>();
+
+    services.AddScoped<HistoryPage>();
+    services.AddScoped<HistoryViewModel>();
 
     services.AddTransient<TrackListViewModel>();
 

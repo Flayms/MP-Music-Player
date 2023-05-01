@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:UserControls="clr-namespace:MP_Music_Player.Views.UserControls"
+             xmlns:ViewModels="clr-namespace:MP_Music_PLayer.ViewModels"
+             x:Class="MP_Music_PLayer.Views.Pages.HistoryPage"
+             x:DataType="ViewModels:HistoryViewModel"
+             Title="History">
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*" />
+      <RowDefinition Height="auto"/>
+    </Grid.RowDefinitions>
+
+    <UserControls:TrackListView BindingContext="{Binding TrackListViewModel}"/>
+    <UserControls:BottomTrackPlayerView Grid.Row="1"/>
+  </Grid>
+</ContentPage>

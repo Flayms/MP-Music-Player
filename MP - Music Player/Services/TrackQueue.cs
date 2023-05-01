@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using MP_Music_Player.Enums;
+﻿using MP_Music_Player.Enums;
 using MP_Music_Player.Extensions;
 using MP_Music_Player.Models;
 using MP_Music_Player.Models.EventArgs;
