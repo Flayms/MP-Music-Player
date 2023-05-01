@@ -20,6 +20,6 @@ public partial class HistoryViewModel : AViewModel {
   }
 
   private void _Queue_NewSongSelected(object? _, TrackEventArgs __) {
-    this.TrackListViewModel.TrackViewModels = this._queue.HistoryTracks.Select(t => new SmallTrackViewModel(t)).ToList();
+    this.TrackListViewModel.TrackViewModels = this._queue.HistoryTracks.Reverse().Select(t => new SmallTrackViewModel(t)).ToList();
   }
 }

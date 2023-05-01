@@ -5,7 +5,7 @@ using MP_Music_Player.Views.Pages;
 namespace MP_Music_Player.ViewModels; 
 
 public partial class BottomTrackViewModel : ATrackViewModel {
-  public BottomTrackViewModel(TrackQueue queue) : base(queue) { }
+  public BottomTrackViewModel(TrackQueue queue, AudioPlayer player) : base(queue, player) { }
 
   [RelayCommand]
   public void OpenBigTrackPage() {

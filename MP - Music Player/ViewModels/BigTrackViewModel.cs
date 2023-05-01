@@ -10,7 +10,8 @@ public partial class BigTrackViewModel : ATrackViewModel {
 
   private readonly TrackOptionsService _trackOptionsService;
 
-  public BigTrackViewModel(TrackQueue queue, TrackOptionsService trackOptionsService) : base(queue) {
+  public BigTrackViewModel(TrackQueue queue, TrackOptionsService trackOptionsService, AudioPlayer player)
+    : base(queue, player) {
     this._trackOptionsService = trackOptionsService;
   }
 
@@ -30,7 +31,7 @@ public partial class BigTrackViewModel : ATrackViewModel {
   public void GoBack() {
     //Either jump back to last track or repeat current track
 
-    if (this.queue.CurrentTrackPositionInS < _PREVIOUS_TIMEOUT_IN_S)
+    if (this._player.PositionInS < _PREVIOUS_TIMEOUT_IN_S)
       this.queue.Previous();
     else
       this.queue.JumpToPercent(0);

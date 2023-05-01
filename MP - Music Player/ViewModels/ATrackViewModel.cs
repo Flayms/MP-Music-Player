@@ -9,6 +9,7 @@ namespace MP_Music_Player.ViewModels;
 
 public abstract partial class ATrackViewModel : AViewModel {
   protected readonly TrackQueue queue;
+  protected readonly AudioPlayer _player;
 
   [ObservableProperty]
   [NotifyPropertyChangedFor(nameof(Title))]
@@ -24,10 +25,10 @@ public abstract partial class ATrackViewModel : AViewModel {
   public string Producer => this.Track?.CombinedArtistNames ?? "/";
   public ImageSource CoverSource => this.Track?.Cover.Source ?? ImageSource.FromFile("record.png"); //todo: refac!!
 
-  public double CurrentPositionInS => this.queue.CurrentTrackPositionInS;
+  public double CurrentPositionInS => this._player.PositionInS;
 
   //todo: currently always shows length of last track after switching
-  public double TrackLengthInS => this.queue.CurrentTrackDurationInS;
+  public double TrackLengthInS => this._player.DurationInS;
 
   //public string ShuffleImageSource => this._queue.IsShuffle ? "shuffle_selected.png" : "shuffle.png";
 
@@ -39,8 +40,9 @@ public abstract partial class ATrackViewModel : AViewModel {
 
   private double _progressPercent;
 
-  protected ATrackViewModel(TrackQueue queue) {
+  protected ATrackViewModel(TrackQueue queue, AudioPlayer player) {
     this.queue = queue;
+    this._player = player;
 
 
     var timer = Application.Current!.Dispatcher.CreateTimer();

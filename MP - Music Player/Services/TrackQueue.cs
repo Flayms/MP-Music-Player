@@ -25,8 +25,8 @@ public class TrackQueue {
   public IList<Track> QueuedTracks { get; private set; } = new List<Track>(); //todo: could be queue
 
   //todo: these shouldn't be exposed here, instead callers need to ask audioPlayer directly
-  public double CurrentTrackDurationInS => this._audioPlayer.DurationInS;
-  public double CurrentTrackPositionInS => this._audioPlayer.PositionInS;
+  //public double CurrentTrackDurationInS => this._audioPlayer.DurationInS;
+  //public double CurrentTrackPositionInS => this._audioPlayer.PositionInS;
 
   //todo: maybe move into audio-player
   public bool IsPlaying {
