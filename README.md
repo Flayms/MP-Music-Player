@@ -1,3 +1,4 @@
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/flayms/mp-music-player?display_name=tag&include_prereleases)](https://github.com/Flayms/MP-Music-Player/releases)
 [![Build and Release](https://github.com/Flayms/MP-Music-Player/actions/workflows/build-and-release.yml/badge.svg?event=workflow_dispatch)](https://github.com/Flayms/MP-Music-Player/actions/workflows/build-and-release.yml)
 
 # MP - Music Player
