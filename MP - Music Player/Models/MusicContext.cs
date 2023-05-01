@@ -52,7 +52,11 @@ public class MusicContext : DbContext {
       .ToTable("Genres")
       .HasKey(g => g.Id);
 
-    var queueBuilder = modelBuilder.Entity<DbQueuedTrack>(); 
+    modelBuilder.Entity<Album>()
+      .ToTable("Albums")
+      .HasKey(a => a.Id);
+
+    var queueBuilder = modelBuilder.Entity<DbQueuedTrack>();
     queueBuilder
       .ToTable("QueuedTracks")
       .HasKey(q => q.Id);
@@ -76,7 +80,10 @@ public class MusicContext : DbContext {
   public void ClearAllData() {
     this.Tracks.Clear();
     this.Artists.Clear();
+    this.Genres.Clear();
+    this.Albums.Clear();
     this.QueuedTracks.Clear();
+    this.CurrentTracks.Clear();
 
     this.SaveChanges();
   }

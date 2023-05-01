@@ -11,6 +11,11 @@ public class QueuedTracksRepository : IQueuedTracksRepository {
   private DbSet<DbQueuedTrack> _queuedTracks => this._context.QueuedTracks;
 
   //todo: decide if its better for these to be properties or methods
+  public IReadOnlyCollection<Track> HistoryTracks => this._queuedTracks
+    .Where(qt => qt.Type == QueuedType.History)
+    .Select(qt => qt.Track)
+    .ToList();
+
   public IReadOnlyCollection<Track> NextUpTracks => this._queuedTracks
     .Where(qt => qt.Type == QueuedType.NextUp)
     .Select(qt => qt.Track)

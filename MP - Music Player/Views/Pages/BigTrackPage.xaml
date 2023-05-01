@@ -84,7 +84,7 @@
 
       <Image Grid.Column="1" Source="previous.png">
         <Image.GestureRecognizers>
-          <TapGestureRecognizer Command="{Binding PreviousCommand}" />
+          <TapGestureRecognizer Command="{Binding GoBackCommand}" />
         </Image.GestureRecognizers>
       </Image>
 

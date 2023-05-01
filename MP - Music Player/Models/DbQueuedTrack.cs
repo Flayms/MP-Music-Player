@@ -2,6 +2,9 @@
 
 namespace MP_Music_Player.Models; 
 
+/// <summary>
+/// All the tracks from the current playing queue, including history
+/// </summary>
 public class DbQueuedTrack {
 
   //allows bigger values since id-incrementation of queue could become quite high

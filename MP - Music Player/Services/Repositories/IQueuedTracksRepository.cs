@@ -3,6 +3,8 @@
 namespace MP_Music_Player.Services.Repositories;
 
 public interface IQueuedTracksRepository {
+
+  IReadOnlyCollection<Track> HistoryTracks { get; }
   IReadOnlyCollection<Track> NextUpTracks { get; }
   IReadOnlyCollection<Track> QueuedTracks { get; }
 

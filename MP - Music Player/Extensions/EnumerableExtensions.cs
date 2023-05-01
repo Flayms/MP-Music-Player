@@ -26,6 +26,12 @@ public static class EnumerableExtensions {
     return item;
   }
 
+  public static T Pop<T>(this IList<T> @this) {
+    var item = @this.Last();
+    @this.RemoveAt(@this.Count - 1);
+    return item;
+  }
+
   public static int IndexOf<T>(this IReadOnlyList<T> list, T item) where T : class {
     for (var i = 0; i < list.Count; ++i)
       if (list[i].Equals(item))

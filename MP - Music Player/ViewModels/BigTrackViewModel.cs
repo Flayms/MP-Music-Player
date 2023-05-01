@@ -5,7 +5,9 @@ using MP_Music_Player.Views.Pages;
 
 namespace MP_Music_Player.ViewModels; 
 
+// ReSharper disable once PartialTypeWithSinglePart
 public partial class BigTrackViewModel : ATrackViewModel {
+  private const int _PREVIOUS_TIMEOUT_IN_S = 5;
 
   private readonly TrackOptionsService _trackOptionsService;
 
@@ -26,7 +28,14 @@ public partial class BigTrackViewModel : ATrackViewModel {
   public void Next() => this.queue.Next();
 
   [RelayCommand]
-  public void Previous() => this.queue.Previous();
+  public void GoBack() {
+    //Either jump back to last track or repeat current track
+
+    if (this.queue.CurrentTrackPositionInS < _PREVIOUS_TIMEOUT_IN_S)
+      this.queue.Previous();
+    else
+      this.queue.JumpToPercent(0);
+  }
 
   [RelayCommand]
   public void Shuffle() {
