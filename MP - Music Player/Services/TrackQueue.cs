@@ -7,6 +7,8 @@ using Track = MP_Music_Player.Models.Track;
 
 namespace MP_Music_Player.Services;
 
+//todo: make go back work again
+
 public class TrackQueue {
 
   private readonly AudioPlayer _audioPlayer;
