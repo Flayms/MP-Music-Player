@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using MP_Music_Player.Extensions;
+using MP_Music_PLayer.Models;
 
 namespace MP_Music_Player.Models;
 
@@ -9,6 +10,7 @@ public class MusicContext : DbContext {
   public DbSet<Track> Tracks { get; set; } = null!;
   public DbSet<Artist> Artists { get; set; } = null!;
   public DbSet<Genre> Genres { get; set; } = null!;
+  public DbSet<Album> Albums { get; set; } = null!;
   public DbSet<DbQueuedTrack> QueuedTracks { get; set; } = null!;
   public DbSet<DbCurrentTrack> CurrentTracks { get; set; } = null!; //always only one entry
 

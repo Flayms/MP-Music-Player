@@ -1,8 +1,8 @@
-using MP_Music_Player.ViewModels;
-
 namespace MP_Music_Player.Views.UserControls;
 
-//todo: should be view instead of page and used at in songsPage as well
+/// <summary>
+/// A view to display a list of tracks (<see cref="SmallTrackView"/>-List) that can be used in other pages.
+/// </summary>
 public partial class TrackListView : ContentView {
   public TrackListView() {
     this.InitializeComponent();

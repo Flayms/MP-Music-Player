@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MP_Music_Player.Models;
+﻿using MP_Music_Player.Models;
 
 namespace MP_Music_Player.Services;
 

@@ -3,6 +3,12 @@ using MP_Music_Player.ViewModels;
 
 namespace MP_Music_Player.Views.Pages;
 
+//todo: display image for groups
+
+/// <summary>
+/// A page displaying the tracks grouped by a category.
+/// All possible categories are in the <see cref="GroupType"/> enum.
+/// </summary>
 public partial class GroupsPage : ContentPage {
 
   private readonly GroupsViewModel _viewModel;

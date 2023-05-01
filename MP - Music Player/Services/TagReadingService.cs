@@ -1,5 +1,7 @@
 ﻿using MP_Music_Player.Models;
+using MP_Music_PLayer.Models;
 using TagLib;
+using Track = MP_Music_Player.Models.Track;
 
 namespace MP_Music_Player.Services;
 
@@ -7,8 +9,21 @@ public class TagReadingService {
 
   //todo: fix this
 
+  //todo: make object for method params
   // ReSharper disable once SuggestBaseTypeForParameter
-  public bool TryReadTags(FileInfo file, ref List<Artist> existingArtists, ref List<Genre> existingGenres, out Track track) {
+
+  /// <summary>
+  /// Reads all tags of the track and then adds them to the given lists if they don't contain them yet.
+  /// </summary>
+  /// <param name="file">The <see cref="FileInfo"/> of the track.</param>
+  /// <param name="existingArtists">A list with all artists already read. This tracks artists get added to this.</param>
+  /// <param name="existingGenres">A list with all genres already read. This tracks genres get added to this.</param>
+  /// <param name="existingAlbums">A list with all albums already read. This tracks album gets added to this.</param>
+  /// <param name="track">The newly parsed track from the given file.</param>
+  /// <returns><c>True</c> if the file was readable.</returns>
+  public bool TryReadTags(FileInfo file,
+    ref List<Artist> existingArtists, ref List<Genre> existingGenres, ref List<Album> existingAlbums,
+    out Track track) {
 
     try {
       var tFile = TagLib.File.Create(file.FullName);
@@ -20,48 +35,66 @@ public class TagReadingService {
         Title = string.IsNullOrEmpty(title) ? file.Name : title.Trim(),
         Path = file.FullName,
         Duration = tFile.Properties.Duration,
-        Album = fileTags.Album
       };
 
-      //todo: put in other method
-      var artistNames = _GetArtists(fileTags);
-      var artists = new List<Artist>();
-
-      foreach (var artistName in artistNames) {
-        var artist = existingArtists.FirstOrDefault(a => a.Name.Equals(artistName, StringComparison.InvariantCultureIgnoreCase));
-
-        if (artist == null) {
-          artist = new Artist { Name = artistName };
-          existingArtists.Add(artist);
-        }
-
-        artists.Add(artist);
-      }
-
-      track.Artists = artists;
-
-      //todo: same here
-      var genreNames = _GetGenres(fileTags.Genres);
-      var genres = new List<Genre>();
-
-      foreach (var genreName in genreNames) {
-        var genre = existingGenres.FirstOrDefault(g => g.Name.Equals(genreName, StringComparison.InvariantCultureIgnoreCase));
-
-        if (genre == null) {
-          genre = new Genre { Name = genreName };
-          existingGenres.Add(genre);
-        }
-
-        genres.Add(genre);
-      }
-
-      track.Genres = genres;
+      _ReadArtists(ref existingArtists, track, fileTags);
+      _ReadGenres(ref existingGenres, track, fileTags);
+      _ReadAlbum(ref existingAlbums, track, fileTags);
 
       return true;
     } catch {
       track = null!;
       return false;
     }
+  }
+
+  private static void _ReadArtists(ref List<Artist> existingArtists, Track track, Tag fileTags) {
+    var artistNames = _GetArtists(fileTags);
+    var artists = new List<Artist>();
+
+    foreach (var artistName in artistNames) {
+      var artist = existingArtists.FirstOrDefault(a => a.Name.Equals(artistName, StringComparison.InvariantCultureIgnoreCase));
+
+      if (artist == null) {
+        artist = new Artist { Name = artistName };
+        existingArtists.Add(artist);
+      }
+
+      artists.Add(artist);
+    }
+
+    track.Artists = artists;
+  }
+
+  private static void _ReadGenres(ref List<Genre> existingGenres, Track track, Tag fileTags) {
+    var genreNames = _GetGenres(fileTags.Genres);
+    var genres = new List<Genre>();
+
+    foreach (var genreName in genreNames) {
+      var genre = existingGenres.FirstOrDefault(g => g.Name.Equals(genreName, StringComparison.InvariantCultureIgnoreCase));
+
+      if (genre == null) {
+        genre = new Genre { Name = genreName };
+        existingGenres.Add(genre);
+      }
+
+      genres.Add(genre);
+    }
+
+    track.Genres = genres;
+  }
+
+  private static void _ReadAlbum(ref List<Album> existingAlbums, Track track, Tag fileTags) {
+    var albumName = fileTags.Album;
+
+    var album = existingAlbums.FirstOrDefault(a => a.Name.Equals(albumName, StringComparison.InvariantCultureIgnoreCase));
+
+    if (album == null && albumName != null) {
+      album = new Album { Name = albumName };
+      existingAlbums.Add(album);
+    }
+
+    track.Album = album;
   }
 
   private static string[] _GetArtists(Tag fileTags) {
@@ -108,4 +141,5 @@ public class TagReadingService {
       .Distinct(StringComparer.InvariantCulture)
       .ToArray();
   }
+
 }

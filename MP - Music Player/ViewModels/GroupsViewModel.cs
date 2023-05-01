@@ -36,14 +36,20 @@ public partial class GroupsViewModel : AViewModel {
       case GroupType.Genres:
         var genreGroups = context.Genres
           .OrderBy(g => g.Name)
-          .Select(artist => new SmallGroupViewModel(artist.Name, artist.Tracks))
+          .Select(genre => new SmallGroupViewModel(genre.Name, genre.Tracks))
           .ToArray();
 
         this.Groups = genreGroups;
         break;
 
       case GroupType.Albums:
-        throw new NotImplementedException();
+        var albumGroups = context.Albums
+          .OrderBy(a => a.Name)
+          .Select(album => new SmallGroupViewModel(album.Name, album.Tracks))
+          .ToArray();
+        this.Groups = albumGroups;
+        break;
+
       case GroupType.Playlists:
         throw new NotImplementedException();
       case GroupType.Folders:

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using MP_Music_PLayer.Models;
 
 namespace MP_Music_Player.Models;
 
@@ -19,7 +20,7 @@ public class Track {
 
   public List<Genre> Genres { get; set; } = null!;
 
-  public string? Album { get; set; }
+  public Album? Album { get; set; }
   public TimeSpan Duration { get; set; }
 
   [NotMapped]

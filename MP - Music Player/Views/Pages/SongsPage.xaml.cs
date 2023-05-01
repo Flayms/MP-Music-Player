@@ -3,6 +3,9 @@ using MP_Music_Player.ViewModels;
 
 namespace MP_Music_Player.Views.Pages;
 
+/// <summary>
+/// The Main-Page displaying the list of all songs.
+/// </summary>
 public partial class SongsPage : ContentPage {
   public SongsPage() {
     this.InitializeComponent();

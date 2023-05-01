@@ -21,16 +21,16 @@
     <ShellContent Route="GroupsPage-Artists" ContentTemplate="{DataTemplate local:GroupsPage}" />
   </FlyoutItem>
 
-  <!--<FlyoutItem Title="Albums" Icon="albums.png">
-    <ShellContent Route="GroupsPage" ContentTemplate="{DataTemplate local:GroupsPage}" />
+  <FlyoutItem Title="Albums" Icon="albums.png">
+    <ShellContent Route="GroupsPage-Albums" ContentTemplate="{DataTemplate local:GroupsPage}" />
   </FlyoutItem>
 
-  <FlyoutItem Title="Playlists" Icon="playlist.png">
-    <ShellContent Route="GroupsPage-Artists" ContentTemplate="{DataTemplate local:GroupsPage}" />
+  <!--<FlyoutItem Title="Playlists" Icon="playlist.png">
+    <ShellContent Route="GroupsPage-Playlists" ContentTemplate="{DataTemplate local:GroupsPage}" />
   </FlyoutItem>
 
   <FlyoutItem Title="Folders" Icon="folder.png">
-    <ShellContent Route="GroupsPage-Artists" ContentTemplate="{DataTemplate local:GroupsPage}" />
+    <ShellContent Route="GroupsPage-Folders" ContentTemplate="{DataTemplate local:GroupsPage}" />
   </FlyoutItem>-->
 
 

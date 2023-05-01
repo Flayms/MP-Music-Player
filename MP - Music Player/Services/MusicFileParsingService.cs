@@ -1,4 +1,5 @@
 ﻿using MP_Music_Player.Models;
+using MP_Music_PLayer.Models;
 
 namespace MP_Music_Player.Services;
 
@@ -32,13 +33,18 @@ public class MusicFileParsingService {
     var files = this._GetMusicFiles();
 
     //load all tracks with artists and genres
-    if (!this._LoadTracks(cancellationToken, files, out var tracks, out var artists, out var genres)) {
+    if (!this._LoadTracks(cancellationToken, files,
+          out var tracks,
+          out var artists,
+          out var genres,
+          out var albums)) {
       result = null!;
       return false;
     }
 
     _AttachTracksToArtists(artists, tracks);
     _AttachTracksToGenres(genres, tracks);
+    _AttachTracksToAlbums(albums, tracks);
 
     result = new ParseResult(tracks, artists, genres);
     return true;
@@ -68,10 +74,12 @@ public class MusicFileParsingService {
     }
   }
 
-  private bool _LoadTracks(CancellationToken cancellationToken, FileInfo[] files, out List<Track> tracks, out List<Artist> artists, out List<Genre> genres) {
+  private bool _LoadTracks(CancellationToken cancellationToken, IReadOnlyCollection<FileInfo> files,
+    out List<Track> tracks, out List<Artist> artists, out List<Genre> genres, out List<Album> albums) {
     tracks = new List<Track>();
     artists = new List<Artist>();
     genres = new List<Genre>();
+    albums = new List<Album>();
 
     foreach (var file in files) {
       if (cancellationToken.IsCancellationRequested)
@@ -80,11 +88,11 @@ public class MusicFileParsingService {
       if (_supportedFormats.All(f => file.Extension != f))
         continue;
 
-      if (!this._tagReadingService.TryReadTags(file, ref artists, ref genres, out var dbTrack))
+      if (!this._tagReadingService.TryReadTags(file, ref artists, ref genres, ref albums, out var dbTrack))
         continue;
 
       tracks.Add(dbTrack);
-      this.OnTrackLoaded?.Invoke(this, new TrackLoadedEventArgs(tracks.Count, files.Length));
+      this.OnTrackLoaded?.Invoke(this, new TrackLoadedEventArgs(tracks.Count, files.Count));
     }
 
     tracks = tracks.OrderBy(t => t.Title).ToList();
@@ -109,6 +117,11 @@ public class MusicFileParsingService {
           .Contains(artist))
         .ToList();
     }
+  }
+
+  private static void _AttachTracksToAlbums(IEnumerable<Album> albums, IList<Track> tracks) {
+    foreach (var album in albums)
+      album.Tracks = tracks.Where(t => t.Album == album).ToList();
   }
 
 }
