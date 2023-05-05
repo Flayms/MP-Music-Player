@@ -1,4 +1,5 @@
 ﻿using MP_Music_Player.Enums;
+using MP_Music_PLayer.Enums;
 using MP_Music_Player.Extensions;
 using MP_Music_Player.Models;
 using MP_Music_Player.Models.EventArgs;
@@ -17,6 +18,8 @@ public class TrackQueue {
   public event EventHandler<TrackEventArgs>? NewSongSelected;
   public event EventHandler<IsPlayingEventArgs>? IsPlayingChanged;
 
+  //todo: save in settings / db
+  public LoopMode LoopMode { get; set; } = LoopMode.None;
   
   public IList<Track> HistoryTracks { get; private set; } = new List<Track>(); //todo: could be stack
   public Track? CurrentTrack { get; private set; }

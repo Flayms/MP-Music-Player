@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using MP_Music_PLayer.Enums;
 using MP_Music_Player.Models.EventArgs;
 using MP_Music_Player.Services;
 using MP_Music_Player.Views.Pages;
@@ -6,9 +7,19 @@ using MP_Music_Player.Views.Pages;
 namespace MP_Music_Player.ViewModels;
 
 public partial class BigTrackViewModel : ATrackViewModel {
+
   private const int _PREVIOUS_TIMEOUT_IN_S = 5;
 
   private readonly TrackOptionsService _trackOptionsService;
+
+  //todo: not completely safe, refac
+  public LoopMode LoopMode {
+    get => this.queue.LoopMode;
+    set {
+      this.queue.LoopMode = value;
+      this.OnPropertyChanged();
+    }
+  }
 
   public BigTrackViewModel(TrackQueue queue, TrackOptionsService trackOptionsService, AudioPlayer player)
     : base(queue, player) {
@@ -41,6 +52,15 @@ public partial class BigTrackViewModel : ATrackViewModel {
   public void Shuffle() {
     this.queue.Shuffle();
     //  this.OnPropertyChanged(nameof(this.ShuffleImageSource));
+  }
+
+  [RelayCommand]
+  public void ChangeLoopMode() {
+    var values = Enum.GetValues(typeof(LoopMode)).Cast<LoopMode>().ToList();
+    var pos = values.IndexOf(this.LoopMode);
+    var nextMode = values[(pos + 1) % values.Count];
+
+    this.LoopMode = nextMode;
   }
 
   [RelayCommand]

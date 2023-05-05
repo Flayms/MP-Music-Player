@@ -19,7 +19,6 @@ public abstract partial class ATrackViewModel : AViewModel {
   private Track? _track;
 
   public bool IsPlaying => this.queue.IsPlaying;
-
   public bool HasTrack => this.Track != null;
   public string Title => this.Track?.Title ?? "no song selected";
   public string Producer => this.Track?.CombinedArtistNames ?? "/";

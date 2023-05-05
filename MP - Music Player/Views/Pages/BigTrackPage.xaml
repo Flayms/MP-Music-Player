@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ViewModels="clr-namespace:MP_Music_Player.ViewModels"
              xmlns:Converters="clr-namespace:MP_Music_Player.Converters"
+             xmlns:Converters1="clr-namespace:MP_Music_PLayer.Converters"
              x:Class="MP_Music_Player.Views.Pages.BigTrackPage"
              Title="{Binding Title}"
              x:DataType="ViewModels:BigTrackViewModel"
@@ -10,6 +11,7 @@
 
   <ContentPage.Resources>
     <Converters:IsPlayingToImageSourceConverter x:Key="IsPlayingToImageSourceConverter"/>
+    <Converters1:LoopModeToImageSourceConverter x:Key="LoopModeToImageSourceConverter"/>
     <Converters:SecondsToDisplayTimeConverter x:Key="SecondsToDisplayTimeConverter"/>
   </ContentPage.Resources>
 
@@ -100,7 +102,14 @@
           <TapGestureRecognizer Command="{Binding NextCommand}" />
         </Image.GestureRecognizers>
       </Image>
-      <Image Grid.Column="4" Source="again.png" WidthRequest="20" HorizontalOptions="Start"/>
+
+
+      <Image Grid.Column="4" Source="{Binding LoopMode, Converter={StaticResource LoopModeToImageSourceConverter}, Mode=OneWay}"
+        WidthRequest="20" HorizontalOptions="Start">
+        <Image.GestureRecognizers>
+          <TapGestureRecognizer Command="{Binding ChangeLoopModeCommand}" />
+        </Image.GestureRecognizers>
+      </Image>
     </Grid>
 
     <Image Grid.Row="8" Source="playlist.png" WidthRequest="20" HorizontalOptions="End">
