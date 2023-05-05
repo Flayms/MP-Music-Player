@@ -22,14 +22,14 @@ versionName = parse()
 
 # combine with datetime
 currentTime = datetime.utcnow()
-timeForTag = currentTime.strftime("%y%m%dT%H%M")
-timeForRelease = currentTime.strftime("%y-%m-%dT%H:%M")
+timeForTag = currentTime.strftime("%Y%m%dT%H%M")
+timeForRelease = currentTime.strftime("%Y-%m-%d %H:%M")
 
 tagName = f"v{versionName}-{timeForTag}" 
 releaseName = f"Version {versionName} ({timeForRelease})" 
 
-print(f"Tag-Name:     {tagName}")
-print(f"Release-Name: {releaseName}")
+print(f"Tag_Name:     {tagName}")
+print(f"Release_Name: {releaseName}")
 
 
 # set github enviorment variable

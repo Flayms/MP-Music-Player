@@ -3,7 +3,7 @@ using MP_Music_Player.Models.EventArgs;
 using MP_Music_Player.Services;
 using MP_Music_Player.Views.Pages;
 
-namespace MP_Music_Player.ViewModels; 
+namespace MP_Music_Player.ViewModels;
 
 public partial class BigTrackViewModel : ATrackViewModel {
   private const int _PREVIOUS_TIMEOUT_IN_S = 5;
