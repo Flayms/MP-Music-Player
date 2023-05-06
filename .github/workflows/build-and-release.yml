@@ -28,18 +28,18 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: windows-build
-        path: MP - Music Player/bin/Release/net7.0-windows10.0.19041.0/win10-x64
+        path: MP - Music Player/bin/Release/net7.0-windows10.0.19041.0/win10-x64/publish
         retention-days: 1
 
     # Android  
     - name: Build Android
-      run: dotnet build "MP - Music Player/MP - Music Player.csproj" -c Release -f:net7.0-android
+      run: dotnet publish "MP - Music Player/MP - Music Player.csproj" -c Release -f:net7.0-android
     
     - name: Upload Android-Artifact
       uses: actions/upload-artifact@v3
       with:
         name: android-build
-        path: MP - Music Player/bin/Release/net7.0-android
+        path: MP - Music Player/bin/Release/net7.0-android/publish
         retention-days: 1
 
   # Creates GitHub-Release with Release-Notes   

@@ -25,7 +25,7 @@ public abstract partial class ATrackViewModel : AViewModel {
   public ImageSource CoverSource => this.Track?.Cover.Source ?? ImageSource.FromFile("record.png"); //todo: refac!!
 
   public double CurrentPositionInS => this._player.PositionInS;
-  public double TrackLengthInS => this._track?.Duration.TotalSeconds ?? 0;
+  public double TrackLengthInS => this.Track?.Duration.TotalSeconds ?? 0;
 
   //public string ShuffleImageSource => this._queue.IsShuffle ? "shuffle_selected.png" : "shuffle.png";
 

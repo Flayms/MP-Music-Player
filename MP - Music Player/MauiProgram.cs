@@ -90,6 +90,10 @@ public static class MauiProgram {
     services.AddSingleton(provider => {
       const string dbName = "sqliteDb.db";
       var applicationDataPath = FileSystem.Current.AppDataDirectory;
+
+      if (!Directory.Exists(applicationDataPath))
+        Directory.CreateDirectory(applicationDataPath);
+
       var dbFilePath = Path.Combine(applicationDataPath, dbName);
 
       //for preventing migration issues
