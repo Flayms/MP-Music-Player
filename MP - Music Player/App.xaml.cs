@@ -17,6 +17,14 @@ public partial class App : Application {
 
   #region Overrides of Application
 
+#if ANDROID
+  //android app lifecycle works different than windows
+  protected override void OnSleep() {
+    this._queue.SaveToDb();
+    base.OnSleep();
+  }
+#endif
+
   protected override void OnStart() {
     Task.Run(this._SetupAsync);
     base.OnStart();
@@ -27,11 +35,6 @@ public partial class App : Application {
     this._queue.LoadTracksFromDb();
   }
 
-  protected override void OnSleep() {
-    this._queue.SaveToDb();
+#endregion
 
-    base.OnSleep();
-  }
-
-  #endregion
 }

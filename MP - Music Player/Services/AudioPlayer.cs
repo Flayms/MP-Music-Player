@@ -16,20 +16,6 @@ public class AudioPlayer {
   public bool HasTrackSelected => this._currentPlayer != null;
 
   /// <summary>
-  /// Gets the duration of the current track in seconds or 0 if nothing is playing.
-  /// </summary>
-  public double DurationInS {
-    get {
-      try {
-        var duration = this._currentPlayer?.Duration ?? 0;
-        return duration;
-      } catch (System.Runtime.InteropServices.COMException) { }
-
-      return 0;
-    }
-  }
-
-  /// <summary>
   /// Gets the position of the current track in seconds or 0 if nothing is playing.
   /// </summary>
   public double PositionInS => this._currentPlayer?.CurrentPosition ?? 0;
@@ -99,6 +85,7 @@ public class AudioPlayer {
 
     var stream = File.OpenRead(track.Path);
     var player = this._audioManager.CreatePlayer(stream);
+
     player.PlaybackEnded += this._CurrentPlayer_PlaybackEnded;
 
     return player;

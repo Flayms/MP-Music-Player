@@ -104,7 +104,7 @@
       </Image>
 
 
-      <Image Grid.Column="4" Source="{Binding LoopMode, Converter={StaticResource LoopModeToImageSourceConverter}, Mode=OneWay}"
+      <Image Grid.Column="4" Source="{Binding LoopMode, Converter={StaticResource LoopModeToImageSourceConverter}}"
         WidthRequest="20" HorizontalOptions="Start">
         <Image.GestureRecognizers>
           <TapGestureRecognizer Command="{Binding ChangeLoopModeCommand}" />

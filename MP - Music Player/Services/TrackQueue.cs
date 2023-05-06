@@ -153,7 +153,7 @@ public class TrackQueue {
   /// <param name="addLastTrackToHistory"></param>
   public void Play(Track track, bool addLastTrackToHistory = true) {
     this.ChangeCurrentTrack(track, addLastTrackToHistory);
-    this._audioPlayer.Play(track);
+    this._audioPlayer.Play();
     this.IsPlaying = true;
   }
 
@@ -238,7 +238,7 @@ public class TrackQueue {
     if (this.CurrentTrack == null)
       throw new NullReferenceException(nameof(this.CurrentTrack));
 
-    var duration = this._audioPlayer.DurationInS;
+    var duration = this.CurrentTrack.Duration.TotalSeconds;
     var position = duration * value;
 
     if (!this._audioPlayer.HasTrackSelected)
@@ -251,7 +251,7 @@ public class TrackQueue {
     if (this.CurrentTrack == null)
       return 0;
 
-    var duration = this._audioPlayer.DurationInS;
+    var duration = this.CurrentTrack.Duration.TotalSeconds;
     var position = this._audioPlayer.PositionInS;
 
     if (duration == 0)

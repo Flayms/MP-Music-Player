@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
+using Microsoft.Maui.LifecycleEvents;
 using MP_Music_Player.Services;
 using MP_Music_Player.ViewModels;
 using MP_Music_Player.Views.Pages;
@@ -24,6 +25,12 @@ public static class MauiProgram {
       .ConfigureFonts(fonts => {
         fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
         fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+      })
+      .ConfigureLifecycleEvents(events => {
+#if WINDOWS
+        events.AddWindows(windows => windows
+          .OnClosed((_, _) => ServiceHelper.GetService<TrackQueue>().SaveToDb()));
+#endif
       });
 
     services.AddSingleton<Settings>();
