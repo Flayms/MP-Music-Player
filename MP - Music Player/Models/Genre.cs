@@ -1,15 +1,7 @@
-﻿namespace MP_Music_Player.Models;
+﻿using MP_Music_PLayer.Models;
 
-public class Genre {
+namespace MP_Music_Player.Models;
 
+public class Genre : ACategory {
   public const string SEPARATOR = "/";
-  public int Id { get; set; }
-  public string Name { get; set; } = null!;
-  public List<Track> Tracks { get; set; } = null!;
-
-  #region Overrides of Object
-
-  public override string ToString() => this.Name;
-
-  #endregion
 }

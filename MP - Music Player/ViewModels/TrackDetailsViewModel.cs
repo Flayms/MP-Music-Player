@@ -13,6 +13,7 @@ public class TrackDetailsViewModel {
   public string Title => this._track.Title;
   public string Artists => this._track.CombinedArtistNames;
   public string Genres => this._track.CombinedGenreNames;
+  public string Album => this._track.Album?.Name ?? "/";
 
   public TrackDetailsViewModel(Track track) {
     this._track = track;

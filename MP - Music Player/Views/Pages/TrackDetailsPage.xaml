@@ -21,5 +21,8 @@
 
     <Label Text="Genre:" HorizontalOptions="Center" />
     <Label Text="{Binding Genres}" HorizontalOptions="Center" />
+
+    <Label Text="Album:" HorizontalOptions="Center" />
+    <Label Text="{Binding Album}" HorizontalOptions="Center" />
   </VerticalStackLayout>
 </ContentPage>

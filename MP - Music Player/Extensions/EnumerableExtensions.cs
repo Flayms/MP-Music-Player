@@ -17,15 +17,21 @@ public static class EnumerableExtensions {
   /// <summary>
   /// Removes and returns the item at the beginning of the <see cref="IList{T}"/>.
   /// </summary>
-  /// <typeparam name="T"></typeparam>
-  /// <param name="this"></param>
-  /// <returns></returns>
+  /// <typeparam name="T">The type of the item.</typeparam>
+  /// <param name="this">This list.</param>
+  /// <returns>The dequeued item.</returns>
   public static T Dequeue<T>(this IList<T> @this) {
     var item = @this.First();
     @this.RemoveAt(0);
     return item;
   }
 
+  /// <summary>
+  /// Removes and returns the item at the end of the <see cref="IList{T}"/>
+  /// </summary>
+  /// <typeparam name="T">The type of the item.</typeparam>
+  /// <param name="this">This list.</param>
+  /// <returns>The popped item.</returns>
   public static T Pop<T>(this IList<T> @this) {
     var item = @this.Last();
     @this.RemoveAt(@this.Count - 1);

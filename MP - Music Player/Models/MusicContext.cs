@@ -44,6 +44,10 @@ public class MusicContext : DbContext {
       .Navigation(t => t.Genres)
       .AutoInclude();
 
+    trackBuilder
+      .Navigation(t => t.Album)
+      .AutoInclude();
+
     modelBuilder.Entity<Artist>()
       .ToTable("Artists")
       .HasKey(a => a.Id);

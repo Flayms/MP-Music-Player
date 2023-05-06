@@ -1,5 +1,6 @@
 ﻿using MP_Music_Player.Enums;
 using MP_Music_Player.Models;
+using MP_Music_PLayer.Models;
 using MP_Music_Player.ViewModels;
 using MP_Music_Player.Views.Pages;
 using Track = MP_Music_Player.Models.Track;
@@ -32,6 +33,7 @@ public class TrackOptionsService {
     TrackOption.AddToEndOfQueue,
     //TrackOption.AddToPlaylist,
     TrackOption.GoToArtist,
+    TrackOption.GoToAlbum,
     TrackOption.Details,
   };
 
@@ -93,7 +95,8 @@ public class TrackOptionsService {
         break;
 
       case TrackOption.GoToAlbum:
-        throw new NotImplementedException();
+        await _GoToAlbum(track);
+        break;
 
       case TrackOption.Details:
         var model = new TrackDetailsViewModel(track);
@@ -107,7 +110,7 @@ public class TrackOptionsService {
 
   private static async Task _GoToArtist(Track track) {
     if (track.Artists.Count <= 0) {
-      await Shell.Current.DisplayAlert("No Artist", $"Couldn't find any Artists for '{track.CombinedName}'", "OK");
+      await Shell.Current.DisplayAlert("No Artist", $"Couldn't find any Artists for '{track.CombinedName}'.", "OK");
       return;
     }
 
@@ -125,9 +128,22 @@ public class TrackOptionsService {
       artist = track.Artists.First(a => a.Name == selectText);
     }
 
+    await _OpenCategory(artist);
+  }
+
+  private static async Task _GoToAlbum(Track track) {
+    if (track.Album == null) {
+      await Shell.Current.DisplayAlert("No Album", $"The track '{track.CombinedName}' does not have an album.", "OK");
+      return;
+    }
+
+    await _OpenCategory(track.Album);
+  }
+
+  private static async Task _OpenCategory(ACategory category) {
     var model = ServiceHelper.GetService<TrackListViewModel>();
-    model.TrackViewModels = artist.Tracks.Select(t => new SmallTrackViewModel(t)).ToList();
-    model.Title = artist.Name;
+    model.TrackViewModels = category.Tracks.Select(t => new SmallTrackViewModel(t)).ToList();
+    model.Title = category.Name;
 
     await Shell.Current.Navigation.PushAsync(new TrackListPage(model));
   }
