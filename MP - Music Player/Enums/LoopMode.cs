@@ -2,9 +2,17 @@
 
 public enum LoopMode {
   /// <summary>
-  /// Default case
+  /// When queue is over, stop playback.
   /// </summary>
   None = 0,
-  LoopQueue = 1,
-  LoopCurrent
+
+  /// <summary>
+  /// When queue is over, repeat from beginning.
+  /// </summary>
+  Queue,
+
+  /// <summary>
+  /// When track is over, repeat same track again.
+  /// </summary>
+  Current
 }

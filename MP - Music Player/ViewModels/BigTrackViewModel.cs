@@ -12,7 +12,6 @@ public partial class BigTrackViewModel : ATrackViewModel {
 
   private readonly TrackOptionsService _trackOptionsService;
 
-  //todo: not completely safe, refac
   public LoopMode LoopMode {
     get => this.queue.LoopMode;
     set {
@@ -56,10 +55,10 @@ public partial class BigTrackViewModel : ATrackViewModel {
 
   [RelayCommand]
   public void ChangeLoopMode() {
+    //cycle through enum values
     var values = Enum.GetValues(typeof(LoopMode)).Cast<LoopMode>().ToList();
     var pos = values.IndexOf(this.LoopMode);
     var nextMode = values[(pos + 1) % values.Count];
-
     this.LoopMode = nextMode;
   }
 

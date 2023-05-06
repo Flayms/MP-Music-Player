@@ -10,8 +10,8 @@ public class LoopModeToImageSourceConverter : AValueConverter<LoopMode, string> 
   public override string Convert(LoopMode loopMode, Type targetType, object parameter, CultureInfo culture) {
     return loopMode switch {
       LoopMode.None => "loop.png",
-      LoopMode.LoopQueue => "loop_selected.png",
-      LoopMode.LoopCurrent => "loop_current.png",
+      LoopMode.Queue => "loop_selected.png",
+      LoopMode.Current => "loop_current.png",
       _ => throw new ArgumentOutOfRangeException()
     };
   }

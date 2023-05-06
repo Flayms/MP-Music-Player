@@ -21,15 +21,15 @@ public class TrackQueue {
   //todo: save in settings / db
   public LoopMode LoopMode { get; set; } = LoopMode.None;
   
+  //todo: make distinction between previously played and previous track in queue
   public IList<Track> HistoryTracks { get; private set; } = new List<Track>(); //todo: could be stack
   public Track? CurrentTrack { get; private set; }
 
   public IList<Track> NextUpTracks { get; private set; } = new List<Track>(); //todo: could be queue
   public IList<Track> QueuedTracks { get; private set; } = new List<Track>(); //todo: could be queue
 
-  //todo: these shouldn't be exposed here, instead callers need to ask audioPlayer directly
-  //public double CurrentTrackDurationInS => this._audioPlayer.DurationInS;
-  //public double CurrentTrackPositionInS => this._audioPlayer.PositionInS;
+  //the queue, how it was first initiated without any dequeued elements
+  private IList<Track> _originalQueue = new List<Track>();
 
   //todo: maybe move into audio-player
   public bool IsPlaying {
@@ -67,13 +67,14 @@ public class TrackQueue {
     this.HistoryTracks = this._queuedTrackRepository.HistoryTracks.ToList();
     this.NextUpTracks = this._queuedTrackRepository.NextUpTracks.ToList();
     this.QueuedTracks = this._queuedTrackRepository.QueuedTracks.ToList();
+    this._originalQueue = new List<Track>(this.QueuedTracks);
   }
 
   /// <summary>
   /// Changes current track without starting playback.
   /// </summary>
   /// <param name="newTrack">The new track to be selected.</param>
-  /// <param name="addLastTrackToHistory"><c>True</c> if the last playing track should be added to <see cref="HistoryTracks"/>.</param>
+  /// <param name="addLastTrackToHistory"><c>True</c> if the last playing <see cref="Track"/> should be added to <see cref="HistoryTracks"/>.</param>
   public void ChangeCurrentTrack(Track newTrack, bool addLastTrackToHistory = true) {
     if (addLastTrackToHistory && this.CurrentTrack != null)
       this.HistoryTracks.Add(this.CurrentTrack);
@@ -94,6 +95,7 @@ public class TrackQueue {
     //todo: should be done with enumeration instead of changing to list
     var list = tracks.ToList();
 
+    this._originalQueue = new List<Track>(list);
     this.ChangeCurrentTrack(list.Dequeue());
     this.QueuedTracks = list;
   }
@@ -143,17 +145,24 @@ public class TrackQueue {
       this.QueuedTracks.Remove(track);
   }
 
+  /// <inheritdoc cref="ChangeCurrentTrack"/>
   /// <summary>
   /// Changes the current track and starts playback.
   /// </summary>
   /// <param name="track">The new track to play.</param>
+  /// <param name="addLastTrackToHistory"></param>
   public void Play(Track track, bool addLastTrackToHistory = true) {
     this.ChangeCurrentTrack(track, addLastTrackToHistory);
     this._audioPlayer.Play(track);
     this.IsPlaying = true;
   }
 
-  private void _AudioPlayer_PlaybackEnded(object? _, EventArgs __) => this.Next();
+  private void _AudioPlayer_PlaybackEnded(object? _, EventArgs __) {
+    if (this.LoopMode == LoopMode.Current)
+      this._audioPlayer.Play(this.CurrentTrack!);
+    else
+      this.Next();
+  }
 
   /// <summary>
   /// Resumes or starts playback.
@@ -176,7 +185,7 @@ public class TrackQueue {
       //start first time playback from start
       this._audioPlayer.Play(this.CurrentTrack);
     else
-      // start playing at specific time for the first time
+      //start playing at specific time for the first time
       this._audioPlayer.PlayAtTime(this.CurrentTrack, playbackPosition);
 
     this.IsPlaying = true;
@@ -195,6 +204,12 @@ public class TrackQueue {
 
     else if (this.QueuedTracks.Count > 0)
       this.Play(this.QueuedTracks.Dequeue());
+
+    //repeat queue
+    else if (this.LoopMode == LoopMode.Queue) {
+      this.QueuedTracks = new List<Track>(this._originalQueue);
+      this.Play(this.QueuedTracks.Dequeue());
+    }
   }
 
   public void Previous() {
