@@ -23,7 +23,7 @@ jobs:
       
     # Windows
     - name: Build Windows
-      run: dotnet build "MP - Music Player/MP - Music Player.csproj" -c Release -f:net7.0-windows10.0.19041.0
+      run: dotnet publish "MP - Music Player/MP - Music Player.csproj" -c Release -f:net7.0-windows10.0.19041.0 -p:WindowsPackageType=None -p:SelfContained=true -p:WindowsAppSDKSelfContained=true
     - name: Upload Windows-Artifact
       uses: actions/upload-artifact@v3
       with:
