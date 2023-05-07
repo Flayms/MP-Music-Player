@@ -2,7 +2,7 @@
 
 public enum TrackOption {
   PlayNext,
-  AddToQueue,
+  AddToEndOfNextUp,
   AddToEndOfQueue,
   RemoveFromQueue,
   AddToPlaylist,

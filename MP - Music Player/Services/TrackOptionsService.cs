@@ -14,7 +14,7 @@ public class TrackOptionsService {
   //todo: BiDictionary
   public static readonly IReadOnlyDictionary<TrackOption, string> OptionTexts = new Dictionary<TrackOption, string> {
     {TrackOption.PlayNext, "Play next"},
-    {TrackOption.AddToQueue, "Add to queue" },
+    {TrackOption.AddToEndOfNextUp, "Add to end of next up" },
     {TrackOption.AddToEndOfQueue, "Add to end of queue"},
     {TrackOption.RemoveFromQueue, "Remove from queue"},
     {TrackOption.AddToPlaylist, "Add to playlist" },
@@ -29,7 +29,7 @@ public class TrackOptionsService {
   /// </summary>
   public static readonly TrackOption[] BasicOptions = {
     TrackOption.PlayNext,
-    TrackOption.AddToQueue,
+    TrackOption.AddToEndOfNextUp,
     TrackOption.AddToEndOfQueue,
     //TrackOption.AddToPlaylist,
     TrackOption.GoToArtist,
@@ -69,7 +69,7 @@ public class TrackOptionsService {
         queue.InsertNextUp(track);
         break;
 
-      case TrackOption.AddToQueue:
+      case TrackOption.AddToEndOfNextUp:
         queue.AddToNextUp(track);
         break;
 

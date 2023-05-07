@@ -19,13 +19,16 @@ public class AudioPlayer {
   /// </summary>
   public event EventHandler<IsPlayingEventArgs>? IsPlayingChanged;
 
-  public bool HasTrackSelected => this._currentPlayer != null;
+  public bool HasTrackSelected => this._currentTrack != null;
 
   /// <summary>
   /// Gets the position of the current track in seconds or 0 if nothing is playing.
   /// </summary>
   public double PositionInS => this._currentPlayer?.CurrentPosition ?? 0;
 
+  /// <summary>
+  /// <see langword="true"/> if this player is currently playing.
+  /// </summary>
   public bool IsPlaying {
     get => this._isPlaying;
     private set {
@@ -39,6 +42,13 @@ public class AudioPlayer {
 
   private bool _isPlaying;
 
+  /// <summary>
+  /// <see langword="true"/> if there is a paused, selected track.
+  /// </summary>
+  public bool IsPaused { get; private set; }
+
+  private Track? _currentTrack;
+
   public AudioPlayer(IAudioManager audioManager) {
     this._audioManager = audioManager;
   }
@@ -48,7 +58,7 @@ public class AudioPlayer {
   /// </summary>
   /// <param name="track">The track to play.</param>
   public void Play(Track track) {
-    this._currentPlayer = this._CreatePlayer(track);
+    this._CreatePlayer(track);
     this.Play();
   }
 
@@ -56,9 +66,7 @@ public class AudioPlayer {
   /// Adds the given <see cref="Track"/> without starting playback.
   /// </summary>
   /// <param name="track">The track to set.</param>
-  public void SetTrack(Track track) {
-    this._currentPlayer = this._CreatePlayer(track);
-  }
+  public void SetTrack(Track track) => this._CreatePlayer(track);
 
   /// <summary>
   /// Starts playback on the given <see cref="Track"/> at a specific position.
@@ -66,7 +74,7 @@ public class AudioPlayer {
   /// <param name="track">The track to play.</param>
   /// <param name="timeInSeconds">The position to seek to in seconds.</param>
   public void PlayAtTime(Track track, double timeInSeconds) {
-    var player = this._currentPlayer = this._CreatePlayer(track);
+    var player = this._CreatePlayer(track);
     player.Seek(timeInSeconds);
     this.Play();
   }
@@ -98,6 +106,7 @@ public class AudioPlayer {
 
     this._currentPlayer.Pause();
     this.IsPlaying = false;
+    this.IsPaused = false;
   }
 
   private IAudioPlayer _CreatePlayer(Track track) {
@@ -107,6 +116,9 @@ public class AudioPlayer {
     var player = this._audioManager.CreatePlayer(stream);
 
     player.PlaybackEnded += this._CurrentPlayer_PlaybackEnded;
+
+    this._currentTrack = track;
+    this._currentPlayer = player;
 
     return player;
   }
@@ -120,6 +132,7 @@ public class AudioPlayer {
 
     this._currentPlayer.Play();
     this.IsPlaying = true;
+    this.IsPaused = false;
   }
 
   private void _CurrentPlayer_PlaybackEnded(object? sender, EventArgs e) {
@@ -144,5 +157,30 @@ public class AudioPlayer {
     } catch (System.Runtime.InteropServices.COMException) { }
 
     this.IsPlaying = false;
+    this.IsPaused = false;
+  }
+
+  public double GetProgressPercent() {
+    if (this._currentTrack == null)
+      return 0;
+
+    var duration = this._currentTrack.Duration.TotalSeconds;
+    var position = this.PositionInS;
+
+    if (duration == 0)
+      return 0;
+
+    var result = position / duration;
+    return result;
+  }
+
+  public void JumpToPercent(double value) {
+    if (this._currentTrack == null)
+      throw new NullReferenceException(nameof(this._currentTrack));
+
+    var duration = this._currentTrack.Duration.TotalSeconds;
+    var position = duration * value;
+
+    this.Seek(position);
   }
 }

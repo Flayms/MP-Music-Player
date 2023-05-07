@@ -44,7 +44,7 @@ public partial class BigTrackViewModel : ATrackViewModel {
     if (this.Player.PositionInS < _PREVIOUS_TIMEOUT_IN_S)
       this.Queue.Previous();
     else
-      this.Queue.JumpToPercent(0);
+      this.Player.JumpToPercent(0);
   }
 
   [RelayCommand]

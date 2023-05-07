@@ -75,7 +75,7 @@ public abstract partial class ATrackViewModel : AViewModel {
   [RelayCommand]
   public void PlayTapped() {
     if (this.IsPlaying)
-      this.Queue.Pause();
+      this.Player.Pause();
     else
       this.Queue.Play();
   }
@@ -86,7 +86,7 @@ public abstract partial class ATrackViewModel : AViewModel {
   }
 
   private void _Timer_Tick(object? sender, object e) {
-    this.ProgressPercent = this.Queue.GetProgressPercent();
+    this.ProgressPercent = this.Player.GetProgressPercent();
     this.OnPropertyChanged(nameof(this.CurrentPositionInS));
   }
 
@@ -99,7 +99,7 @@ public abstract partial class ATrackViewModel : AViewModel {
   public void TrackPositionChanged() {
     Trace.WriteLine($"Jumping to {this.ProgressPercent}");
 
-    this.Queue.JumpToPercent(this.ProgressPercent);
+    this.Player.JumpToPercent(this.ProgressPercent);
     this.OnPropertyChanged(nameof(this.CurrentPositionInS));
   }
 
