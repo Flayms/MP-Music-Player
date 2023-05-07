@@ -8,8 +8,8 @@ using MP_Music_Player.Services;
 namespace MP_Music_Player.ViewModels;
 
 public abstract partial class ATrackViewModel : AViewModel {
-  protected readonly TrackQueue queue;
-  protected readonly AudioPlayer _player;
+  protected TrackQueue Queue { get; }
+  protected AudioPlayer Player { get; }
 
   [ObservableProperty]
   [NotifyPropertyChangedFor(nameof(Title))]
@@ -18,13 +18,13 @@ public abstract partial class ATrackViewModel : AViewModel {
   [NotifyPropertyChangedFor(nameof(HasTrack))]
   private Track? _track;
 
-  public bool IsPlaying => this.queue.IsPlaying;
+  public bool IsPlaying => this.Player.IsPlaying;
   public bool HasTrack => this.Track != null;
   public string Title => this.Track?.Title ?? "no song selected";
   public string Producer => this.Track?.CombinedArtistNames ?? "/";
   public ImageSource CoverSource => this.Track?.Cover.Source ?? ImageSource.FromFile("record.png"); //todo: refac!!
 
-  public double CurrentPositionInS => this._player.PositionInS;
+  public double CurrentPositionInS => this.Player.PositionInS;
   public double TrackLengthInS => this.Track?.Duration.TotalSeconds ?? 0;
 
   //public string ShuffleImageSource => this._queue.IsShuffle ? "shuffle_selected.png" : "shuffle.png";
@@ -38,8 +38,8 @@ public abstract partial class ATrackViewModel : AViewModel {
   private double _progressPercent;
 
   protected ATrackViewModel(TrackQueue queue, AudioPlayer player) {
-    this.queue = queue;
-    this._player = player;
+    this.Queue = queue;
+    this.Player = player;
 
 
     var timer = Application.Current!.Dispatcher.CreateTimer();
@@ -50,7 +50,7 @@ public abstract partial class ATrackViewModel : AViewModel {
     this.Track = queue.CurrentTrack;
 
     queue.NewSongSelected += this.OnNewSongSelected;
-    queue.IsPlayingChanged += this._IsPlayingChanged;
+    player.IsPlayingChanged += this._IsPlayingChanged;
 
     //this._GetColors();
   }
@@ -75,9 +75,9 @@ public abstract partial class ATrackViewModel : AViewModel {
   [RelayCommand]
   public void PlayTapped() {
     if (this.IsPlaying)
-      this.queue.Pause();
+      this.Queue.Pause();
     else
-      this.queue.Play();
+      this.Queue.Play();
   }
 
   protected virtual void OnNewSongSelected(object? sender, TrackEventArgs args) {
@@ -86,7 +86,7 @@ public abstract partial class ATrackViewModel : AViewModel {
   }
 
   private void _Timer_Tick(object? sender, object e) {
-    this.ProgressPercent = this.queue.GetProgressPercent();
+    this.ProgressPercent = this.Queue.GetProgressPercent();
     this.OnPropertyChanged(nameof(this.CurrentPositionInS));
   }
 
@@ -99,7 +99,7 @@ public abstract partial class ATrackViewModel : AViewModel {
   public void TrackPositionChanged() {
     Trace.WriteLine($"Jumping to {this.ProgressPercent}");
 
-    this.queue.JumpToPercent(this.ProgressPercent);
+    this.Queue.JumpToPercent(this.ProgressPercent);
     this.OnPropertyChanged(nameof(this.CurrentPositionInS));
   }
 

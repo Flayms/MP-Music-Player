@@ -13,9 +13,9 @@ public partial class BigTrackViewModel : ATrackViewModel {
   private readonly TrackOptionsService _trackOptionsService;
 
   public LoopMode LoopMode {
-    get => this.queue.LoopMode;
+    get => this.Queue.LoopMode;
     set {
-      this.queue.LoopMode = value;
+      this.Queue.LoopMode = value;
       this.OnPropertyChanged();
     }
   }
@@ -35,21 +35,21 @@ public partial class BigTrackViewModel : ATrackViewModel {
   #endregion
 
   [RelayCommand]
-  public void Next() => this.queue.Next();
+  public void Next() => this.Queue.Next();
 
   [RelayCommand]
   public void GoBack() {
     //Either jump back to last track or repeat current track
 
-    if (this._player.PositionInS < _PREVIOUS_TIMEOUT_IN_S)
-      this.queue.Previous();
+    if (this.Player.PositionInS < _PREVIOUS_TIMEOUT_IN_S)
+      this.Queue.Previous();
     else
-      this.queue.JumpToPercent(0);
+      this.Queue.JumpToPercent(0);
   }
 
   [RelayCommand]
   public void Shuffle() {
-    this.queue.Shuffle();
+    this.Queue.Shuffle();
     //  this.OnPropertyChanged(nameof(this.ShuffleImageSource));
   }
 

@@ -30,7 +30,7 @@ public partial class QueueViewModel : AViewModel {
 
   public QueueViewModel(TrackQueue queue) {
     this._queue = queue;
-    queue.NewSongSelected += (_, _) => this.Refresh();
+    queue.QueueChanged += (_, _) => this.Refresh();
   }
 
   public void Refresh() {

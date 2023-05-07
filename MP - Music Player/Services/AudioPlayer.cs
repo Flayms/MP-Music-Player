@@ -1,4 +1,5 @@
 ﻿using MP_Music_Player.Models;
+using MP_Music_Player.Models.EventArgs;
 using Plugin.Maui.Audio;
 using Exception = System.Exception;
 
@@ -13,12 +14,30 @@ public class AudioPlayer {
   private IAudioPlayer? _currentPlayer;
   public event EventHandler? PlaybackEnded;
 
+  /// <summary>
+  /// This <see langword="event"/> raises whenever the playback starts / stops changes.
+  /// </summary>
+  public event EventHandler<IsPlayingEventArgs>? IsPlayingChanged;
+
   public bool HasTrackSelected => this._currentPlayer != null;
 
   /// <summary>
   /// Gets the position of the current track in seconds or 0 if nothing is playing.
   /// </summary>
   public double PositionInS => this._currentPlayer?.CurrentPosition ?? 0;
+
+  public bool IsPlaying {
+    get => this._isPlaying;
+    private set {
+      if (value == this._isPlaying)
+        return;
+
+      this._isPlaying = value;
+      this.IsPlayingChanged?.Invoke(this, new IsPlayingEventArgs(this.IsPlaying));
+    }
+  }
+
+  private bool _isPlaying;
 
   public AudioPlayer(IAudioManager audioManager) {
     this._audioManager = audioManager;
@@ -30,7 +49,7 @@ public class AudioPlayer {
   /// <param name="track">The track to play.</param>
   public void Play(Track track) {
     this._currentPlayer = this._CreatePlayer(track);
-    this._currentPlayer.Play();
+    this.Play();
   }
 
   /// <summary>
@@ -49,7 +68,7 @@ public class AudioPlayer {
   public void PlayAtTime(Track track, double timeInSeconds) {
     var player = this._currentPlayer = this._CreatePlayer(track);
     player.Seek(timeInSeconds);
-    player.Play();
+    this.Play();
   }
 
   /// <summary>
@@ -78,6 +97,7 @@ public class AudioPlayer {
       throw new Exception("Can't pause if no song is selected!");
 
     this._currentPlayer.Pause();
+    this.IsPlaying = false;
   }
 
   private IAudioPlayer _CreatePlayer(Track track) {
@@ -99,6 +119,7 @@ public class AudioPlayer {
       throw new NullReferenceException(nameof(this._currentPlayer));
 
     this._currentPlayer.Play();
+    this.IsPlaying = true;
   }
 
   private void _CurrentPlayer_PlaybackEnded(object? sender, EventArgs e) {
@@ -121,5 +142,7 @@ public class AudioPlayer {
 
       //throws when a track gets double-clicked instead of once
     } catch (System.Runtime.InteropServices.COMException) { }
+
+    this.IsPlaying = false;
   }
 }

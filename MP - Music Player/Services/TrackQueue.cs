@@ -8,6 +8,7 @@ using Track = MP_Music_Player.Models.Track;
 
 namespace MP_Music_Player.Services;
 
+//todo: maybe split up in TrackQueue (model) and TrackQueueService (acting on model)
 public class TrackQueue {
 
   private readonly AudioPlayer _audioPlayer;
@@ -15,8 +16,15 @@ public class TrackQueue {
 
   private readonly MusicContext _context;
 
+  /// <summary>
+  /// This <see langword="event"/> raises when the <see cref="CurrentTrack"/> changes.
+  /// </summary>
   public event EventHandler<TrackEventArgs>? NewSongSelected;
-  public event EventHandler<IsPlayingEventArgs>? IsPlayingChanged;
+
+  /// <summary>
+  /// This <see langword="event"/> raises when anything in this <see cref="TrackQueue"/> changes.
+  /// </summary>
+  public event EventHandler<EventArgs>? QueueChanged;
 
   //todo: save in settings / db
   public LoopMode LoopMode { get; set; } = LoopMode.None;
@@ -31,18 +39,8 @@ public class TrackQueue {
   //the queue, how it was first initiated without any dequeued elements
   private IList<Track> _originalQueue = new List<Track>();
 
-  //todo: maybe move into audio-player
-  public bool IsPlaying {
-    get => this._isPlaying;
-    private set {
-      this._isPlaying = value;
-      this.IsPlayingChanged?.Invoke(this, new IsPlayingEventArgs(this.IsPlaying));
-    }
-  }
-
   //indicates if the track was already paused or if its the first play
   private bool _wasPaused;
-  private bool _isPlaying;
 
   public bool IsShuffle { get; private set; }
 
@@ -70,12 +68,25 @@ public class TrackQueue {
     this._originalQueue = new List<Track>(this.QueuedTracks);
   }
 
+
+  //public void ChangeCurrentTrack(Track newTrack, bool addLastTrackToHistory = true) {
+  //  if (addLastTrackToHistory && this.CurrentTrack != null)
+  //    this.HistoryTracks.Add(this.CurrentTrack);
+
+  //  this.CurrentTrack = newTrack;
+  //  this._audioPlayer.Stop();
+
+  //  this.NewSongSelected?.Invoke(this, new TrackEventArgs(newTrack));
+  //  this._wasPaused = false;
+  //}
+
   /// <summary>
   /// Changes current track without starting playback.
   /// </summary>
+  /// <remarks>Doesn't raise <see cref="QueueChanged"/>.</remarks>
   /// <param name="newTrack">The new track to be selected.</param>
   /// <param name="addLastTrackToHistory"><c>True</c> if the last playing <see cref="Track"/> should be added to <see cref="HistoryTracks"/>.</param>
-  public void ChangeCurrentTrack(Track newTrack, bool addLastTrackToHistory = true) {
+  private void _ChangeCurrentTrack(Track newTrack, bool addLastTrackToHistory = true) {
     if (addLastTrackToHistory && this.CurrentTrack != null)
       this.HistoryTracks.Add(this.CurrentTrack);
 
@@ -96,28 +107,38 @@ public class TrackQueue {
     var list = tracks.ToList();
 
     this._originalQueue = new List<Track>(list);
-    this.ChangeCurrentTrack(list.Dequeue());
+    this._ChangeCurrentTrack(list.Dequeue());
     this.QueuedTracks = list;
+    this.QueueChanged?.Invoke(this, EventArgs.Empty);
   }
 
   /// <summary>
   /// Adds a track to the first position of the <see cref="NextUpTracks"/> (it's gonna play as the next track).
   /// </summary>
   /// <param name="track">The track to insert at the front of the queue.</param>
-  public void InsertNextUp(Track track) => this.NextUpTracks.Insert(0, track);
+  public void InsertNextUp(Track track) {
+    this.NextUpTracks.Insert(0, track);
+    this.QueueChanged?.Invoke(this, EventArgs.Empty);
+  }
 
   /// <summary>
   /// Adds track to the end of the <see cref="NextUpTracks"/>
   /// (it's gonna play after all the other user picks but before the common queue).
   /// </summary>
   /// <param name="track"></param>
-  public void AddToNextUp(Track track) => this.NextUpTracks.Add(track);
+  public void AddToNextUp(Track track) {
+    this.NextUpTracks.Add(track);
+    this.QueueChanged?.Invoke(this, EventArgs.Empty);
+  }
 
   /// <summary>
   /// Adds the track to the very last playback position.
   /// </summary>
   /// <param name="track"></param>
-  public void AddToEndOfQueue(Track track) => this.QueuedTracks.Add(track);
+  public void AddToEndOfQueue(Track track) {
+    this.QueuedTracks.Add(track);
+    this.QueueChanged?.Invoke(this, EventArgs.Empty);
+  }
 
   //todo: implement these again
   //public void JumpToNextUpTrack(Track track) => this._JumpToClickedTrack(track, this.NextUpTracks);
@@ -143,6 +164,8 @@ public class TrackQueue {
   public void Remove(Track track) {
     if (!this.NextUpTracks.Remove(track))
       this.QueuedTracks.Remove(track);
+
+    this.QueueChanged?.Invoke(this, EventArgs.Empty);
   }
 
   /// <inheritdoc cref="ChangeCurrentTrack"/>
@@ -152,9 +175,9 @@ public class TrackQueue {
   /// <param name="track">The new track to play.</param>
   /// <param name="addLastTrackToHistory"></param>
   public void Play(Track track, bool addLastTrackToHistory = true) {
-    this.ChangeCurrentTrack(track, addLastTrackToHistory);
+    this._ChangeCurrentTrack(track, addLastTrackToHistory);
+    this.QueueChanged?.Invoke(this, EventArgs.Empty);
     this._audioPlayer.Play(track);
-    this.IsPlaying = true;
   }
 
   private void _AudioPlayer_PlaybackEnded(object? _, EventArgs __) {
@@ -175,7 +198,6 @@ public class TrackQueue {
     //resume playback
     if (this._wasPaused) {
       this._audioPlayer.Play();
-      this.IsPlaying = true;
       return;
     }
 
@@ -187,14 +209,12 @@ public class TrackQueue {
     else
       //start playing at specific time for the first time
       this._audioPlayer.PlayAtTime(this.CurrentTrack, playbackPosition);
-
-    this.IsPlaying = true;
   }
 
+  //todo: should be audioPlayer logic
   public void Pause() {
     this._audioPlayer.Pause();
     this._wasPaused = true;
-    this.IsPlaying = false;
   }
 
   //todo: what if end of queue reached
@@ -247,6 +267,7 @@ public class TrackQueue {
       this._audioPlayer.Seek(position);
   }
 
+  //todo: audioPlayer
   public double GetProgressPercent() {
     if (this.CurrentTrack == null)
       return 0;
