@@ -1,7 +1,5 @@
 # This workflow builds and releases the project on github
 
-# todo: format release log better
-# todo: make releases signed by github again
 # todo: rename android apk
 
 name: Build and Release
@@ -72,28 +70,27 @@ jobs:
         name: android-build
         path: ./download/android
 
+    - name: Receive Version (env.Tag_Name + env.Release_Name)
+      run: python ".github/workflows/receive-version.py"
+
     # Creating Release Log
     # Needs to fetch before otherwise doesn't know last commits
     - name: Git Fetch
       shell: bash
       run: git fetch --depth=500
 
-    - name: create release log
-      shell: bash
-      run: git log $(git describe --tags --abbrev=0)..HEAD --no-merges --oneline > "${{ github.workspace }}\new-in-this-release.log"
+      - name: create release-notes.md
+        run: bash ".github/workflows/create-release-notes.sh" "${{ github.repository }}" ${{ env.Tag_Name }}
       
     - name: show release log file
-      run: cat "${{ github.workspace }}\new-in-this-release.log"
+      run: cat "${{ github.workspace }}\release-notes.md"
       
     - name: workspace directory
       shell: bash
-      run: echo "${{ github.workspace }}\new-in-this-release.log"
+      run: echo "${{ github.workspace }}\release-notes.md"
     
     - name: list files
       run: ls
-      
-    - name: Receive Version (env.Tag_Name + env.Release_Name)
-      run: python ".github/workflows/receive-version.py"
 
     - name: Release
       uses: softprops/action-gh-release@v1
@@ -101,7 +98,7 @@ jobs:
         tag_name: "${{ env.Tag_Name }}"
         name: "${{ env.Release_Name }}"
         prerelease: true
-        body_path: "${{ github.workspace }}\\new-in-this-release.log"
+        body_path: "${{ github.workspace }}\\release-notes.md"
         token: ${{ secrets.GITHUB_TOKEN }}
         files: |
           ./download/android/mp_music_player.mp_music_player-Signed.apk
