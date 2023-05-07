@@ -17,11 +17,13 @@ public partial class App : Application {
 
   #region Overrides of Application
 
-#if ANDROID
-  //android app lifecycle works different than windows
-  protected override void OnSleep() {
-    this._queue.SaveToDb();
-    base.OnSleep();
+#if WINDOWS
+  //Windows app is missing title so need to add it manually
+  protected override Window CreateWindow(IActivationState? activationState) {
+    var window = base.CreateWindow(activationState);
+
+    window.Title = AppInfo.Current.Name;
+    return window;
   }
 #endif
 
@@ -35,6 +37,14 @@ public partial class App : Application {
     this._queue.LoadTracksFromDb();
   }
 
-#endregion
+#if ANDROID
+  //android app lifecycle works different than windows
+  protected override void OnSleep() {
+    this._queue.SaveToDb();
+    base.OnSleep();
+  }
+#endif
+
+  #endregion
 
 }
