@@ -17,9 +17,14 @@ public partial class HistoryViewModel : AViewModel {
     var model = ServiceHelper.GetService<TrackListViewModel>();
     this.TrackListViewModel = model;
     this._queue.NewSongSelected += this._Queue_NewSongSelected;
+    this._Reload();
   }
 
-  private void _Queue_NewSongSelected(object? _, TrackEventArgs __) {
-    this.TrackListViewModel.TrackViewModels = this._queue.HistoryTracks.Reverse().Select(t => new SmallTrackViewModel(t)).ToList();
-  }
+  private void _Queue_NewSongSelected(object? _, TrackEventArgs __) => this._Reload();
+
+  private void _Reload() => this.TrackListViewModel.TrackViewModels = this._queue.HistoryTracks
+    .Reverse()
+    .Select(t => new SmallTrackViewModel(t))
+    .Take(50)
+    .ToList();
 }

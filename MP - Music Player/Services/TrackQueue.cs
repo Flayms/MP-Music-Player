@@ -251,9 +251,9 @@ public class TrackQueue {
     var queuedTracks = this.QueuedTracks
       .Select(t => new DbQueuedTrack(t, QueuedType.Queued))
       .Concat(this.NextUpTracks
-        .Select(t => new DbQueuedTrack(t, QueuedType.NextUp)));
-    //todo: current track can be null!
-    // .Concat(new[] {new DbQueuedTrack {Track = this.CurrentTrack, Type = QueuedType.Current}});
+        .Select(t => new DbQueuedTrack(t, QueuedType.NextUp)))
+      .Concat(this.HistoryTracks
+        .Select(t => new DbQueuedTrack(t, QueuedType.History)));
 
     this._context.CurrentTracks.Clear();
     var currentPosition = this._player.PositionInS;
