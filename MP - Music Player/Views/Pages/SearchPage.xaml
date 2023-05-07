@@ -4,9 +4,15 @@
              xmlns:ViewModels="using:MP_Music_Player.ViewModels"
              xmlns:Models="using:MP_Music_Player.Models"
              xmlns:UserControls="using:MP_Music_Player.Views.UserControls"
+             xmlns:Converters="using:MP_Music_Player.Converters"
              x:Class="MP_Music_Player.Views.Pages.SearchPage"
              Title="Search"
              x:DataType="ViewModels:SearchViewModel">
+
+  <ContentPage.Resources>
+    <Converters:DisplayStateToContentIsVisibleConverter x:Key="displayStateToContentIsVisible" />
+    <Converters:DisplayStateToIsEmptyConverter x:Key="displayStateToIsEmpty" />
+  </ContentPage.Resources>
 
   <Grid>
     <Grid.RowDefinitions>
@@ -21,9 +27,17 @@
                SearchCommand="{Binding PerformSearchCommand}"
                SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}"/>
 
+    <Label HorizontalOptions="Center"
+           VerticalOptions="CenterAndExpand"
+           Text="No results"
+           IsVisible="{Binding Path=DisplayState, Converter={StaticResource displayStateToIsEmpty}}"
+           Grid.Row="1"/>
+
     <!--todo: use SongsPage here!-->
     <ListView Grid.Row="1"
               ItemsSource="{Binding Tracks}"
+
+              IsVisible="{Binding Path=DisplayState, Converter={StaticResource displayStateToContentIsVisible}}"
               RowHeight="69"
               SeparatorVisibility="None">
 

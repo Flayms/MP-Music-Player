@@ -24,8 +24,6 @@
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="auto" />
-      <RowDefinition Height="auto" />
-      <RowDefinition Height="auto" />
       <RowDefinition Height="*" />
       <RowDefinition Height="auto" />
     </Grid.RowDefinitions>
@@ -33,23 +31,22 @@
     <Label Text="{Binding AmountOfTracksRead}"
            IsVisible="{Binding Path=DisplayState, Converter={StaticResource displayStateToIsLoading}}"/>
 
-    <ActivityIndicator IsVisible="{Binding Path=DisplayState, Converter={StaticResource displayStateToIsLoading}}"
-                     IsRunning="{Binding Path=DisplayState, Converter={StaticResource displayStateToIsLoading}}"
-                     Grid.Row="1"/>
+    <ActivityIndicator Grid.Row="1" IsVisible="{Binding Path=DisplayState, Converter={StaticResource displayStateToIsLoading}}"
+                     IsRunning="{Binding Path=DisplayState, Converter={StaticResource displayStateToIsLoading}}"/>
 
     <Label HorizontalOptions="Center"
-         VerticalOptions="CenterAndExpand"
-         Text="We couldn't find anything here.."
-         IsVisible="{Binding Path=DisplayState, Converter={StaticResource displayStateToIsEmpty}}"
-         Grid.Row="2"/>
+           VerticalOptions="CenterAndExpand"
+           Text="We couldn't find anything here.."
+           IsVisible="{Binding Path=DisplayState, Converter={StaticResource displayStateToIsEmpty}}"
+           Grid.Row="1"/>
 
-    <UserControls:TrackListView Grid.Row="3"
+    <UserControls:TrackListView Grid.Row="1"
                                 IsVisible="{Binding Path=DisplayState,
       Source={RelativeSource AncestorType={x:Type ViewModels:SongsViewModel}},
       Converter={StaticResource displayStateToContentIsVisible}}"
                                 BindingContext="{Binding TrackListViewModel}" />
 
-    <UserControls:BottomTrackPlayerView Grid.Row="4"/>
+    <UserControls:BottomTrackPlayerView Grid.Row="2"/>
   </Grid>
 
 </ContentPage>
