@@ -97,7 +97,6 @@ jobs:
       with:
         tag_name: "${{ env.Tag_Name }}"
         name: "${{ env.Release_Name }}"
-        prerelease: true
         body_path: "${{ github.workspace }}\\release-notes.md"
         token: ${{ secrets.GITHUB_TOKEN }}
         files: |
