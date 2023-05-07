@@ -94,7 +94,12 @@ public class AudioPlayer {
   /// <summary>
   /// Begins or continues playback.
   /// </summary>
-  public void Play() => this._currentPlayer?.Play();
+  public void Play() {
+    if (this._currentPlayer == null)
+      throw new NullReferenceException(nameof(this._currentPlayer));
+
+    this._currentPlayer.Play();
+  }
 
   private void _CurrentPlayer_PlaybackEnded(object? sender, EventArgs e) {
     this._RemoveCurrentPlayerSafely();

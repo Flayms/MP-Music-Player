@@ -153,7 +153,7 @@ public class TrackQueue {
   /// <param name="addLastTrackToHistory"></param>
   public void Play(Track track, bool addLastTrackToHistory = true) {
     this.ChangeCurrentTrack(track, addLastTrackToHistory);
-    this._audioPlayer.Play();
+    this._audioPlayer.Play(track);
     this.IsPlaying = true;
   }
 
