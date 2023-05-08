@@ -6,8 +6,7 @@
              xmlns:Converters1="clr-namespace:MP_Music_PLayer.Converters"
              x:Class="MP_Music_Player.Views.Pages.BigTrackPage"
              Title="{Binding Title}"
-             x:DataType="ViewModels:BigTrackViewModel"
-             BackgroundColor="#0d0d0d">
+             x:DataType="ViewModels:BigTrackViewModel">
 
   <ContentPage.Resources>
     <Converters:IsPlayingToImageSourceConverter x:Key="IsPlayingToImageSourceConverter"/>

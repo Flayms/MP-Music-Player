@@ -15,9 +15,12 @@
   </ContentPage.Resources>
 
   <ContentPage.ToolbarItems>
-    <ToolbarItem Order="Primary" Text="Shuffle all" IconImageSource="shuffle.png" Priority="0"
+    <ToolbarItem Order="Primary" Text="Shuffle all"
+                 IconImageSource="{AppThemeBinding Light=shuffle_dark.png, Dark=shuffle_dark.png}"
                  Command="{Binding ShuffleAllCommand}"/>
-    <ToolbarItem Order="Primary" Text="Search" IconImageSource="search.png" Priority="1"
+    <ToolbarItem Order="Primary" Text="Search"
+                 IconImageSource="{AppThemeBinding Light=search_dark.png, Dark=search_dark.png}"
+                 Priority="1"
                  Command="{Binding NavigateToSearchCommand}"/>
   </ContentPage.ToolbarItems>
 

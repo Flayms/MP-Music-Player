@@ -4,9 +4,11 @@
   xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
   xmlns:local="clr-namespace:MP_Music_Player.Views.Pages"
-  xmlns:Pages="clr-namespace:MP_Music_PLayer.Views.Pages">
+  xmlns:Pages="clr-namespace:MP_Music_PLayer.Views.Pages"
+  FlyoutBackgroundColor="{AppThemeBinding Light={StaticResource SurfaceLight}, Dark={StaticResource SurfaceDark}}"
+  FlyoutBackground="{AppThemeBinding Light={StaticResource SurfaceLight}, Dark={StaticResource SurfaceDark}}">
 
-  <FlyoutItem Title="Songs" Icon="music_library.png">
+  <FlyoutItem Title="Songs" Icon="{AppThemeBinding Light=music_library_light.png, Dark=music_library_dark.png}">
     <ShellContent Route="SongsPage" ContentTemplate="{DataTemplate local:SongsPage}" />
   </FlyoutItem>
 
@@ -14,19 +16,19 @@
     <ShellContent Route="TabLibraryPage" ContentTemplate="{DataTemplate local:TabLibraryPage}" />
   </FlyoutItem>-->
 
-  <FlyoutItem Title="Genres" Icon="genres.png">
+  <FlyoutItem Title="Genres" Icon="{AppThemeBinding Light=genres_light.png, Dark=genres_dark.png}">
     <ShellContent Route="GroupsPage-Genres" ContentTemplate="{DataTemplate local:GroupsPage}" />
   </FlyoutItem>
 
-  <FlyoutItem Title="Artists" Icon="people.png">
+  <FlyoutItem Title="Artists" Icon="{AppThemeBinding Light=people_light.png, Dark=people_dark.png}">
     <ShellContent Route="GroupsPage-Artists" ContentTemplate="{DataTemplate local:GroupsPage}" />
   </FlyoutItem>
 
-  <FlyoutItem Title="Albums" Icon="albums.png">
+  <FlyoutItem Title="Albums" Icon="{AppThemeBinding Light=albums_light.png, Dark=albums_dark.png}">
     <ShellContent Route="GroupsPage-Albums" ContentTemplate="{DataTemplate local:GroupsPage}" />
   </FlyoutItem>
 
-  <!--<FlyoutItem Title="Playlists" Icon="playlist.png">
+  <!--<FlyoutItem Title="Playlists" Icon="{AppThemeBinding Light=playlist_light.png, Dark=playlist_dark.png}">
     <ShellContent Route="GroupsPage-Playlists" ContentTemplate="{DataTemplate local:GroupsPage}" />
   </FlyoutItem>
 
@@ -35,19 +37,19 @@
   </FlyoutItem>-->
 
 
-  <FlyoutItem Title="Search" Icon="search.png">
+  <FlyoutItem Title="Search" Icon="{AppThemeBinding Light=search_light.png, Dark=search_dark.png}">
     <ShellContent Route="SearchPage" ContentTemplate="{DataTemplate local:SearchPage}" />
   </FlyoutItem>
 
-  <FlyoutItem Title="Now Playing" Icon="now_playing.png">
+  <FlyoutItem Title="Now Playing" Icon="{AppThemeBinding Light=now_playing_light.png, Dark=now_playing_dark.png}">
     <ShellContent Route="QueuePage" ContentTemplate="{DataTemplate local:QueuePage}" />
   </FlyoutItem>
 
-  <FlyoutItem Title="History" Icon="history.png">
+  <FlyoutItem Title="History" Icon="{AppThemeBinding Light=history_light.png, Dark=history_dark.png}">
     <ShellContent Route="HistoryPage" ContentTemplate="{DataTemplate Pages:HistoryPage}" />
   </FlyoutItem>
 
-  <FlyoutItem Title="Settings" Icon="settings.png">
+  <FlyoutItem Title="Settings" Icon="{AppThemeBinding Light=settings_light.png, Dark=settings_dark.png}">
     <ShellContent Route="SettingsPage" ContentTemplate="{DataTemplate local:SettingsPage}" />
   </FlyoutItem>
 
