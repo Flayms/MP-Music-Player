@@ -50,6 +50,8 @@ jobs:
     
     # Need to checkout again
     - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
     
     # Download previous artifacts and zip em up
     - name: Download windows artifact
