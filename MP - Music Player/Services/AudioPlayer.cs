@@ -85,10 +85,15 @@ public class AudioPlayer {
   /// <param name="positionInS">The position in seconds to seek to.</param>
   /// <exception cref="Exception">Throws if no track is selected.</exception>
   public void Seek(double positionInS) {
-    if (this._currentPlayer == null)
-      throw new Exception("Can't seek if no track is selected!");
+    var player = this._currentPlayer;
+    if (player == null) {
+      if (this._currentTrack == null)
+        throw new NullReferenceException("Can't seek without a selected track.");
 
-    this._currentPlayer.Seek(positionInS);
+      player = this._CreatePlayer(this._currentTrack);
+    }
+
+    player.Seek(positionInS);
   }
 
   /// <summary>
