@@ -9,7 +9,7 @@
 
   <ListView ItemsSource="{Binding TrackViewModels}"
             RowHeight="69"
-            SeparatorVisibility="None">
+            SeparatorVisibility="None" Margin="5">
 
     <ListView.ItemTemplate>
       <DataTemplate x:DataType="Models:Track">

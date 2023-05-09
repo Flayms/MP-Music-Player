@@ -6,7 +6,7 @@
              x:Class="MP_Music_Player.Views.UserControls.BottomTrackPlayerView"
              x:DataType="ViewModels:BottomTrackViewModel"
              IsVisible="{Binding HasTrack}"
-             BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceLight}, Dark={StaticResource SurfaceDark}}">
+             BackgroundColor="{AppThemeBinding Light={StaticResource Surface2Light}, Dark={StaticResource Surface2Dark}}">
 
   <!--todo: maybe move all converters to one global place-->
   <ContentView.Resources>
@@ -14,9 +14,6 @@
   </ContentView.Resources>
 
   <VerticalStackLayout Margin="0, 0, 5, 0">
-    <BoxView Color="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray900}}"
-             Margin="0"
-             HeightRequest="1"/>
     <Grid>
       <Grid.GestureRecognizers>
         <TapGestureRecognizer Command="{Binding OpenBigTrackPageCommand}"/>

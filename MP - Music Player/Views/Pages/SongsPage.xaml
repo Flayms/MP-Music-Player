@@ -37,11 +37,14 @@
     <ActivityIndicator Grid.Row="1" IsVisible="{Binding Path=DisplayState, Converter={StaticResource displayStateToIsLoading}}"
                      IsRunning="{Binding Path=DisplayState, Converter={StaticResource displayStateToIsLoading}}"/>
 
+
+    <VerticalStackLayout Grid.Row="1"
+                         VerticalOptions="CenterAndExpand"
+                         IsVisible="{Binding Path=DisplayState, Converter={StaticResource displayStateToIsEmpty}}">
     <Label HorizontalOptions="Center"
-           VerticalOptions="CenterAndExpand"
-           Text="We couldn't find anything here.."
-           IsVisible="{Binding Path=DisplayState, Converter={StaticResource displayStateToIsEmpty}}"
-           Grid.Row="1"/>
+           Text="We couldn't find anything here.." Margin="0,0,0,10"/>
+      <Button HorizontalOptions="Center" Text="Locate Music Directory" Command="{Binding ChangeMusicDirectoryCommand}"/>
+    </VerticalStackLayout>
 
     <UserControls:TrackListView Grid.Row="1"
                                 IsVisible="{Binding Path=DisplayState,
@@ -49,7 +52,7 @@
       Converter={StaticResource displayStateToContentIsVisible}}"
                                 BindingContext="{Binding TrackListViewModel}" />
 
-    <UserControls:BottomTrackPlayerView Grid.Row="2"/>
+    <UserControls:BottomTrackPlayerView Grid.Row="2" />
   </Grid>
 
 </ContentPage>

@@ -4,6 +4,7 @@ using MP_Music_Player.Enums;
 using MP_Music_Player.Services;
 using MP_Music_Player.Views.Pages;
 using MP_Music_Player.Extensions;
+using MP_Music_PLayer.Services;
 
 namespace MP_Music_Player.ViewModels;
 
@@ -20,10 +21,13 @@ public partial class SongsViewModel : AViewModel {
 
   private readonly MusicService _musicService;
   private readonly TrackQueue _queue;
+  private readonly MusicDirectoryService _musicDirectoryService;
 
-  public SongsViewModel(MusicService musicService, MusicFileParsingService musicFileParsingService, TrackQueue queue) {
+  public SongsViewModel(MusicService musicService, MusicFileParsingService musicFileParsingService, TrackQueue queue,
+    MusicDirectoryService musicDirectoryService) {
     this._musicService = musicService;
     this._queue = queue;
+    this._musicDirectoryService = musicDirectoryService;
 
     musicService.LoadingStateChangedEvent += this._OnLoadingChanged;
     musicFileParsingService.OnTrackLoaded += this._OnTrackLoaded;
@@ -102,4 +106,6 @@ public partial class SongsViewModel : AViewModel {
     trackQueue.Play();
   }
 
+  [RelayCommand]
+  public async void ChangeMusicDirectory() => await this._musicDirectoryService.LetUserChangeMusicDirectory();
 }

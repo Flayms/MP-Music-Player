@@ -34,13 +34,13 @@
         <ColumnDefinition Width="auto"/>
       </Grid.ColumnDefinitions>
 
-      <Image Source="down.png" HorizontalOptions="Start" WidthRequest="20">
+      <Image Source="{AppThemeBinding Light=down_light.png, Dark=down_dark.png}" HorizontalOptions="Start" WidthRequest="20">
         <Image.GestureRecognizers>
           <TapGestureRecognizer Command="{Binding ClosePageCommand}" />
         </Image.GestureRecognizers>
       </Image>
 
-      <Image Grid.Column="1" Source="options.png" WidthRequest="20">
+      <Image Grid.Column="1" Source="{AppThemeBinding Light=options_light.png, Dark=options_dark.png}" WidthRequest="20">
         <Image.GestureRecognizers>
           <TapGestureRecognizer Command="{Binding ShowOptionsCommand}" />
         </Image.GestureRecognizers>
@@ -77,13 +77,13 @@
         <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
 
-      <Image Source="shuffle.png" WidthRequest="20" HorizontalOptions="End">
+      <Image Source="{AppThemeBinding Light=shuffle_light.png, Dark=shuffle_dark.png}" WidthRequest="20" HorizontalOptions="End">
         <Image.GestureRecognizers>
           <TapGestureRecognizer Command="{Binding ShuffleCommand}" />
         </Image.GestureRecognizers>
       </Image>
 
-      <Image Grid.Column="1" Source="previous.png">
+      <Image Grid.Column="1"  Source="{AppThemeBinding Light=previous_light.png, Dark=previous_dark.png}">
         <Image.GestureRecognizers>
           <TapGestureRecognizer Command="{Binding GoBackCommand}" />
         </Image.GestureRecognizers>
@@ -96,7 +96,7 @@
         </Image.GestureRecognizers>
       </Image>
 
-      <Image Grid.Column="3" Source="next.png">
+      <Image Grid.Column="3"  Source="{AppThemeBinding Light=next_light.png, Dark=next_dark.png}">
         <Image.GestureRecognizers>
           <TapGestureRecognizer Command="{Binding NextCommand}" />
         </Image.GestureRecognizers>
@@ -111,7 +111,7 @@
       </Image>
     </Grid>
 
-    <Image Grid.Row="8" Source="playlist.png" WidthRequest="20" HorizontalOptions="End">
+    <Image Grid.Row="8"  Source="{AppThemeBinding Light=playlist_light.png, Dark=playlist_dark.png}" WidthRequest="20" HorizontalOptions="End">
       <Image.GestureRecognizers>
         <TapGestureRecognizer Command="{Binding OpenQueuePageCommand}" />
       </Image.GestureRecognizers>

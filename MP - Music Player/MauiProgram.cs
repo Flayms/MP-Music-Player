@@ -5,6 +5,7 @@ using MP_Music_Player.Services;
 using MP_Music_Player.ViewModels;
 using MP_Music_Player.Views.Pages;
 using MP_Music_Player.Models;
+using MP_Music_PLayer.Services;
 using MP_Music_Player.Services.Repositories;
 using MP_Music_PLayer.ViewModels;
 using MP_Music_PLayer.Views.Pages;
@@ -54,6 +55,7 @@ public static class MauiProgram {
     services.AddSingleton<MusicService>();
     services.AddSingleton<TrackOptionsService>();
     services.AddSingleton<IQueuedTracksRepository, QueuedTracksRepository>();
+    services.AddSingleton<MusicDirectoryService>();
   }
 
   private static void _AddPageAndViewModelServices(IServiceCollection services) {

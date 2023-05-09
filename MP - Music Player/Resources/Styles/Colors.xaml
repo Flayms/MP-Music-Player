@@ -44,18 +44,20 @@
 
   <Color x:Key="BackgroundDark">#0a0a0a</Color>
   <Color x:Key="SurfaceDark">#141414</Color>
+  <Color x:Key="Surface2Dark">#1d1d1d</Color>
   <Color x:Key="PrimaryDark">#a278ff</Color>
   <Color x:Key="SecondaryDark">#b8ffda</Color>
-  <Color x:Key="OnBackgroundDark">#f7f7f7</Color>
+  <Color x:Key="OnBackgroundDark">#f5f5f5</Color>
   <Color x:Key="OnSurfaceDark">#ededed</Color>
   <Color x:Key="OnPrimaryDark">#000000</Color>
   <Color x:Key="OnSecondaryDark">#0d0d0d</Color>
 
-  <Color x:Key="BackgroundLight">#f3f3f3</Color>
+  <Color x:Key="BackgroundLight">#f5f5f5</Color>
   <Color x:Key="SurfaceLight">#efefef</Color>
+  <Color x:Key="Surface2Light">#e6e6e6</Color>
   <Color x:Key="PrimaryLight">#6a26ff</Color>
   <Color x:Key="SecondaryLight">#26ff80</Color>
-  <Color x:Key="OnBackgroundLight">#f7f7f7</Color>
+  <Color x:Key="OnBackgroundLight">#f5f5f5</Color>
   <Color x:Key="OnSurfaceLight">#0d0d0d</Color>
   <Color x:Key="OnPrimaryLight">#ffffff</Color>
   <Color x:Key="OnSecondaryLight">#ffffff</Color>

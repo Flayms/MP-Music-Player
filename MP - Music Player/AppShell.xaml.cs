@@ -15,4 +15,15 @@ public partial class AppShell : Shell {
 #endif
   }
 
+  //necessary because maui flyoutBackgroundColor is bugged 
+  protected override async void OnAppearing() {
+    base.OnAppearing();
+
+    await Task.Delay(2000);
+
+    var color = this.FlyoutBackgroundColor;
+    this.FlyoutBackgroundColor = Colors.DarkBlue;
+    this.FlyoutBackgroundColor = color;
+  }
+
 }

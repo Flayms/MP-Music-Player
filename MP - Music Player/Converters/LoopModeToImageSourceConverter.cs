@@ -1,15 +1,16 @@
 ﻿using System.Globalization;
 using MP_Music_Player.Converters;
 using MP_Music_PLayer.Enums;
-
 namespace MP_Music_PLayer.Converters; 
 
 public class LoopModeToImageSourceConverter : AValueConverter<LoopMode, string> {
   #region Implementation of IValueConverter
 
   public override string Convert(LoopMode loopMode, Type targetType, object parameter, CultureInfo culture) {
+    var themeName = Application.Current!.RequestedTheme == AppTheme.Light ? "light" : "dark";
+
     return loopMode switch {
-      LoopMode.None => "loop.png",
+      LoopMode.None => $"loop_{themeName}.png",
       LoopMode.Queue => "loop_selected.png",
       LoopMode.Current => "loop_current.png",
       _ => throw new ArgumentOutOfRangeException()
