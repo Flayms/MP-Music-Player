@@ -19,7 +19,7 @@ public partial class AppShell : Shell {
   protected override async void OnAppearing() {
     base.OnAppearing();
 
-    await Task.Delay(2000);
+    await Task.Delay(2200);
 
     var color = this.FlyoutBackgroundColor;
     this.FlyoutBackgroundColor = Colors.DarkBlue;

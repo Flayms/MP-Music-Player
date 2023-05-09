@@ -1,56 +1,27 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:UserControls="clr-namespace:MP_Music_Player.Views.UserControls"
-             xmlns:Models="clr-namespace:MP_Music_Player.Models"
              xmlns:ViewModels="clr-namespace:MP_Music_Player.ViewModels"
+             xmlns:Models="clr-namespace:MP_Music_PLayer.Models"
+             xmlns:UserControls="clr-namespace:MP_Music_Player.Views.UserControls"
              x:Class="MP_Music_Player.Views.Pages.QueuePage"
              Title="Now Playing"
              x:DataType="ViewModels:QueueViewModel">
 
-  <Grid>
-    <Grid.RowDefinitions>
-      <RowDefinition Height="auto" />
-      <RowDefinition Height="auto" />
-      <RowDefinition Height="auto" />
-      <RowDefinition Height="auto" />
-      <RowDefinition Height="auto" />
-      <RowDefinition Height="*" />
-    </Grid.RowDefinitions>
 
-    <Label Text="Currently Playing:" FontAttributes="Bold"/>
-    <UserControls:SmallTrackView Grid.Row="1" BindingContext="{Binding CurrentTrack}"/>
+  <CollectionView ItemsSource="{Binding TrackGroups}"
+                  IsGrouped="True">
+    <CollectionView.GroupHeaderTemplate>
+      <DataTemplate x:DataType="Models:TrackGroup">
+        <Label Text="{Binding Name}"/>
+      </DataTemplate>
+    </CollectionView.GroupHeaderTemplate>
 
-    <Label Grid.Row="2" Text="Next Up:" FontAttributes="Bold"/>
-    <ListView Grid.Row="3"
-              ItemsSource="{Binding  NextUpTracks}"
-              RowHeight="69"
-              SeparatorVisibility="None">
-
-      <ListView.ItemTemplate>
-        <DataTemplate x:DataType="Models:Track">
-          <ViewCell>
-            <UserControls:SmallTrackView />
-          </ViewCell>
-        </DataTemplate>
-      </ListView.ItemTemplate>
-    </ListView>
-
-    <Label Grid.Row="4" Text="Next In Queue:" FontAttributes="Bold"/>
-    <ListView Grid.Row="5"
-              ItemsSource="{Binding QueuedTracks}"
-              RowHeight="69"
-              SeparatorVisibility="None">
-
-      <ListView.ItemTemplate>
-        <DataTemplate x:DataType="Models:Track">
-          <ViewCell>
-            <UserControls:SmallTrackView />
-          </ViewCell>
-        </DataTemplate>
-      </ListView.ItemTemplate>
-    </ListView>
-
-  </Grid>
+    <CollectionView.ItemTemplate>
+      <DataTemplate x:DataType="ViewModels:SmallTrackViewModel">
+        <UserControls:SmallTrackView />
+      </DataTemplate>
+    </CollectionView.ItemTemplate>
+  </CollectionView>
 
 </ContentPage>
