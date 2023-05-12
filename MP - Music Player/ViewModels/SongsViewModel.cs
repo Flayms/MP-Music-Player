@@ -81,7 +81,7 @@ public partial class SongsViewModel : AViewModel {
       : hasTracks
         ? DisplayState.DisplayingContent
         : DisplayState.Empty;
-
+  
   [RelayCommand]
   public async Task NavigateToSearch() {
     //Shell.Current.CurrentPage.Title = "Search";

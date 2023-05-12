@@ -108,6 +108,16 @@ public class TrackQueue {
     this.QueueChanged?.Invoke(this, EventArgs.Empty);
   }
 
+  public void ChangeNextUp(IEnumerable<Track> tracks) {
+    //todo: should be done with enumeration instead of changing to list
+    var list = tracks.ToList();
+
+    this._originalQueue = new List<Track>(list);
+    this._ChangeCurrentTrack(list.Dequeue());
+    this.NextUpTracks = list;
+    this.QueueChanged?.Invoke(this, EventArgs.Empty);
+  }
+
   /// <summary>
   /// Adds a track to the first position of the <see cref="NextUpTracks"/> (it's gonna play as the next track).
   /// </summary>
