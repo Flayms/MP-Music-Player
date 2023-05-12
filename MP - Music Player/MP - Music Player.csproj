@@ -21,8 +21,8 @@
 		<ApplicationIdGuid>0a01ae86-fb75-4a38-8c2c-16947f9c16fc</ApplicationIdGuid>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>1.1.0</ApplicationDisplayVersion>
-		<ApplicationVersion>1</ApplicationVersion>
+		<ApplicationDisplayVersion>1.2.0</ApplicationDisplayVersion>
+		<ApplicationVersion>120</ApplicationVersion>
 
 		<WindowsPackageType>None</WindowsPackageType>
 		<WindowsAppSDKSelfContained Condition="'$(IsUnpackaged)' == 'true'">true</WindowsAppSDKSelfContained>
@@ -94,7 +94,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Platforms\Windows\CoverRetriever.cs">
+	  <Compile Update="Platforms\Windows\CoverRetriever.Windows.cs">
 	    <ExcludeFromCurrentConfiguration>false</ExcludeFromCurrentConfiguration>
 	  </Compile>
 	  <Compile Update="Views\Pages\GroupsPage.xaml.cs">
