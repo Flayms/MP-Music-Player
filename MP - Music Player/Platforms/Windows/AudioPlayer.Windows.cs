@@ -24,6 +24,13 @@ public partial class AudioPlayer {
     musicProperties.Artist = track.CombinedArtistNames;
     //todo: set thumbnail
     mediaItem.ApplyDisplayProperties(props);
+
+    //override commands
+    var commandManager = mediaPlayer.CommandManager;
+    commandManager.PlayReceived += (_, _) => this.IsPlaying = true;
+    commandManager.PauseReceived += (_, _) => this.IsPlaying = false;
+
+    //todo: also support previous/ next
   }
 
   private MediaPlayer _LoadMediaPlayer() {
