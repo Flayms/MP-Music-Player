@@ -10,6 +10,7 @@ using MP_Music_Player.Services.Repositories;
 using MP_Music_PLayer.ViewModels;
 using MP_Music_PLayer.Views.Pages;
 using MP_Music_Player.Views.UserControls;
+using Plugin.LocalNotification;
 using Plugin.Maui.Audio;
 using AudioPlayer = MP_Music_Player.Services.AudioPlayer;
 
@@ -22,6 +23,10 @@ public static class MauiProgram {
 
     builder
       .UseMauiApp<App>()
+
+#if ANDROID
+      .UseLocalNotification(_SetupLocalNotification)
+#endif
       .UseMauiCommunityToolkit()
       .ConfigureFonts(fonts => {
         fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -113,6 +118,32 @@ public static class MauiProgram {
       context.SaveChanges();
 
       return context;
+    });
+  }
+
+  //todo: images not working
+  private static void _SetupLocalNotification(ILocalNotificationBuilder builder) {
+    builder.AddCategory(new NotificationCategory(NotificationCategoryType.Status) {
+      ActionList = new HashSet<NotificationAction>(new List<NotificationAction> {
+        new(100) {
+          Title = "Previous",
+          Android = {
+            LaunchAppWhenTapped = true,
+            IconName = {
+              ResourceName = "record.png"
+            }
+          }
+        },
+        new(101) {
+          Title = "Next",
+          Android = {
+            LaunchAppWhenTapped = false,
+            IconName = {
+              ResourceName = "next_dark.png"
+            }
+          }
+        }
+      })
     });
   }
 }
