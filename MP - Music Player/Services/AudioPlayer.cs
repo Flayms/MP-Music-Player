@@ -1,4 +1,11 @@
-﻿using MP_Music_Player.Models;
+﻿#if WINDOWS
+using Windows.Media.Playback;
+using Windows.Media;
+using Windows.Media.Core;
+using System.Reflection;
+#endif
+using Windows.Storage.Streams;
+using MP_Music_Player.Models;
 using MP_Music_Player.Models.EventArgs;
 using Plugin.Maui.Audio;
 using Exception = System.Exception;
@@ -119,6 +126,28 @@ public class AudioPlayer {
 
     var stream = File.OpenRead(track.Path);
     var player = this._audioManager.CreatePlayer(stream);
+
+#if WINDOWS
+    //todo: access private field per reflection
+    //todo: cache fieldInfo
+    var type = typeof(Plugin.Maui.Audio.AudioPlayer);
+    var field = type.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)
+      .First(f => f.FieldType == typeof(MediaPlayer));
+
+    var windowsPlayer = (MediaPlayer)field.GetValue(player)!;
+    var source = (MediaSource)windowsPlayer.Source;
+    var mediaItem = MediaPlaybackItem.FindFromMediaSource(source);
+
+    var props = mediaItem.GetDisplayProperties();
+    var musicProperties = props.MusicProperties;
+    props.Type = MediaPlaybackType.Music;
+    musicProperties.Title = track.Title;
+    musicProperties.Artist = track.CombinedArtistNames;
+    //todo: set thumbnail
+    mediaItem.ApplyDisplayProperties(props);
+#endif
+
+
 
     player.PlaybackEnded += this._CurrentPlayer_PlaybackEnded;
 
