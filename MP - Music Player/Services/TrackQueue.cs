@@ -232,8 +232,10 @@ public class TrackQueue {
   }
 
   public void Previous() {
-    if (this.HistoryTracks.Count <= 0)
+    if (this.HistoryTracks.Count <= 0) {
+      this._player.Seek(0);
       return;
+    }
 
     var lastTrack = this.HistoryTracks.Pop();
 
