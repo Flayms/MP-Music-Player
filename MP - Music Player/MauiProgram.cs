@@ -13,6 +13,7 @@ using MP_Music_Player.Views.UserControls;
 using Plugin.LocalNotification;
 using Plugin.Maui.Audio;
 using AudioPlayer = MP_Music_Player.Services.AudioPlayer;
+using MP_Music_PLayer.Enums;
 
 namespace MP_Music_Player;
 
@@ -125,16 +126,16 @@ public static class MauiProgram {
   private static void _SetupLocalNotification(ILocalNotificationBuilder builder) {
     builder.AddCategory(new NotificationCategory(NotificationCategoryType.Status) {
       ActionList = new HashSet<NotificationAction>(new List<NotificationAction> {
-        new(100) {
+        new((int)NotificationButtonType.Previous) {
           Title = "Previous",
           Android = {
-            LaunchAppWhenTapped = true,
+            LaunchAppWhenTapped = false,
             IconName = {
               ResourceName = "record.png"
             }
           }
         },
-        new(101) {
+        new((int)NotificationButtonType.Next) {
           Title = "Next",
           Android = {
             LaunchAppWhenTapped = false,

@@ -1,5 +1,6 @@
 ﻿using Android.Media;
 using System.Reflection;
+using MP_Music_PLayer.Enums;
 using Plugin.LocalNotification;
 using Plugin.LocalNotification.AndroidOption;
 
@@ -18,6 +19,7 @@ public partial class AudioPlayer {
       this._isSubscribed = true;
     }
     
+    //todo: icons not working
     var request = new NotificationRequest {
       NotificationId = 1337,
       Title = track.Title,
@@ -40,14 +42,19 @@ public partial class AudioPlayer {
     if (this._currentTrack == null)
       return;
 
-    switch (e.ActionId) {
-      case 100:
+    if (!Enum.IsDefined(typeof(NotificationButtonType), e.ActionId))
+      throw new ArgumentOutOfRangeException();
+
+    var type = (NotificationButtonType)e.ActionId;
+
+    switch (type) {
+      case NotificationButtonType.Previous:
         break;
 
-      case 101:
+      case NotificationButtonType.Next:
+        //todo: solve better than seeking to end
         var duration = this._currentTrack.Duration;
         this.Seek(duration.TotalSeconds);
-
 
         LocalNotificationCenter.Current.Cancel(e.Request.NotificationId);
         break;

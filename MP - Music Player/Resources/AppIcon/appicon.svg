@@ -1,4 +1,23 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg width="456" height="456" viewBox="0 0 456 456" version="1.1" xmlns="http://www.w3.org/2000/svg">
-    <rect x="0" y="0" width="456" height="456" fill="#512BD4" />
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg fill="#000000" height="800px" width="800px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+	 viewBox="-16 -16 544 544" xml:space="preserve">
+
+<defs>
+    <linearGradient id="gradient" x1="1" x2="0" y1="0" y2="1">
+    <stop offset="0%" stop-color="#63b6f5" />
+	  <stop offset="35%" stop-color="#031aae" />
+    <stop offset="50%" stop-color="#8d41ff"  />
+	  <stop offset="70%" stop-color="#fa28a0" />
+    <stop offset="90%" stop-color="#441197" />
+    <stop offset="100%" stop-color="#1e0546" />
+    </linearGradient>
+</defs>
+
+<rect
+    x="-16"
+    y="-16"
+    width="544"
+    height="544"
+    fill="url(#gradient)"/>
 </svg>

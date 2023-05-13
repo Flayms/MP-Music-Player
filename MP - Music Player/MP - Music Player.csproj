@@ -21,7 +21,7 @@
 		<ApplicationIdGuid>0a01ae86-fb75-4a38-8c2c-16947f9c16fc</ApplicationIdGuid>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>1.2.0</ApplicationDisplayVersion>
+		<ApplicationDisplayVersion>1.2.1</ApplicationDisplayVersion>
 		<ApplicationVersion>120</ApplicationVersion>
 
 		<WindowsPackageType>None</WindowsPackageType>
@@ -54,7 +54,12 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\logo.png" Color="#6c49de" />
+		<MauiIcon Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) != 'android'"
+		          Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" />
+
+		<MauiIcon Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'"
+		          Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" ForegroundScale="0.6"/>
+		
 
 		<!-- Splash Screen -->
 		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#6c49de" BaseSize="128,128" />

@@ -35,7 +35,8 @@
            IsVisible="{Binding Path=DisplayState, Converter={StaticResource displayStateToIsLoading}}"/>
 
     <ActivityIndicator Grid.Row="1" IsVisible="{Binding Path=DisplayState, Converter={StaticResource displayStateToIsLoading}}"
-                     IsRunning="{Binding Path=DisplayState, Converter={StaticResource displayStateToIsLoading}}"/>
+                     IsRunning="{Binding Path=DisplayState, Converter={StaticResource displayStateToIsLoading}}"
+                     HorizontalOptions="Center" VerticalOptions="Center"/>/>
 
 
     <VerticalStackLayout Grid.Row="1"
