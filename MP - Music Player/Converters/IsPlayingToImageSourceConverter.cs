@@ -1,15 +1,13 @@
 ﻿using System.Globalization;
+using MP_Music_PLayer.Converters;
 
 namespace MP_Music_Player.Converters; 
 
-internal class IsPlayingToImageSourceConverter : AValueConverter<bool, string> {
+internal class IsPlayingToImageSourceConverter : AToImageSourceConverter<bool, string> {
   #region Implementation of IValueConverter
 
-  public override string Convert(bool isPlaying, Type targetType, object parameter, CultureInfo culture) {
-    var themeName = Application.Current!.RequestedTheme == AppTheme.Light ? "light" : "dark";
-
-    return isPlaying ? $"pause_{themeName}.png" : $"play_{themeName}.png";
-  }
+  public override string Convert(bool isPlaying, Type targetType, object parameter, CultureInfo culture)
+    => isPlaying ? $"pause_{this.ThemeName}.png" : $"play_{this.ThemeName}.png";
 
   public override bool ConvertBack(string imageSource, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
 

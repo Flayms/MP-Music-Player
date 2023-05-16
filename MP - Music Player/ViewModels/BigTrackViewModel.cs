@@ -20,6 +20,8 @@ public partial class BigTrackViewModel : ATrackViewModel {
     }
   }
 
+  public bool IsShuffle => this.Queue.IsShuffle;
+
   public BigTrackViewModel(TrackQueue queue, TrackOptionsService trackOptionsService, AudioPlayer player)
     : base(queue, player) {
     this._trackOptionsService = trackOptionsService;
@@ -50,7 +52,7 @@ public partial class BigTrackViewModel : ATrackViewModel {
   [RelayCommand]
   public void Shuffle() {
     this.Queue.Shuffle();
-    //  this.OnPropertyChanged(nameof(this.ShuffleImageSource));
+    this.OnPropertyChanged(nameof(this.IsShuffle));
   }
 
   [RelayCommand]

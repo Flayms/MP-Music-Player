@@ -36,8 +36,12 @@ public class TrackQueue {
   public IList<Track> NextUpTracks { get; private set; } = new List<Track>(); //todo: could be queue
   public IList<Track> QueuedTracks { get; private set; } = new List<Track>(); //todo: could be queue
 
-  //the queue, how it was first initiated without any dequeued elements
+  /// <summary>
+  /// the queue, how it was first initiated without any dequeued elements.
+  /// </summary>
   private IList<Track> _originalQueue = new List<Track>();
+
+  private IList<Track> _unshuffledQueue = new List<Track>();
 
   public bool IsShuffle { get; private set; }
 
@@ -246,12 +250,23 @@ public class TrackQueue {
   }
 
   public void Shuffle() {
-    var tracks = new List<Track>(this.QueuedTracks);
+    var tracks = new List<Track>(this._originalQueue);
 
-    tracks.Shuffle();
-    this.ChangeQueue(tracks);
-    this.IsShuffle = true;
-    this.Play();
+    if (!this.IsShuffle)
+      tracks.Shuffle();
+    else {
+      //seek to current playing track position if possible
+      if (this.CurrentTrack != null) {
+        var position = tracks.IndexOf(this.CurrentTrack);
+
+        if (position >= 0)
+          tracks.RemoveRange(0, position + 1); //plus one because zero-based index
+      }
+    }
+
+    this.IsShuffle = !this.IsShuffle;
+    this.QueuedTracks = tracks;
+    this.QueueChanged?.Invoke(this, EventArgs.Empty);
   }
 
   //todo: db logic shouldn't be here i think

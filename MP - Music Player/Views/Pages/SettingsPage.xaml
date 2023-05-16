@@ -5,7 +5,7 @@
              x:Class="MP_Music_Player.Views.Pages.SettingsPage"
              Title="Settings"
              x:DataType="ViewModels:SettingsViewModel">
-  <VerticalStackLayout>
+  <VerticalStackLayout Margin="5, 0">
     <TableView>
       <TableRoot>
 
@@ -15,7 +15,7 @@
                     Command="{Binding SelectMusicDirectoryCommand}"></TextCell>
         </TableSection>
 
-        <TableSection Title="Colors"></TableSection>
+        <!--<TableSection Title="Colors"></TableSection>-->
 
         <TableSection Title="About">
           <TextCell Text="Version" Detail="{Binding Version}"></TextCell>

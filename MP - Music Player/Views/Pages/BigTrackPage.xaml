@@ -10,6 +10,7 @@
 
   <ContentPage.Resources>
     <Converters:IsPlayingToImageSourceConverter x:Key="IsPlayingToImageSourceConverter"/>
+    <Converters1:IsShuffleToImageSourceConverter x:Key="IsShuffleToImageSourceConverter"/>
     <Converters1:LoopModeToImageSourceConverter x:Key="LoopModeToImageSourceConverter"/>
     <Converters:SecondsToDisplayTimeConverter x:Key="SecondsToDisplayTimeConverter"/>
   </ContentPage.Resources>
@@ -77,7 +78,8 @@
         <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
 
-      <Image Source="{AppThemeBinding Light=shuffle_light.png, Dark=shuffle_dark.png}" WidthRequest="20" HorizontalOptions="End">
+      <Image Source="{Binding IsShuffle, Converter={StaticResource IsShuffleToImageSourceConverter}}"
+             WidthRequest="20" HorizontalOptions="End">
         <Image.GestureRecognizers>
           <TapGestureRecognizer Command="{Binding ShuffleCommand}" />
         </Image.GestureRecognizers>
