@@ -27,14 +27,16 @@ timeForRelease = currentTime.strftime("%Y-%m-%d %H:%M")
 
 tagName = f"v{versionName}-{timeForTag}" 
 releaseName = f"Version {versionName} ({timeForRelease})" 
+applicationVersion = versionName.replace(".", "")
 
 print(f"Tag_Name:     {tagName}")
 print(f"Release_Name: {releaseName}")
-
+print(f"Application_Version: {applicationVersion}")
 
 # set github enviorment variable
 env_file = os.getenv('GITHUB_ENV')
 
 with open(env_file, "a") as myfile:
     myfile.write(f"Tag_Name={tagName}\r\n")
-    myfile.write(f"Release_Name={releaseName}")
+    myfile.write(f"Release_Name={releaseName}\r\n")
+    myfile.write(f"Application_Version={applicationVersion}")
