@@ -33,13 +33,14 @@
            IsVisible="{Binding Path=DisplayState, Converter={StaticResource displayStateToIsEmpty}}"
            Grid.Row="1"/>
 
-    <!--todo: use SongsPage here!-->
+    <!--todo: use TrackListView here!-->
     <ListView Grid.Row="1"
               ItemsSource="{Binding Tracks}"
 
               IsVisible="{Binding Path=DisplayState, Converter={StaticResource displayStateToContentIsVisible}}"
               RowHeight="69"
-              SeparatorVisibility="None">
+              SeparatorVisibility="None"
+              Margin="5">
 
       <ListView.ItemTemplate>
         <DataTemplate x:DataType="Models:Track">

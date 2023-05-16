@@ -13,6 +13,9 @@ public partial class GroupsViewModel : AViewModel {
   [ObservableProperty]
   private IReadOnlyCollection<SmallGroupViewModel>? _groups;
 
+  [ObservableProperty]
+  private DisplayState _displayState = DisplayState.Empty;
+
   //todo: don't go over context here!
   public GroupsViewModel(MusicContext context) {
     this._context = context;
@@ -57,5 +60,7 @@ public partial class GroupsViewModel : AViewModel {
       default:
         throw new ArgumentOutOfRangeException(nameof(groupType), groupType, null);
     }
+
+    this.DisplayState = this.Groups.Count > 0 ? DisplayState.DisplayingContent : DisplayState.Empty;
   }
 }

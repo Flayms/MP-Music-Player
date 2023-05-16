@@ -2,18 +2,64 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ViewModels="using:MP_Music_Player.ViewModels"
+             xmlns:UserControls="clr-namespace:MP_Music_Player.Views.UserControls"
+             xmlns:Converters="clr-namespace:MP_Music_Player.Converters"
              x:Class="MP_Music_Player.Views.Pages.GroupsPage"
              x:DataType="ViewModels:GroupsViewModel"
              Title="{Binding GroupType}">
 
-  <ListView ItemsSource="{Binding Groups}" RowHeight="60">
-    <ListView.ItemTemplate>
-      <DataTemplate x:DataType="ViewModels:SmallGroupViewModel">
-        <TextCell Text="{Binding Name}"
-                  Detail="{Binding TrackAmountUi}"
-                  Command="{Binding ShowTracksCommand}"/>
-      </DataTemplate>
-    </ListView.ItemTemplate>
-  </ListView>
+  <ContentPage.Resources>
+    <Converters:DisplayStateToContentIsVisibleConverter x:Key="displayStateToContentIsVisible" />
+    <Converters:DisplayStateToIsEmptyConverter x:Key="displayStateToIsEmpty" />
+  </ContentPage.Resources>
+
+
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*" />
+      <RowDefinition Height="auto" />
+    </Grid.RowDefinitions>
+
+    <Label HorizontalOptions="Center"
+           Text="We couldn't find anything here.." Margin="0,0,0,10"
+           IsVisible="{Binding Path=DisplayState, Converter={StaticResource displayStateToIsEmpty}}"
+           VerticalOptions="Center"
+           Grid.Row="0"/>
+
+    <ListView ItemsSource="{Binding Groups}"
+              IsVisible="{Binding Path=DisplayState, Converter={StaticResource displayStateToContentIsVisible}}"
+              RowHeight="60"
+              Margin="5"
+              Grid.Row="0">
+      <ListView.ItemTemplate>
+        <!--todo: almost the same as SmallTrackView -> create same base-class-->
+        <DataTemplate x:DataType="ViewModels:SmallGroupViewModel">
+          <ViewCell>
+            <Frame Padding="0" Margin="7" CornerRadius="7" 
+               BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceLight}, Dark={StaticResource SurfaceDark}}">
+              <Frame.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding ShowTracksCommand}"></TapGestureRecognizer>
+              </Frame.GestureRecognizers>
+
+              <Grid>
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="*"/>
+                  <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Label Margin="5,0,0,0" Text="{Binding Name}" LineBreakMode="TailTruncation"
+                   Grid.Row="0"/>
+                <Label Margin="5,0,0,0" Text="{Binding TrackAmountUi}" TextColor="Grey" LineBreakMode="TailTruncation"
+                     Grid.Row="1"/>
+              </Grid>
+
+            </Frame>
+          </ViewCell>
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
+
+    <UserControls:BottomTrackPlayerView Grid.Row="1" />
+  </Grid>
 
 </ContentPage>

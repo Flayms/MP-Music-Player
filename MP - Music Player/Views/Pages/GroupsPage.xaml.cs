@@ -4,6 +4,7 @@ using MP_Music_Player.ViewModels;
 namespace MP_Music_Player.Views.Pages;
 
 //todo: display image for groups
+//todo: card display style
 
 /// <summary>
 /// A page displaying the tracks grouped by a category.
@@ -26,7 +27,6 @@ public partial class GroupsPage : ContentPage {
     this._viewModel.SetGroupType(groupType);
     base.OnNavigatedTo(args);
   }
-
 
   private static GroupType _GetGroupTypeFromRoute() {
     // Hack: As the shell can't define query parameters
